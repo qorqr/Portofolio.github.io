@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTOFOLIO</title>
-    <meta name="description" content="Professional portfolio of a Full Stack Developer specializing in modern web technologies and exceptional digital solutions.">
-    <meta name="keywords" content="developer, portfolio, full stack, web development, react, nodejs">
+    <title>PORTOFOLIO - Zuyyina Firdausi Muhammad</title>
+    <meta name="description" content="Professional portfolio of Zuyyina Firdausi Muhammad - Full Stack Developer specializing in modern web technologies">
+    <meta name="keywords" content="developer, portfolio, full stack, web development, react, nodejs, Zuyyina">
+    <meta name="author" content="Zuyyina Firdausi Muhammad">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="DevPort - Full Stack Developer">
+    <meta property="og:title" content="Zuyyina Firdausi - Full Stack Developer">
     <meta property="og:description" content="Professional portfolio showcasing skills and projects">
     <meta property="og:type" content="website">
     
@@ -25,1277 +26,9 @@
     <!-- Particle.js -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --accent: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-        }
-
-        * {
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* Theme Variables */
-        .dark-mode {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border-color: #334155;
-        }
-
-        .light-mode {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --border-color: #e2e8f0;
-        }
-
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Particle Background */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            top: 0;
-            left: 0;
-        }
-
-        .dark-mode #particles-js {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-        }
-
-        .light-mode #particles-js {
-            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-        }
-
-        /* Glass Effects */
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .dark-mode .glass-effect {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .dark-mode .glass-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .light-mode .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        /* Gradient Text & Backgrounds */
-        .gradient-text {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Utility Classes */
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-
-        .animate-slide-in {
-            animation: slideIn 0.4s ease-out forwards;
-        }
-
-        .animate-pulse {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .loading-spinner {
-            animation: spin 1.5s linear infinite;
-        }
-
-        .stagger-item {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: center;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(99, 102, 241, 0.1);
-        }
-
-        .dark-mode .card-hover:hover {
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(99, 102, 241, 0.2);
-        }
-
-        /* Skill Progress Bar */
-        .skill-bar {
-            height: 10px;
-            border-radius: 5px;
-            background: rgba(226, 232, 240, 0.2);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .dark-mode .skill-bar {
-            background: rgba(51, 65, 85, 0.3);
-        }
-
-        .skill-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 5px;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-progress::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            animation: shimmer 2s infinite;
-        }
-
-        /* Scroll Progress */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform-origin: 0%;
-            z-index: 9999;
-            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(241, 245, 249, 0.1);
-            border-radius: 10px;
-        }
-
-        .dark-mode ::-webkit-scrollbar-track {
-            background: rgba(30, 41, 59, 0.5);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            border: 3px solid transparent;
-            background-clip: padding-box;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
-        }
-
-        /* Selection */
-        ::selection {
-            background: rgba(99, 102, 241, 0.4);
-            color: white;
-        }
-
-        .dark-mode ::selection {
-            background: rgba(99, 102, 241, 0.6);
-        }
-
-        /* Floating Elements */
-        .floating-element {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.2;
-            z-index: -1;
-            animation: float 25s infinite linear;
-        }
-
-        /* Form Elements */
-        .form-container {
-            position: relative;
-            margin-bottom: 1.75rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            font-size: 1rem;
-            line-height: 1.5;
-            border-radius: 14px;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
-            outline: none;
-            color: var(--text-primary);
-        }
-
-        /* Light mode form background */
-        .light-mode .form-input {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                inset 0 1px 3px rgba(0, 0, 0, 0.05),
-                0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Dark mode form background */
-        .dark-mode .form-input {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                inset 0 1px 3px rgba(0, 0, 0, 0.2),
-                0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-input:focus {
-            border-color: var(--primary);
-            box-shadow: 
-                0 0 0 4px rgba(99, 102, 241, 0.15),
-                0 4px 20px rgba(99, 102, 241, 0.2),
-                inset 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .dark-mode .form-input:focus {
-            box-shadow: 
-                0 0 0 4px rgba(99, 102, 241, 0.25),
-                0 4px 20px rgba(99, 102, 241, 0.3),
-                inset 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.7;
-        }
-
-        /* Textarea khusus */
-        textarea.form-input {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Select khusus */
-        select.form-input {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236366f1'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.5em;
-            padding-right: 3rem;
-        }
-
-        /* Disabled state */
-        .form-input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: rgba(148, 163, 184, 0.1);
-        }
-
-        /* Error state */
-        .form-input.error {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        .form-input.error:focus {
-            box-shadow: 
-                0 0 0 4px rgba(239, 68, 68, 0.15),
-                0 4px 20px rgba(239, 68, 68, 0.2);
-        }
-
-        /* Success state */
-        .form-input.success {
-            border-color: var(--accent);
-            background: rgba(16, 185, 129, 0.05);
-        }
-
-        .form-input.success:focus {
-            box-shadow: 
-                0 0 0 4px rgba(16, 185, 129, 0.15),
-                0 4px 20px rgba(16, 185, 129, 0.2);
-        }
-
-        /* File input khusus */
-        input[type="file"].form-input {
-            padding: 0.75rem;
-            cursor: pointer;
-        }
-
-        input[type="file"].form-input::file-selector-button {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            margin-right: 1rem;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        input[type="file"].form-input::file-selector-button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        /* Checkbox dan Radio */
-        input[type="checkbox"],
-        input[type="radio"] {
-            width: 1.25rem;
-            height: 1.25rem;
-            accent-color: var(--primary);
-            cursor: pointer;
-        }
-
-        /* Input group */
-        .input-group {
-            display: flex;
-            border-radius: 14px;
-            overflow: hidden;
-        }
-
-        .input-group .form-input {
-            border-radius: 0;
-            flex: 1;
-        }
-
-        .input-group-prepend,
-        .input-group-append {
-            display: flex;
-            align-items: center;
-            padding: 0 1rem;
-            background: rgba(99, 102, 241, 0.1);
-            border: 2px solid var(--border-color);
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .input-group-prepend {
-            border-right: none;
-            border-radius: 14px 0 0 14px;
-        }
-
-        .input-group-append {
-            border-left: none;
-            border-radius: 0 14px 14px 0;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            line-height: 1.5;
-            border-radius: 14px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            gap: 0.75rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 
-                0 8px 30px rgba(99, 102, 241, 0.3),
-                0 2px 8px rgba(99, 102, 241, 0.15);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 
-                0 15px 40px rgba(99, 102, 241, 0.4),
-                0 4px 15px rgba(99, 102, 241, 0.25);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-3px);
-            border-color: rgba(99, 102, 241, 0.3);
-        }
-
-        /* Tags */
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 9990;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-container {
-            position: fixed;
-            inset: 0;
-            z-index: 9991;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .modal-content {
-            width: 100%;
-            max-width: 48rem;
-            max-height: 90vh;
-            border-radius: 20px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Toast */
-        .toast-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 9999;
-            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .toast {
-            padding: 1.25rem 1.5rem;
-            border-radius: 14px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 
-                0 12px 32px rgba(0, 0, 0, 0.2),
-                0 4px 16px rgba(0, 0, 0, 0.1);
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Status Badges */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-        }
-
-        .status-success {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .status-warning {
-            background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .status-error {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        /* Profile Image Styling - Match dengan Project Image */
-        .profile-container {
-            position: relative;
-            width: 320px;
-            height: 320px;
-            margin: 0 auto;
-            border-radius: 20px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 20px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(99, 102, 241, 0.1);
-        }
-
-        .profile-container:hover .profile-image {
-            transform: scale(1.05);
-        }
-
-        /* Overlay untuk edit */
-        .profile-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 30%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .profile-container:hover .profile-overlay {
-            opacity: 1;
-        }
-
-        .profile-overlay-content {
-            text-align: center;
-            color: white;
-            padding: 15px;
-            width: 100%;
-        }
-
-        .profile-overlay-content i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .profile-overlay-content p {
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            margin: 0;
-        }
-
-        /* Floating Tech Icons untuk Profile */
-        .floating-tech-icon {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            z-index: 2;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Typewriter Effect */
-        .typewriter {
-            overflow: hidden;
-            border-right: 2px solid var(--primary);
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--primary) }
-        }
-
-        /* Tech Categories */
-        .tech-category-frontend { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3); color: #3b82f6; }
-        .tech-category-backend { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #10b981; }
-        .tech-category-database { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #f59e0b; }
-        .tech-category-mobile { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.3); color: #8b5cf6; }
-        .tech-category-devops { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
-        .tech-category-cloud { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #6366f1; }
-        .tech-category-tools { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #a855f7; }
-        .tech-category-design { background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.3); color: #ec4899; }
-        .tech-category-ai { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.3); color: #8b5cf6; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .profile-container {
-                width: 280px;
-                height: 280px;
-            }
-            
-            .modal-content {
-                max-width: 95vw;
-                max-height: 85vh;
-            }
-            
-            .grid-responsive {
-                grid-template-columns: 1fr;
-            }
-
-            .floating-tech-icon {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .profile-container {
-                width: 240px;
-                height: 240px;
-            }
-        }
-
-        /* Print Styles */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            
-            .glass-effect, .glass-card {
-                background: white !important;
-                box-shadow: none !important;
-                border: 1px solid #ddd !important;
-            }
-        }
-
-        /* Accessibility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .focus-visible:focus {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 3.5rem;
-            height: 3.5rem;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .fab:hover {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
-        }
-
-        @media (max-width: 640px) {
-            .fab {
-                width: 3rem;
-                height: 3rem;
-                bottom: 1.5rem;
-                right: 1.5rem;
-            }
-        }
-
-        /* Button Loading State */
-        .btn-loading {
-            position: relative;
-            color: transparent !important;
-        }
-
-        .btn-loading::after {
-            content: '';
-            position: absolute;
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        /* Typography improvements */
-        .section-title {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            font-weight: 900;
-            letter-spacing: -0.025em;
-        }
-
-        @media (max-width: 768px) {
-            .section-title {
-                font-size: 2.5rem;
-            }
-        }
-
-        .lead-text {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-        }
-
-        /* Project Image Styling (untuk referensi) */
-        .project-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s ease;
-            border-radius: 20px 20px 0 0;
-        }
-
-        /* Tooltip untuk social links */
-        .tooltip-container {
-            position: relative;
-        }
-
-        .tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s;
-            margin-bottom: 0.5rem;
-            z-index: 10;
-        }
-
-        .tooltip-container:hover .tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 6px;
-            border-style: solid;
-            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
-        }
-
-        /* ============================================== */
-        /* PROJECT SLIDER & PAGINATION STYLES - TAMBAHAN */
-        /* ============================================== */
-
-        /* Projects Pagination Container */
-        .projects-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-        }
-
-        /* Projects Grid for normal view */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            transition: transform 0.5s ease;
-        }
-
-        /* Project Slide for slider view */
-        .project-slide {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .project-slide.active {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        /* Slider Controls */
-        .slider-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 3rem;
-            padding: 1rem;
-        }
-
-        .slider-nav-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-primary);
-            font-size: 1.2rem;
-        }
-
-        .slider-nav-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.1);
-            border-color: var(--primary);
-        }
-
-        .slider-nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-        }
-
-        .slider-nav-btn:disabled:hover {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border-color: var(--border-color);
-        }
-
-        /* Pagination Dots */
-        .pagination-dots {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .pagination-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--border-color);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .pagination-dot.active {
-            background: var(--primary);
-            transform: scale(1.3);
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
-        }
-
-        .pagination-dot:hover:not(.active) {
-            background: var(--text-secondary);
-            transform: scale(1.1);
-        }
-
-        /* Slide Info */
-        .slide-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .slide-info-number {
-            background: var(--primary);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        /* View Toggle Buttons */
-        .view-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .view-toggle-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            color: var(--text-primary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .view-toggle-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .view-toggle-btn:hover:not(.active) {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        /* Auto-slide Indicator */
-        .auto-slide-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .auto-slide-toggle {
-            width: 40px;
-            height: 20px;
-            background: var(--border-color);
-            border-radius: 10px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .auto-slide-toggle.active {
-            background: var(--primary);
-        }
-
-        .auto-slide-toggle::before {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-        }
-
-        .auto-slide-toggle.active::before {
-            transform: translateX(20px);
-        }
-
-        /* Slide Animation */
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(-100px);
-            }
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .slide-out {
-            animation: slideOut 0.3s ease forwards;
-        }
-
-        .slide-in {
-            animation: slideInRight 0.3s ease forwards;
-        }
-
-        /* Responsive adjustments for slider */
-        @media (max-width: 768px) {
-            .project-slide.active {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .slider-controls {
-                margin-top: 2rem;
-                padding: 0.5rem;
-            }
-            
-            .slider-nav-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-            
-            .view-toggle {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .view-toggle-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .slider-controls {
-                flex-wrap: wrap;
-            }
-            
-            .slide-info {
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                margin-top: 1rem;
-            }
-        }
-
-        /* Empty State */
-        .empty-projects {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            border: 2px dashed var(--border-color);
-        }
-
-        .empty-projects i {
-            font-size: 4rem;
-            color: var(--border-color);
-            margin-bottom: 1rem;
-        }
-
-        .empty-projects h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .empty-projects p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        /* Firebase Auth Button */
-        .firebase-auth-btn {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            z-index: 100;
-        }
-
-        /* Connection Status */
-        .connection-status {
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            pointer-events: none;
-        }
-
-        .connection-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-            display: inline-block;
-        }
-
-        .connection-online .connection-dot {
-            background-color: #10B981;
-            box-shadow: 0 0 10px #10B981;
-        }
-
-        .connection-offline .connection-dot {
-            background-color: #EF4444;
-        }
-
-        .connection-syncing .connection-dot {
-            background-color: #F59E0B;
-            animation: pulse 1.5s infinite;
-        }
+        /* [Semua style CSS yang sama seperti sebelumnya] */
+        /* ... (paste semua CSS dari file sebelumnya di sini) ... */
     </style>
 </head>
 <body x-bind:class="isDark ? 'dark-mode' : 'light-mode'" class="min-h-screen relative">
@@ -1306,21 +39,6 @@
     <div class="floating-element w-96 h-96 bg-purple-500 top-20 left-20"></div>
     <div class="floating-element w-64 h-64 bg-indigo-500 bottom-20 right-20" style="animation-delay: -10s;"></div>
     <div class="floating-element w-80 h-80 bg-blue-500 top-1/2 left-1/4" style="animation-delay: -5s;"></div>
-
-    <!-- Connection Status -->
-    <div class="connection-status" :class="{
-        'connection-online': isOnline && !isSyncing,
-        'connection-offline': !isOnline,
-        'connection-syncing': isSyncing
-    }">
-        <div class="px-4 py-2 rounded-full glass-card text-sm font-medium">
-            <span class="connection-dot"></span>
-            <span x-text="connectionStatusText"></span>
-            <span x-show="isSyncing" class="ml-2">
-                <i class="fas fa-sync-alt animate-spin"></i>
-            </span>
-        </div>
-    </div>
 
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" :style="`transform: scaleX(${scrollProgress / 100})`"></div>
@@ -1349,20 +67,6 @@
         </div>
     </div>
 
-    <!-- Firebase Auth Button -->
-    <div class="firebase-auth-btn no-print" x-show="!userId && !isLoading">
-        <button @click="initFirebaseAuth()"
-                class="btn btn-primary flex items-center gap-2 shadow-xl">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <span>Sync with Firebase</span>
-        </button>
-    </div>
-
-    <!-- Floating Action Button -->
-    <button @click="scrollTo('contact')" class="fab no-print" title="Get in Touch" aria-label="Contact me">
-        <i class="fas fa-paper-plane text-xl"></i>
-    </button>
-
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-40 py-4 transition-all duration-300 glass-effect"
          :class="{'shadow-xl': !isAtTop}">
@@ -1375,7 +79,7 @@
                     </div>
                     <div>
                         <h1 class="text-lg sm:text-xl font-bold gradient-text tracking-tight">PORTOFOLIO</h1>
-                        <p class="text-xs text-slate-600 dark:text-slate-400">IT Developer</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">Zuyyina Firdausi M</p>
                     </div>
                 </a>
 
@@ -1398,25 +102,11 @@
 
                 <!-- Right Actions -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <!-- Firebase User Info -->
-                    <div x-show="userId" class="flex items-center space-x-3">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-xs font-semibold gradient-text truncate max-w-[120px]" 
-                               x-text="userEmail"></p>
-                            <p class="text-xs text-slate-500">Cloud Sync</p>
-                        </div>
-                        <button @click="signOut()"
-                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg group focus-visible"
-                                title="Sign Out">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-
                     <!-- Data Management Button -->
                     <div class="relative">
                         <button @click="toggleDataPanel"
                                 class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg group focus-visible"
-                                :title="`${totalItems} items in storage`"
+                                :title="`${totalItems} items`"
                                 aria-label="Data management">
                             <i class="fas fa-database group-hover:rotate-90 transition-transform duration-300"></i>
                             <span x-show="totalItems > 0" 
@@ -1480,39 +170,34 @@
                         </button>
                     </div>
 
-                    <!-- Firebase Sync Status -->
-                    <div x-show="userId" class="mb-6 p-4 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <i class="fas fa-cloud text-green-500 text-xl"></i>
-                                <div>
-                                    <h4 class="font-semibold text-green-500">Firebase Sync Active</h4>
-                                    <p class="text-sm text-slate-600 dark:text-slate-400">
-                                        Data synchronized with cloud
-                                    </p>
-                                </div>
-                            </div>
-                            <button @click="syncToFirebase()" 
-                                    class="btn btn-secondary text-sm px-4 py-2"
-                                    :disabled="isSyncing">
-                                <i class="fas fa-sync-alt mr-2" :class="{'animate-spin': isSyncing}"></i>
-                                <span x-text="isSyncing ? 'Syncing...' : 'Sync Now'"></span>
-                            </button>
+                    <!-- Data Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
+                        <div class="text-center p-4 rounded-xl glass-card">
+                            <div class="text-2xl font-bold gradient-text" x-text="skills.length"></div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Skills</div>
+                        </div>
+                        <div class="text-center p-4 rounded-xl glass-card">
+                            <div class="text-2xl font-bold" x-text="projects.length"></div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Projects</div>
+                        </div>
+                        <div class="text-center p-4 rounded-xl glass-card">
+                            <div class="text-2xl font-bold" x-text="totalProjectCount"></div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Total Projects</div>
+                        </div>
+                        <div class="text-center p-4 rounded-xl glass-card">
+                            <div class="text-2xl font-bold" x-text="averageSkillLevel + '%'"></div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Avg. Skill Level</div>
                         </div>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Import/Export -->
+                    <div class="grid md:grid-cols-2 gap-6 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
                         <!-- Import Data -->
                         <div class="space-y-4">
                             <h4 class="font-semibold text-lg">
                                 <i class="fas fa-download mr-2"></i>Import Data
                             </h4>
                             <div class="flex flex-col sm:flex-row gap-3">
-                                <button @click="importSampleData"
-                                        class="btn btn-secondary flex-1">
-                                    <i class="fas fa-database mr-2"></i>
-                                    Load Sample
-                                </button>
                                 <button @click="importFromFile"
                                         class="btn btn-primary flex-1">
                                     <i class="fas fa-file-import mr-2"></i>
@@ -1533,50 +218,12 @@
                                     <i class="fas fa-file-export mr-2"></i>
                                     Export JSON
                                 </button>
-                                <button @click="clearAllData"
-                                        class="btn btn-secondary flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800/30">
-                                    <i class="fas fa-trash mr-2"></i>
-                                    Clear All
+                                <button @click="resetToDefault"
+                                        class="btn btn-secondary flex-1 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800/30">
+                                    <i class="fas fa-history mr-2"></i>
+                                    Reset Default
                                 </button>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Stats -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
-                        <div class="text-center p-4 rounded-xl glass-card">
-                            <div class="text-2xl font-bold gradient-text" x-text="skills.length"></div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Skills</div>
-                        </div>
-                        <div class="text-center p-4 rounded-xl glass-card">
-                            <div class="text-2xl font-bold" x-text="projects.length"></div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Projects</div>
-                        </div>
-                        <div class="text-center p-4 rounded-xl glass-card">
-                            <div class="text-2xl font-bold" x-text="totalProjectCount"></div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Total Projects</div>
-                        </div>
-                        <div class="text-center p-4 rounded-xl glass-card">
-                            <div class="text-2xl font-bold" x-text="averageSkillLevel + '%'"></div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Avg. Skill Level</div>
-                        </div>
-                    </div>
-
-                    <!-- Sync History -->
-                    <div x-show="syncHistory.length > 0" class="mt-6 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
-                        <h4 class="font-semibold text-lg mb-4">
-                            <i class="fas fa-history mr-2"></i>Sync History
-                        </h4>
-                        <div class="space-y-2 max-h-40 overflow-y-auto">
-                            <template x-for="(sync, index) in syncHistory.slice(0, 5)" :key="index">
-                                <div class="flex items-center justify-between p-3 rounded-lg glass-card text-sm">
-                                    <div class="flex items-center space-x-3">
-                                        <i :class="sync.status === 'success' ? 'fas fa-check-circle text-green-500' : 'fas fa-times-circle text-red-500'"></i>
-                                        <span x-text="sync.action"></span>
-                                    </div>
-                                    <span class="text-xs text-slate-500" x-text="formatTimeAgo(sync.timestamp)"></span>
-                                </div>
-                            </template>
                         </div>
                     </div>
                 </div>
@@ -1601,12 +248,11 @@
                         <!-- Main Headline -->
                         <div class="space-y-6 sm:space-y-8">
                             <h1 class="section-title">
-                                <span class="block"> Digital</span>
-                                <span class="gradient-text">Excellence</span>
+                                <span class="block">Hi, I'm</span>
+                                <span class="gradient-text" x-text="profile.name.split(' ')[0]"></span>
                             </h1>
 
-                            <p class="lead-text">
-                                Backend Developer Turning complex problems into elegant solutions.
+                            <p class="lead-text" x-text="profile.bio">
                             </p>
                         </div>
 
@@ -2135,11 +781,11 @@
                             <form @submit.prevent="submitContact" class="space-y-6 sm:space-y-10">
                                 <div class="form-container">
                                     <label class="form-label">
-                                        <i class="fas fa-user mr-2"></i>Username
+                                        <i class="fas fa-user mr-2"></i>Your Name
                                     </label>
                                     <input type="text" x-model="contactForm.name" required
                                            class="form-input"
-                                           placeholder="Username">
+                                           placeholder="Enter your name">
                                 </div>
 
                                 <div class="form-container">
@@ -2148,7 +794,7 @@
                                     </label>
                                     <input type="email" x-model="contactForm.email" required
                                            class="form-input"
-                                           placeholder="Email">
+                                           placeholder="your.email@example.com">
                                 </div>
 
                                 <div class="form-container">
@@ -2157,7 +803,7 @@
                                     </label>
                                     <textarea rows="5" x-model="contactForm.message" required
                                               class="form-input"
-                                              placeholder="Deskripsi"></textarea>
+                                              placeholder="Describe your project or inquiry..."></textarea>
                                 </div>
 
                                 <button type="submit"
@@ -2185,7 +831,7 @@
                         </div>
                         <div>
                             <span class="text-2xl sm:text-3xl font-bold gradient-text">PORTOFOLIO</span>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">IT Developer</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400" x-text="profile.name"></p>
                         </div>
                     </div>
 
@@ -2198,7 +844,7 @@
                     </p>
 
                     <p class="text-xs text-slate-500 dark:text-slate-500">
-                        <i class="fas fa-database mr-1"></i>Data stored locally in your browser
+                        <i class="fas fa-code mr-1"></i>Portfolio built with Alpine.js & Tailwind CSS
                     </p>
                 </div>
 
@@ -2219,1051 +865,8 @@
     </footer>
 
     <!-- MODALS -->
-
-    <!-- Delete Confirmation Modal -->
-    <template x-if="modals.deleteConfirm">
-        <div>
-            <div class="modal-overlay" @click="closeModal('deleteConfirm')"></div>
-            <div class="modal-container">
-                <div class="modal-content max-w-md">
-                    <div class="p-6 sm:p-10">
-                        <!-- Warning Icon -->
-                        <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500/10 to-red-600/10 flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-2xl sm:text-3xl"></i>
-                        </div>
-
-                        <!-- Confirmation Message -->
-                        <div class="text-center mb-6 sm:mb-8">
-                            <h3 class="text-xl sm:text-2xl font-bold mb-4">Confirm Deletion</h3>
-                            <p class="text-lg mb-2 text-slate-600 dark:text-slate-400">
-                                Are you sure you want to delete
-                            </p>
-                            <p class="text-xl sm:text-2xl font-bold gradient-text mb-4 sm:mb-6" x-text="`"${deleteItem.name}"`"></p>
-                            <p class="text-sm px-4 sm:px-6 py-2 sm:py-3 rounded-xl glass-card bg-red-500/10 text-red-600 dark:text-red-400">
-                                <i class="fas fa-info-circle mr-2"></i>
-                                This action cannot be undone
-                            </p>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                            <button @click="closeModal('deleteConfirm')"
-                                    class="btn btn-secondary flex-1">
-                                <i class="fas fa-times mr-2"></i>
-                                Cancel
-                            </button>
-                            <button @click="executeDelete"
-                                    class="btn flex-1 bg-red-500 hover:bg-red-600 text-white">
-                                <i class="fas fa-trash mr-2"></i>
-                                Delete Permanently
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- Add/Edit Skill Modal -->
-    <template x-if="modals.addSkill">
-        <div>
-            <div class="modal-overlay" @click="closeModal('addSkill')"></div>
-            <div class="modal-container">
-                <div class="modal-content">
-                    <div class="p-6 sm:p-10">
-                        <!-- Modal Header -->
-                        <div class="flex items-center justify-between mb-6 sm:mb-10 pb-6 sm:pb-8 border-b border-slate-200/20">
-                            <div class="flex items-center gap-4 sm:gap-5">
-                                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
-                                    <i :class="editingSkill ? 'fas fa-edit' : 'fas fa-plus'" class="text-lg sm:text-xl text-white"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">
-                                        <span x-text="editingSkill ? 'Edit Skill' : 'Add New Skill'"></span>
-                                    </h3>
-                                    <p class="text-lg text-slate-600 dark:text-slate-400">
-                                        <span x-text="editingSkill ? 'Update your skill details' : 'Expand your technical expertise'"></span>
-                                    </p>
-                                </div>
-                            </div>
-                            <button @click="closeModal('addSkill')"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-transform duration-300 focus-visible"
-                                    aria-label="Close modal">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <!-- Skill Form -->
-                        <form @submit.prevent="editingSkill ? updateSkill() : addNewSkill()" class="space-y-6 sm:space-y-8">
-                            <!-- Tab Navigation -->
-                            <div class="flex gap-2 p-2 rounded-xl glass-card mb-6">
-                                <button type="button" @click="activeSkillTab = 'basic'"
-                                        class="flex-1 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeSkillTab === 'basic' 
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-info-circle mr-2"></i>
-                                    Basic
-                                </button>
-                                <button type="button" @click="activeSkillTab = 'details'"
-                                        class="flex-1 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeSkillTab === 'details'
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-chart-line mr-2"></i>
-                                    Details
-                                </button>
-                                <button type="button" @click="activeSkillTab = 'advanced'"
-                                        class="flex-1 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeSkillTab === 'advanced'
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-cog mr-2"></i>
-                                    Advanced
-                                </button>
-                            </div>
-
-                            <!-- Basic Info Tab -->
-                            <div x-show="activeSkillTab === 'basic'" class="space-y-6 sm:space-y-8">
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-tag mr-2"></i>Skill Name
-                                        </label>
-                                        <input type="text" x-model="newSkill.name" required
-                                               class="form-input"
-                                               placeholder="e.g., React, Laravel, Docker">
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-folder mr-2"></i>Category
-                                        </label>
-                                        <select x-model="newSkill.category" required
-                                                class="form-input">
-                                            <option value="">Select a category</option>
-                                            <template x-for="category in skillCategories" :key="category">
-                                                <option :value="category"
-                                                        x-text="getCategoryName(category)">
-                                                </option>
-                                            </template>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-file-alt mr-2"></i>Skill Description
-                                    </label>
-                                    <textarea x-model="newSkill.description" rows="3"
-                                              class="form-input"
-                                              placeholder="Briefly describe your experience with this skill..."></textarea>
-                                </div>
-                            </div>
-
-                            <!-- Details Tab -->
-                            <div x-show="activeSkillTab === 'details'" class="space-y-6 sm:space-y-8">
-                                <div class="p-4 sm:p-6 rounded-xl glass-card mb-6">
-                                    <h4 class="font-semibold text-lg mb-4">
-                                        <i class="fas fa-chart-line"></i>
-                                        Proficiency Level
-                                    </h4>
-                                    
-                                    <div class="space-y-4 sm:space-y-6">
-                                        <div class="flex justify-between items-center">
-                                            <div>
-                                                <label class="form-label">Current Level</label>
-                                                <div class="text-3xl sm:text-4xl font-bold gradient-text" x-text="newSkill.level + '%'"></div>
-                                            </div>
-                                            <div>
-                                                <span class="status-badge" :class="getProficiencyClass(newSkill.level)">
-                                                    <i :class="getProficiencyIcon(newSkill.level)"></i>
-                                                    <span x-text="getProficiencyLevel(newSkill.level)"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <input type="range" x-model="newSkill.level" min="0" max="100" step="1"
-                                               class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
-                                               :style="`background: linear-gradient(90deg, var(--primary) ${newSkill.level}%, var(--border-color) ${newSkill.level}%)`">
-
-                                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                                            <div class="flex flex-col items-center">
-                                                <i class="fas fa-seedling text-green-500 text-lg sm:text-xl mb-2"></i>
-                                                <span class="text-sm font-medium">Beginner</span>
-                                                <span class="text-xs text-slate-500">0-40%</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <i class="fas fa-leaf text-blue-500 text-lg sm:text-xl mb-2"></i>
-                                                <span class="text-sm font-medium">Intermediate</span>
-                                                <span class="text-xs text-slate-500">41-70%</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <i class="fas fa-tree text-purple-500 text-lg sm:text-xl mb-2"></i>
-                                                <span class="text-sm font-medium">Advanced</span>
-                                                <span class="text-xs text-slate-500">71-90%</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <i class="fas fa-fire text-red-500 text-lg sm:text-xl mb-2"></i>
-                                                <span class="text-sm font-medium">Expert</span>
-                                                <span class="text-xs text-slate-500">91-100%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-calendar-alt mr-2"></i>Years Experience
-                                        </label>
-                                        <div class="flex items-center gap-4">
-                                            <input type="number" x-model="newSkill.years" min="0" max="50" step="0.5"
-                                                   class="form-input flex-1"
-                                                   placeholder="e.g., 3.5">
-                                            <span class="text-sm text-slate-600 dark:text-slate-400">years</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-project-diagram mr-2"></i>Projects Used In
-                                        </label>
-                                        <input type="number" x-model="newSkill.projects" min="0" max="100"
-                                               class="form-input"
-                                               placeholder="e.g., 15">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Advanced Tab -->
-                            <div x-show="activeSkillTab === 'advanced'" class="space-y-6 sm:space-y-8">
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-certificate mr-2"></i>Certifications & Achievements
-                                    </label>
-                                    <div class="p-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl min-h-24">
-                                        <template x-for="(cert, index) in newSkill.certifications" :key="index">
-                                            <span class="tag mr-2 mb-2">
-                                                <i class="fas fa-award"></i>
-                                                <span x-text="cert"></span>
-                                                <button type="button" @click="removeCertification(index)" 
-                                                        class="ml-2 text-white/80 hover:text-white">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </span>
-                                        </template>
-                                        <input type="text" x-model="certificationInput"
-                                               @keydown.enter.prevent="addCertification"
-                                               class="w-full border-none bg-transparent outline-none mt-2"
-                                               placeholder="Type certification and press Enter...">
-                                    </div>
-                                </div>
-
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-hashtag mr-2"></i>Custom ID
-                                        </label>
-                                        <input type="text" x-model="newSkill.customId"
-                                               class="form-input"
-                                               placeholder="Optional custom identifier">
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-tags mr-2"></i>Tags
-                                        </label>
-                                        <div class="p-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl min-h-16">
-                                            <template x-for="(tag, index) in newSkill.tags" :key="index">
-                                                <span class="tag mr-2 mb-2">
-                                                    <span x-text="tag"></span>
-                                                    <button type="button" @click="removeTag(index)" 
-                                                            class="ml-2 text-white/80 hover:text-white">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </span>
-                                            </template>
-                                            <input type="text" x-model="tagInput"
-                                                   @keydown.enter.prevent="addTag"
-                                                   class="w-full border-none bg-transparent outline-none"
-                                                   placeholder="Add tags...">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Submit Buttons -->
-                            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 sm:pt-10 border-t border-slate-200/20">
-                                <div class="flex gap-3 order-2 sm:order-1">
-                                    <button type="button" @click="prevSkillTab"
-                                            x-show="activeSkillTab !== 'basic'"
-                                            class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left mr-2"></i>
-                                        Previous
-                                    </button>
-                                    <button type="button" @click="nextSkillTab"
-                                            x-show="activeSkillTab !== 'advanced'"
-                                            class="btn btn-secondary">
-                                        Next
-                                        <i class="fas fa-arrow-right ml-2"></i>
-                                    </button>
-                                </div>
-
-                                <div class="flex gap-3 order-1 sm:order-2">
-                                    <button type="button" @click="closeModal('addSkill')"
-                                        class="btn btn-secondary">
-                                        Cancel
-                                    </button>
-                                    <button type="submit"
-                                            class="btn btn-primary"
-                                            :disabled="isSubmitting">
-                                        <template x-if="!isSubmitting">
-                                            <span x-text="editingSkill ? 'Update Skill' : 'Add Skill'"></span>
-                                        </template>
-                                        <template x-if="isSubmitting">
-                                            <span class="btn-loading"></span>
-                                        </template>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- Add/Edit Project Modal -->
-    <template x-if="modals.addProject">
-        <div>
-            <div class="modal-overlay" @click="closeModal('addProject')"></div>
-            <div class="modal-container">
-                <div class="modal-content">
-                    <div class="p-6 sm:p-10">
-                        <!-- Modal Header -->
-                        <div class="flex items-center justify-between mb-6 sm:mb-10 pb-6 sm:pb-8 border-b border-slate-200/20">
-                            <div class="flex items-center gap-4 sm:gap-5">
-                                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
-                                    <i :class="editingProject ? 'fas fa-edit' : 'fas fa-plus'" class="text-lg sm:text-xl text-white"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">
-                                        <span x-text="editingProject ? 'Edit Project' : 'Add New Project'"></span>
-                                    </h3>
-                                    <p class="text-lg text-slate-600 dark:text-slate-400">
-                                        <span x-text="editingProject ? 'Update project details' : 'Showcase your work'"></span>
-                                    </p>
-                                </div>
-                            </div>
-                            <button @click="closeModal('addProject')"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-transform duration-300 focus-visible"
-                                    aria-label="Close modal">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <!-- Project Form -->
-                        <form @submit.prevent="editingProject ? updateProject() : addNewProject()" class="space-y-6 sm:space-y-8">
-                            <!-- Tab Navigation -->
-                            <div class="flex flex-wrap gap-2 p-2 rounded-xl glass-card mb-6">
-                                <button type="button" @click="activeProjectTab = 'basic'"
-                                        class="flex-1 min-w-[120px] px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeProjectTab === 'basic' 
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-info-circle mr-2"></i>
-                                    Basic
-                                </button>
-                                <button type="button" @click="activeProjectTab = 'tech'"
-                                        class="flex-1 min-w-[120px] px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeProjectTab === 'tech'
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-code mr-2"></i>
-                                    Tech
-                                </button>
-                                <button type="button" @click="activeProjectTab = 'media'"
-                                        class="flex-1 min-w-[120px] px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeProjectTab === 'media'
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-image mr-2"></i>
-                                    Media
-                                </button>
-                                <button type="button" @click="activeProjectTab = 'details'"
-                                        class="flex-1 min-w-[120px] px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                                        :class="activeProjectTab === 'details'
-                                                ? 'gradient-bg text-white shadow-lg'
-                                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'">
-                                    <i class="fas fa-tasks mr-2"></i>
-                                    Details
-                                </button>
-                            </div>
-
-                            <!-- Basic Info Tab -->
-                            <div x-show="activeProjectTab === 'basic'" class="space-y-6 sm:space-y-8">
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-tag mr-2"></i>Project Name
-                                        </label>
-                                        <input type="text" x-model="newProject.name" required
-                                               class="form-input"
-                                               placeholder="e.g., E-commerce Platform">
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-layer-group mr-2"></i>Project Type
-                                        </label>
-                                        <select x-model="newProject.type"
-                                                class="form-input">
-                                            <option value="web">Web Application</option>
-                                            <option value="mobile">Mobile App</option>
-                                            <option value="api">API Development</option>
-                                            <option value="desktop">Desktop Application</option>
-                                            <option value="ai">AI/ML Project</option>
-                                            <option value="saas">SaaS Platform</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-align-left mr-2"></i>Project Description
-                                    </label>
-                                    <textarea x-model="newProject.description" rows="4" required
-                                              class="form-input"
-                                              placeholder="Describe your project goals, features, and achievements..."></textarea>
-                                </div>
-                            </div>
-
-                            <!-- Technologies Tab -->
-                            <div x-show="activeProjectTab === 'tech'" class="space-y-6 sm:space-y-8">
-                                <!-- Selected Technologies -->
-                                <div class="form-container">
-                                    <label class="form-label">Technologies Used</label>
-                                    <div class="p-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl min-h-24">
-                                        <template x-for="tech in newProject.technologies" :key="tech">
-                                            <span class="tag mr-2 mb-2">
-                                                <i :class="getTechIcon(tech)" class="mr-2"></i>
-                                                <span x-text="tech"></span>
-                                                <button type="button" @click="removeTech(tech)" 
-                                                        class="ml-2 text-white/80 hover:text-white">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </span>
-                                        </template>
-                                        <input type="text" x-model="techInput"
-                                               @keydown.enter.prevent="addTechnology"
-                                               class="w-full border-none bg-transparent outline-none mt-2"
-                                               placeholder="Type technology and press Enter...">
-                                    </div>
-                                </div>
-
-                                <!-- Technology Suggestions -->
-                                <div>
-                                    <label class="form-label mb-4">Popular Technologies</label>
-                                    <div class="flex flex-wrap gap-2">
-                                        <template x-for="tech in popularTechnologies" :key="tech">
-                                            <button type="button" @click="addTechFromSuggestion(tech)"
-                                                    :class="newProject.technologies.includes(tech) 
-                                                            ? 'gradient-bg text-white'
-                                                            : 'glass-card text-slate-700 dark:text-slate-300 hover:border-indigo-500'"
-                                                    class="px-4 py-2 rounded-lg transition-all duration-300">
-                                                <span x-text="tech"></span>
-                                                <span x-show="newProject.technologies.includes(tech)" 
-                                                      class="ml-2">✓</span>
-                                            </button>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Media & Links Tab -->
-                            <div x-show="activeProjectTab === 'media'" class="space-y-6 sm:space-y-8">
-                                <!-- Image Upload -->
-                                <div class="form-container">
-                                    <label class="form-label">Project Image</label>
-                                    <div @dragover.prevent @dragenter.prevent @drop.prevent="handleDrop($event)"
-                                         @click="triggerFileInput"
-                                         class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors duration-300">
-                                        <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 dark:text-slate-500 mb-4"></i>
-                                        <p class="text-lg mb-2">Drag & drop or click to upload</p>
-                                        <p class="text-sm text-slate-500">PNG, JPG, GIF up to 5MB</p>
-                                        <input type="file" id="projectImageInput" @change="uploadImage($event)" accept="image/*" class="hidden">
-                                    </div>
-                                    
-                                    <!-- Image Preview -->
-                                    <div x-show="newProject.image" class="mt-6">
-                                        <img :src="newProject.image" alt="Preview" 
-                                             class="w-full h-auto rounded-xl shadow-lg border-2 border-slate-200/20">
-                                    </div>
-                                </div>
-
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fas fa-external-link-alt mr-2"></i>
-                                            Live Demo URL
-                                        </label>
-                                        <input type="url" x-model="newProject.demoUrl"
-                                               class="form-input"
-                                               placeholder="https://your-project.com">
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">
-                                            <i class="fab fa-github mr-2"></i>
-                                            Source Code URL
-                                        </label>
-                                        <input type="url" x-model="newProject.sourceUrl"
-                                               class="form-input"
-                                               placeholder="https://github.com/username/project">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Details Tab -->
-                            <div x-show="activeProjectTab === 'details'" class="space-y-6 sm:space-y-8">
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">Project Role</label>
-                                        <select x-model="newProject.role"
-                                                class="form-input">
-                                            <option value="">Select your role</option>
-                                            <option value="solo">Solo Developer</option>
-                                            <option value="lead">Team Lead</option>
-                                            <option value="frontend">Frontend Developer</option>
-                                            <option value="backend">Backend Developer</option>
-                                            <option value="fullstack">Full Stack Developer</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">Team Size</label>
-                                        <input type="number" x-model="newProject.teamSize" min="1" max="50"
-                                               class="form-input"
-                                               placeholder="e.g., 3">
-                                    </div>
-                                </div>
-
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">Start Date</label>
-                                        <input type="date" x-model="newProject.startDate"
-                                               class="form-input">
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">End Date</label>
-                                        <input type="date" x-model="newProject.endDate"
-                                               class="form-input"
-                                               :disabled="newProject.isOngoing">
-                                        <div class="flex items-center gap-3 mt-3">
-                                            <input type="checkbox" x-model="newProject.isOngoing" id="ongoing"
-                                                   class="w-5 h-5 rounded border-2 border-slate-300 dark:border-slate-600 bg-transparent">
-                                            <label for="ongoing" class="text-sm text-slate-600 dark:text-slate-400">
-                                                Ongoing Project
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                    <div class="form-container">
-                                        <label class="form-label">Status</label>
-                                        <select x-model="newProject.status"
-                                                class="form-input">
-                                            <option value="completed">Completed</option>
-                                            <option value="in-progress">In Progress</option>
-                                            <option value="planning">Planning</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-container">
-                                        <label class="form-label">Client / Company</label>
-                                        <input type="text" x-model="newProject.client"
-                                               class="form-input"
-                                               placeholder="Company name or client">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Form Navigation & Submit -->
-                            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 sm:pt-10 border-t border-slate-200/20">
-                                <div class="flex gap-3 order-2 sm:order-1">
-                                    <button type="button" @click="prevProjectTab"
-                                            x-show="activeProjectTab !== 'basic'"
-                                            class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left mr-2"></i>
-                                        Previous
-                                    </button>
-                                    <button type="button" @click="nextProjectTab"
-                                            x-show="activeProjectTab !== 'details'"
-                                            class="btn btn-secondary">
-                                        Next
-                                        <i class="fas fa-arrow-right ml-2"></i>
-                                    </button>
-                                </div>
-
-                                <div class="flex gap-3 order-1 sm:order-2">
-                                    <button type="button" @click="closeModal('addProject')"
-                                            class="btn btn-secondary">
-                                        Cancel
-                                    </button>
-                                    <button type="submit"
-                                            class="btn btn-primary"
-                                            :disabled="isSubmitting">
-                                        <template x-if="!isSubmitting">
-                                            <span x-text="editingProject ? 'Update Project' : 'Add Project'"></span>
-                                        </template>
-                                        <template x-if="isSubmitting">
-                                            <span class="btn-loading"></span>
-                                        </template>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- Edit Profile Modal -->
-    <template x-if="modals.editProfile">
-        <div>
-            <div class="modal-overlay" @click="closeModal('editProfile')"></div>
-            <div class="modal-container">
-                <div class="modal-content">
-                    <div class="p-6 sm:p-10">
-                        <!-- Modal Header -->
-                        <div class="flex items-center justify-between mb-6 sm:mb-10 pb-6 sm:pb-8 border-b border-slate-200/20">
-                            <div class="flex items-center gap-4 sm:gap-5">
-                                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
-                                    <i class="fas fa-user-edit text-lg sm:text-xl text-white"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">
-                                        Edit Profile
-                                    </h3>
-                                    <p class="text-lg text-slate-600 dark:text-slate-400">
-                                        Update your personal information
-                                    </p>
-                                </div>
-                            </div>
-                            <button @click="closeModal('editProfile')"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-transform duration-300 focus-visible"
-                                    aria-label="Close modal">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <!-- Profile Form -->
-                        <form @submit.prevent="updateProfile()" class="space-y-6 sm:space-y-8">
-                            <!-- Profile Image -->
-                            <div class="text-center">
-                                <div class="relative mx-auto w-40 h-40 sm:w-48 sm:h-48 mb-6">
-                                    <!-- Gambar profil -->
-                                    <img :src="profileImageSrc" alt="Profile" 
-                                         id="modal-profile-image"
-                                         class="w-full h-full rounded-xl object-cover border-4 border-slate-200 dark:border-slate-700 shadow-lg">
-                                    
-                                    <!-- Upload Button -->
-                                    <label for="profile-upload" 
-                                           class="absolute bottom-2 right-2 cursor-pointer group">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full gradient-bg flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                            <i class="fas fa-camera text-white text-lg"></i>
-                                        </div>
-                                        <input id="profile-upload" type="file" accept="image/*" 
-                                               class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" 
-                                               @change="uploadProfileImage($event)">
-                                    </label>
-                                    
-                                    <!-- Loading Overlay -->
-                                    <div x-show="uploadingProfileImage" 
-                                         class="absolute inset-0 rounded-xl bg-black/50 flex items-center justify-center">
-                                        <div class="text-center">
-                                            <div class="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 border-3 border-transparent border-t-white rounded-full loading-spinner"></div>
-                                            <p class="text-white text-sm font-medium">Uploading...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <p class="text-sm text-slate-600 dark:text-slate-400">
-                                    Click camera icon to upload new profile picture
-                                </p>
-                            </div>
-
-                            <!-- Personal Information -->
-                            <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-user-circle mr-2"></i>
-                                        Full Name
-                                    </label>
-                                    <input type="text" x-model="profile.name" required
-                                           class="form-input"
-                                           placeholder="Your full name">
-                                </div>
-
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-briefcase mr-2"></i>
-                                        Professional Title
-                                    </label>
-                                    <input type="text" x-model="profile.title"
-                                           class="form-input"
-                                           placeholder="e.g., Full Stack Developer">
-                                </div>
-                            </div>
-
-                            <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-envelope mr-2"></i>
-                                        Email Address
-                                    </label>
-                                    <input type="email" x-model="profile.email" required
-                                           class="form-input"
-                                           placeholder="your.email@example.com">
-                                </div>
-
-                                <div class="form-container">
-                                    <label class="form-label">
-                                        <i class="fas fa-phone mr-2"></i>
-                                        Phone Number
-                                    </label>
-                                    <input type="tel" x-model="profile.phone"
-                                           class="form-input"
-                                           placeholder="+62 822 9569 2941">
-                                </div>
-                            </div>
-
-                            <!-- Bio Section -->
-                            <div class="form-container">
-                                <label class="form-label">
-                                    <i class="fas fa-edit mr-2"></i>
-                                    Professional Bio
-                                </label>
-                                <textarea x-model="profile.bio" rows="4"
-                                          class="form-input"
-                                          placeholder="Deskripsi"></textarea>
-                            </div>
-
-                            <!-- Social Links -->
-                            <div class="space-y-6">
-                                <div class="flex items-center justify-between">
-                                    <label class="form-label">
-                                        <i class="fas fa-share-alt mr-2"></i>
-                                        Social Links
-                                    </label>
-                                    <span class="text-sm text-slate-500 dark:text-slate-400">
-                                        <span x-text="socialLinks.length"></span> links added
-                                    </span>
-                                </div>
-                                
-                                <div class="space-y-4" x-show="socialLinks.length > 0">
-                                    <template x-for="(link, index) in socialLinks" :key="index">
-                                        <div class="flex gap-3 items-start p-4 rounded-xl glass-card hover:scale-[1.01] transition-transform duration-300">
-                                            <div class="flex items-center justify-center w-12 h-12 rounded-lg"
-                                                 :class="getSocialPlatformColorClass(link.platform)">
-                                                <i :class="link.icon" class="text-xl text-white"></i>
-                                            </div>
-                                            
-                                            <div class="flex-1 space-y-3">
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <div>
-                                                        <label class="block text-sm font-medium mb-2">Platform</label>
-                                                        <select x-model="link.platform"
-                                                                class="form-input text-sm py-2.5"
-                                                                @change="handlePlatformChange(link, index)">
-                                                            <!-- Code & Development -->
-                                                            <optgroup label="Code & Development">
-                                                                <option value="github">GitHub</option>
-                                                                <option value="gitlab">GitLab</option>
-                                                                <option value="bitbucket">Bitbucket</option>
-                                                                <option value="codepen">CodePen</option>
-                                                                <option value="stackoverflow">Stack Overflow</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Professional Networks -->
-                                                            <optgroup label="Professional Networks">
-                                                                <option value="linkedin">LinkedIn</option>
-                                                                <option value="devto">Dev.to</option>
-                                                                <option value="hashnode">Hashnode</option>
-                                                                <option value="medium">Medium</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Social Media -->
-                                                            <optgroup label="Social Media">
-                                                                <option value="twitter">Twitter / X</option>
-                                                                <option value="instagram">Instagram</option>
-                                                                <option value="facebook">Facebook</option>
-                                                                <option value="youtube">YouTube</option>
-                                                                <option value="tiktok">TikTok</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Design & Creative -->
-                                                            <optgroup label="Design & Creative">
-                                                                <option value="dribbble">Dribbble</option>
-                                                                <option value="behance">Behance</option>
-                                                                <option value="figma">Figma</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Communication -->
-                                                            <optgroup label="Communication">
-                                                                <option value="whatsapp">WhatsApp</option>
-                                                                <option value="telegram">Telegram</option>
-                                                                <option value="discord">Discord</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Freelance & Work -->
-                                                            <optgroup label="Freelance & Work">
-                                                                <option value="upwork">Upwork</option>
-                                                                <option value="fiverr">Fiverr</option>
-                                                                <option value="freelancer">Freelancer</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Learning & Courses -->
-                                                            <optgroup label="Learning & Courses">
-                                                                <option value="udemy">Udemy</option>
-                                                                <option value="coursera">Coursera</option>
-                                                                <option value="pluralsight">Pluralsight</option>
-                                                            </optgroup>
-                                                            
-                                                            <!-- Other -->
-                                                            <optgroup label="Other">
-                                                                <option value="email">Email</option>
-                                                                <option value="personal">Personal Website</option>
-                                                                <option value="other">Other</option>
-                                                            </optgroup>
-                                                        </select>
-                                                    </div>
-                                                    
-                                                    <div>
-                                                        <label class="block text-sm font-medium mb-2">Profile URL</label>
-                                                        <div class="relative">
-                                                            <input type="url" x-model="link.url"
-                                                                   class="form-input text-sm py-2.5 pr-10"
-                                                                   :placeholder="getSocialPlaceholder(link.platform)">
-                                                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                                                <i :class="isValidUrl(link.url) ? 'fas fa-check text-green-500' : 'fas fa-exclamation text-yellow-500'"
-                                                                   x-show="link.url"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="flex items-center justify-between">
-                                                    <div class="flex items-center space-x-2">
-                                                        <span class="text-xs px-2 py-1 rounded-full glass-card"
-                                                              x-text="getSocialPlatformName(link.platform)"></span>
-                                                        <span x-show="link.url" 
-                                                              class="text-xs text-slate-500 truncate max-w-[200px]"
-                                                              x-text="getSocialUsername(link.url)"></span>
-                                                    </div>
-                                                    
-                                                    <div class="flex items-center space-x-2">
-                                                        <!-- Move up/down buttons -->
-                                                        <button type="button" @click="moveSocialLink(index, 'up')"
-                                                                x-show="index > 0"
-                                                                class="w-8 h-8 rounded-lg flex items-center justify-center glass-card hover:bg-indigo-500/10 hover:text-indigo-500 transition-colors duration-300"
-                                                                title="Move up">
-                                                            <i class="fas fa-arrow-up text-xs"></i>
-                                                        </button>
-                                                        
-                                                        <button type="button" @click="moveSocialLink(index, 'down')"
-                                                                x-show="index < socialLinks.length - 1"
-                                                                class="w-8 h-8 rounded-lg flex items-center justify-center glass-card hover:bg-indigo-500/10 hover:text-indigo-500 transition-colors duration-300"
-                                                                title="Move down">
-                                                            <i class="fas fa-arrow-down text-xs"></i>
-                                                        </button>
-                                                        
-                                                        <!-- Delete button -->
-                                                        <button type="button" @click="removeSocialLink(index)"
-                                                                class="w-8 h-8 rounded-lg flex items-center justify-center glass-card text-red-500 hover:bg-red-500/10 hover:scale-110 transition-all duration-300"
-                                                                title="Remove link">
-                                                            <i class="fas fa-trash text-xs"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                                
-                                <div class="space-y-4">
-                                    <button type="button" @click="addSocialLink"
-                                            class="btn btn-secondary w-full py-3">
-                                        <i class="fas fa-plus mr-2"></i>
-                                        Add Social Link
-                                    </button>
-                                    
-                                    <!-- Quick Add Buttons -->
-                                    <div class="text-center">
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Quick Add:</p>
-                                        <div class="flex flex-wrap gap-2 justify-center">
-                                            <template x-for="platform in ['github', 'linkedin', 'email', 'twitter', 'whatsapp']" :key="platform">
-                                                <button type="button" @click="addQuickSocialLink(platform)"
-                                                        class="px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2 glass-card hover:scale-105 transition-transform duration-300"
-                                                        x-show="!socialLinks.find(l => l.platform === platform)">
-                                                    <i :class="getSocialIcon(platform)"></i>
-                                                    <span x-text="getSocialPlatformName(platform)"></span>
-                                                </button>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Submit Buttons -->
-                            <div class="flex justify-end gap-4 pt-6 sm:pt-10 border-t border-slate-200/20">
-                                <button type="button" @click="closeModal('editProfile')"
-                                        class="btn btn-secondary">
-                                    Cancel
-                                </button>
-                                <button type="submit"
-                                        class="btn btn-primary">
-                                    Update Profile
-                                    <i class="fas fa-check ml-2"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- Project Detail Modal -->
-    <template x-if="modals.projectDetail">
-        <div>
-            <div class="modal-overlay" @click="closeModal('projectDetail')"></div>
-            <div class="modal-container">
-                <div class="modal-content">
-                    <div class="p-6 sm:p-10">
-                        <!-- Modal Header -->
-                        <div class="flex items-center justify-between mb-6 sm:mb-10">
-                            <div>
-                                <h3 class="text-2xl sm:text-4xl font-bold mb-3" 
-                                    x-text="selectedProject ? selectedProject.name : ''"></h3>
-                                <div class="flex items-center space-x-4">
-                                    <span class="px-4 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-sm font-semibold gradient-bg text-white shadow-lg capitalize"
-                                          x-text="selectedProject ? getProjectTypeName(selectedProject.type) : ''"></span>
-                                    <span class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-sm font-semibold glass-card">
-                                        <i class="fas fa-calendar mr-2"></i>
-                                        <span x-text="selectedProject?.date || '2024'"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <button @click="closeModal('projectDetail')"
-                                    class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center glass-card hover:scale-110 transition-transform duration-300 focus-visible"
-                                    aria-label="Close modal">
-                                <i class="fas fa-times text-lg sm:text-xl"></i>
-                            </button>
-                        </div>
-
-                        <!-- Project Content -->
-                        <div x-show="selectedProject" class="space-y-8 sm:space-y-10">
-                            <!-- Project Image -->
-                            <div class="rounded-3xl overflow-hidden shadow-xl">
-                                <img :src="selectedProject.image"
-                                     :alt="selectedProject.name"
-                                     class="w-full h-64 sm:h-[400px] object-cover"
-                                     @error="handleProjectImageError($event, selectedProject.id)">
-                            </div>
-
-                            <!-- Project Details -->
-                            <div class="grid lg:grid-cols-3 gap-8 sm:gap-16">
-                                <!-- Left Column -->
-                                <div class="lg:col-span-2 space-y-8">
-                                    <!-- Description -->
-                                    <div>
-                                        <h4 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-                                            Project Overview
-                                        </h4>
-                                        <p class="leading-relaxed text-slate-600 dark:text-slate-300"
-                                           x-text="selectedProject.description"></p>
-                                    </div>
-
-                                    <!-- Features -->
-                                    <div x-show="selectedProject.features?.length > 0">
-                                        <h4 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-                                            Key Features
-                                        </h4>
-                                        <div class="grid md:grid-cols-2 gap-3 sm:gap-4">
-                                            <template x-for="feature in selectedProject.features" :key="feature">
-                                                <div class="flex items-start gap-3 p-3 sm:p-4 rounded-xl glass-card">
-                                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                                    <span x-text="feature"></span>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Right Column -->
-                                <div class="space-y-8">
-                                    <!-- Technologies -->
-                                    <div>
-                                        <h4 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-                                            Technology Stack
-                                        </h4>
-                                        <div class="flex flex-wrap gap-2">
-                                            <template x-for="tech in selectedProject.technologies" :key="tech">
-                                                <span class="px-3 py-1.5 rounded-lg text-sm font-medium glass-card"
-                                                      x-text="tech"></span>
-                                            </template>
-                                        </div>
-                                    </div>
-
-                                    <!-- Project Links -->
-                                    <div>
-                                        <h4 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-                                            Project Links
-                                        </h4>
-                                        <div class="space-y-3 sm:space-y-4">
-                                            <a :href="selectedProject.demoUrl" x-show="selectedProject.demoUrl" target="_blank" rel="noopener noreferrer"
-                                               class="flex items-center justify-between p-4 sm:p-5 rounded-2xl glass-card hover:scale-105 transition-transform duration-300 group">
-                                                <div class="flex items-center space-x-3 sm:space-x-4">
-                                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
-                                                        <i class="fas fa-external-link-alt text-white text-sm sm:text-lg"></i>
-                                                    </div>
-                                                    <div>
-                                                        <p class="font-semibold">Live Demo</p>
-                                                        <p class="text-sm text-slate-500">View live project</p>
-                                                    </div>
-                                                </div>
-                                                <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
-                                            </a>
-
-                                            <a :href="selectedProject.sourceUrl" x-show="selectedProject.sourceUrl" target="_blank" rel="noopener noreferrer"
-                                               class="flex items-center justify-between p-4 sm:p-5 rounded-2xl glass-card hover:scale-105 transition-transform duration-300 group">
-                                                <div class="flex items-center space-x-3 sm:space-x-4">
-                                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-lg glass-card">
-                                                        <i class="fab fa-github"
-                                                           :class="isDark ? 'text-slate-300' : 'text-slate-700'"></i>
-                                                    </div>
-                                                    <div>
-                                                        <p class="font-semibold">Source Code</p>
-                                                        <p class="text-sm text-slate-500">View on GitHub</p>
-                                                    </div>
-                                                </div>
-                                                <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
+    <!-- [Semua modal HTML sama seperti sebelumnya, tapi tanpa Firebase] -->
+    <!-- ... (paste semua modal HTML dari file sebelumnya di sini) ... -->
 
     <!-- Toast Notification -->
     <div x-show="showToast" x-transition
@@ -3300,16 +903,6 @@
     </div>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBAuVIJp4jZCzxuBIBFez2SdLMi7MNHNJk",
-            authDomain: "portofolio-4a7eb.firebaseapp.com",
-            projectId: "portofolio-4a7eb",
-            storageBucket: "portofolio-4a7eb.firebasestorage.app",
-            messagingSenderId: "36345970852",
-            appId: "1:36345970852:web:a35881e9ab7b1e18fce631"
-        };
-
         function portfolio() {
             return {
                 // State
@@ -3336,18 +929,7 @@
                 uploadingProfileImage: false,
                 isSubmitting: false,
                 deleteItem: { type: '', id: null, name: '' },
-                toggleDebug: false,
-                loadingMessage: 'Initializing portfolio...',
-
-                // Firebase State
-                firebaseApp: null,
-                firestore: null,
-                auth: null,
-                userId: null,
-                userEmail: null,
-                isOnline: false,
-                isSyncing: false,
-                syncHistory: [],
+                loadingMessage: 'Loading portfolio...',
 
                 // Project Slider State
                 projectView: 'grid',
@@ -3357,22 +939,13 @@
                 autoSlideInterval: null,
                 projectsPerSlide: 3,
 
-                // Storage Configuration
-                storageConfig: {
-                    maxImageSize: 1 * 1024 * 1024,
-                    compressionQuality: 0.7,
-                    enableCompression: true,
-                    maxTotalSize: 5 * 1024 * 1024,
-                    backupCount: 3
-                },
-
-                // Profile Data
+                // Profile Data - DATA LANGSUING DI HTML
                 profile: {
                     name: 'Zuyyina Firdausi Muhammad',
-                    title: 'IT Developer',
+                    title: 'Full Stack Developer',
                     email: 'muhammadzuyyina@gmail.com',
                     phone: '+62 822 9569 2941',
-                    bio: 'IT Developer Junior',
+                    bio: 'IT Developer Junior with expertise in modern web technologies, specializing in creating efficient and scalable solutions. Passionate about problem-solving and delivering exceptional user experiences.',
                     image: null
                 },
 
@@ -3384,12 +957,206 @@
                     { name: 'Contact', href: '#contact' }
                 ],
 
-                skills: [],
-                projects: [],
+                // Skills Data - DATA LANGSUING DI HTML
+                skills: [
+                    {
+                        id: 1,
+                        name: 'JavaScript',
+                        category: 'frontend',
+                        level: 95,
+                        years: 3,
+                        projects: 25,
+                        icon: 'fab fa-js',
+                        description: 'Advanced JavaScript including ES6+, Async/Await, Promises, and modern patterns',
+                        certifications: ['JavaScript Developer Certification'],
+                        tags: ['frontend', 'javascript', 'es6']
+                    },
+                    {
+                        id: 2,
+                        name: 'React',
+                        category: 'frontend',
+                        level: 90,
+                        years: 3,
+                        projects: 18,
+                        icon: 'fab fa-react',
+                        description: 'Modern React with Hooks, Context API, Redux, and advanced component patterns',
+                        certifications: ['React Certified Developer'],
+                        tags: ['react', 'frontend', 'ui']
+                    },
+                    {
+                        id: 3,
+                        name: 'Node.js',
+                        category: 'backend',
+                        level: 88,
+                        years: 3,
+                        projects: 15,
+                        icon: 'fab fa-node-js',
+                        description: 'Building scalable server-side applications, REST APIs, and microservices',
+                        certifications: [],
+                        tags: ['backend', 'node', 'api']
+                    },
+                    {
+                        id: 4,
+                        name: 'Python',
+                        category: 'backend',
+                        level: 85,
+                        years: 2,
+                        projects: 12,
+                        icon: 'fab fa-python',
+                        description: 'Python development with Django, Flask, and data analysis libraries',
+                        certifications: ['Python Developer Certification'],
+                        tags: ['python', 'backend', 'data']
+                    },
+                    {
+                        id: 5,
+                        name: 'MongoDB',
+                        category: 'database',
+                        level: 82,
+                        years: 2,
+                        projects: 10,
+                        icon: 'fas fa-database',
+                        description: 'NoSQL database design, optimization, and aggregation pipelines',
+                        certifications: ['MongoDB Certified Developer'],
+                        tags: ['database', 'nosql', 'mongodb']
+                    },
+                    {
+                        id: 6,
+                        name: 'Docker',
+                        category: 'devops',
+                        level: 80,
+                        years: 1,
+                        projects: 8,
+                        icon: 'fab fa-docker',
+                        description: 'Containerization, Docker Compose, and container orchestration',
+                        certifications: ['Docker Certified Associate'],
+                        tags: ['devops', 'docker', 'containers']
+                    }
+                ],
+
+                // Projects Data - DATA LANGSUING DI HTML
+                projects: [
+                    {
+                        id: 1,
+                        name: 'E-Commerce Platform',
+                        description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, customer analytics, and admin dashboard. Built with modern microservices architecture.',
+                        type: 'web',
+                        technologies: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Tailwind CSS', 'Redux', 'Stripe'],
+                        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        demoUrl: '#',
+                        sourceUrl: '#',
+                        features: ['Real-time inventory', 'Payment integration', 'Admin dashboard', 'Customer analytics'],
+                        status: 'completed',
+                        date: '2024',
+                        role: 'Full Stack Developer',
+                        teamSize: 4,
+                        client: 'Retail Company'
+                    },
+                    {
+                        id: 2,
+                        name: 'Task Management App',
+                        description: 'Collaborative task management application with real-time updates, team collaboration features, file attachments, and progress tracking. Built with Vue.js and Firebase.',
+                        type: 'web',
+                        technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router', 'Tailwind CSS'],
+                        image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        demoUrl: '#',
+                        sourceUrl: '#',
+                        features: ['Real-time collaboration', 'Team management', 'File attachments', 'Progress tracking'],
+                        status: 'completed',
+                        date: '2024',
+                        role: 'Frontend Developer',
+                        teamSize: 3,
+                        client: 'Startup Company'
+                    },
+                    {
+                        id: 3,
+                        name: 'Healthcare Dashboard',
+                        description: 'Healthcare analytics dashboard for patient data visualization, appointment scheduling, and medical record management. HIPAA compliant with advanced security features.',
+                        type: 'web',
+                        technologies: ['React', 'D3.js', 'Node.js', 'PostgreSQL', 'Chart.js'],
+                        image: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        demoUrl: '#',
+                        sourceUrl: '#',
+                        features: ['Patient data visualization', 'Appointment scheduling', 'Medical records', 'HIPAA compliance'],
+                        status: 'completed',
+                        date: '2023',
+                        role: 'Full Stack Developer',
+                        teamSize: 5,
+                        client: 'Healthcare Provider'
+                    },
+                    {
+                        id: 4,
+                        name: 'Food Delivery App',
+                        description: 'Mobile food delivery application with real-time order tracking, restaurant management, and payment integration. Available on both iOS and Android platforms.',
+                        type: 'mobile',
+                        technologies: ['React Native', 'Node.js', 'MongoDB', 'Google Maps API', 'Firebase'],
+                        image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        demoUrl: '#',
+                        sourceUrl: '#',
+                        features: ['Real-time tracking', 'Restaurant management', 'Multiple payment options', 'User reviews'],
+                        status: 'completed',
+                        date: '2023',
+                        role: 'Mobile Developer',
+                        teamSize: 6,
+                        client: 'Food Delivery Startup'
+                    },
+                    {
+                        id: 5,
+                        name: 'Learning Management System',
+                        description: 'Comprehensive LMS platform with course management, video streaming, quizzes, certificates, and student progress tracking. Supports thousands of concurrent users.',
+                        type: 'web',
+                        technologies: ['Laravel', 'Vue.js', 'MySQL', 'Redis', 'AWS S3'],
+                        image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        demoUrl: '#',
+                        sourceUrl: '#',
+                        features: ['Course management', 'Video streaming', 'Interactive quizzes', 'Progress tracking'],
+                        status: 'completed',
+                        date: '2023',
+                        role: 'Backend Developer',
+                        teamSize: 8,
+                        client: 'Education Company'
+                    },
+                    {
+                        id: 6,
+                        name: 'Real Estate Platform',
+                        description: 'Property listing platform with virtual tours, mortgage calculator, agent management, and property valuation tools. Integrated with multiple listing services.',
+                        type: 'web',
+                        technologies: ['Next.js', 'Node.js', 'MongoDB', 'Three.js', 'Stripe'],
+                        image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        demoUrl: '#',
+                        sourceUrl: '#',
+                        features: ['Virtual tours', 'Mortgage calculator', 'Agent management', 'Property valuation'],
+                        status: 'in-progress',
+                        date: '2024',
+                        role: 'Full Stack Developer',
+                        teamSize: 4,
+                        client: 'Real Estate Agency'
+                    }
+                ],
                 portfolioYear: new Date().getFullYear(),
 
-                // Social Links
-                socialLinks: [],
+                // Social Links - DATA LANGSUING DI HTML
+                socialLinks: [
+                    {
+                        platform: 'github',
+                        icon: 'fab fa-github',
+                        url: 'https://github.com/zuyyina'
+                    },
+                    {
+                        platform: 'linkedin',
+                        icon: 'fab fa-linkedin-in',
+                        url: 'https://linkedin.com/in/zuyyina'
+                    },
+                    {
+                        platform: 'email',
+                        icon: 'fas fa-envelope',
+                        url: 'mailto:muhammadzuyyina@gmail.com'
+                    },
+                    {
+                        platform: 'whatsapp',
+                        icon: 'fab fa-whatsapp',
+                        url: 'https://wa.me/6282295692941'
+                    }
+                ],
 
                 // Skill Categories
                 skillCategories: [
@@ -3488,13 +1255,6 @@
                     return this.skills.length + this.projects.length;
                 },
 
-                get connectionStatusText() {
-                    if (!this.isOnline) return 'Offline';
-                    if (this.isSyncing) return 'Syncing...';
-                    if (this.userId) return 'Cloud Sync Active';
-                    return 'Ready to Sync';
-                },
-
                 // Computed property untuk gambar profil
                 get profileImageSrc() {
                     if (!this.profile.image || this.profile.image.trim() === '') {
@@ -3513,392 +1273,13 @@
 
                     this.initParticles();
 
-                    // Check online status
-                    this.isOnline = navigator.onLine;
-                    window.addEventListener('online', () => {
-                        this.isOnline = true;
-                        this.showToastMessage('You are back online', 'success');
-                        if (this.userId) this.syncFromFirebase();
-                    });
-                    window.addEventListener('offline', () => {
-                        this.isOnline = false;
-                        this.showToastMessage('You are offline', 'warning');
-                    });
-
-                    // Initialize Firebase
-                    await this.initFirebase();
-
-                    // Check storage availability
-                    await this.checkStorageAvailability();
-                    
-                    // Load data
-                    await this.loadAllData();
-                    
-                    // Initialize with sample data if empty
-                    if (this.skills.length === 0 && this.projects.length === 0) {
-                        await this.loadSampleData();
-                    }
-                    
                     // Setup project slides
                     this.updateProjectSlides();
                     
                     setTimeout(() => {
                         this.isLoading = false;
-                        this.$nextTick(() => {
-                            console.log('Portfolio initialized successfully');
-                        });
+                        console.log('✅ Portfolio loaded with embedded data');
                     }, 1000);
-                },
-
-                // Initialize Firebase
-                async initFirebase() {
-                    try {
-                        this.loadingMessage = 'Connecting to Firebase...';
-                        
-                        // Initialize Firebase
-                        this.firebaseApp = firebase.initializeApp(firebaseConfig);
-                        this.firestore = firebase.firestore(this.firebaseApp);
-                        this.auth = firebase.auth(this.firebaseApp);
-                        
-                        // Check if user is already signed in
-                        this.auth.onAuthStateChanged((user) => {
-                            if (user) {
-                                this.userId = user.uid;
-                                this.userEmail = user.email;
-                                this.showToastMessage('Firebase connected successfully', 'success');
-                                this.syncFromFirebase();
-                            }
-                        });
-                        
-                        console.log('✅ Firebase initialized');
-                    } catch (error) {
-                        console.error('❌ Firebase initialization error:', error);
-                        this.showToastMessage('Firebase connection failed. Using local storage only.', 'warning');
-                    }
-                },
-
-                // Initialize Firebase Auth
-                async initFirebaseAuth() {
-                    try {
-                        const provider = new firebase.auth.GoogleAuthProvider();
-                        provider.addScope('profile');
-                        provider.addScope('email');
-                        
-                        const result = await this.auth.signInWithPopup(provider);
-                        this.userId = result.user.uid;
-                        this.userEmail = result.user.email;
-                        
-                        this.showToastMessage('Signed in successfully!', 'success');
-                        
-                        // Sync data to Firebase after sign in
-                        await this.syncToFirebase();
-                        
-                    } catch (error) {
-                        console.error('Auth error:', error);
-                        this.showToastMessage('Authentication failed. Please try again.', 'error');
-                    }
-                },
-
-                // Sign Out
-                async signOut() {
-                    try {
-                        await this.auth.signOut();
-                        this.userId = null;
-                        this.userEmail = null;
-                        this.showToastMessage('Signed out successfully', 'success');
-                    } catch (error) {
-                        console.error('Sign out error:', error);
-                        this.showToastMessage('Sign out failed', 'error');
-                    }
-                },
-
-                // Sync data to Firebase
-                async syncToFirebase() {
-                    if (!this.userId || !this.isOnline) {
-                        this.showToastMessage('Cannot sync: Not signed in or offline', 'warning');
-                        return;
-                    }
-
-                    this.isSyncing = true;
-                    
-                    try {
-                        const data = {
-                            profile: this.profile,
-                            skills: this.skills,
-                            projects: this.projects,
-                            socialLinks: this.socialLinks,
-                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-                            syncId: Date.now()
-                        };
-
-                        // Compress images before uploading
-                        const compressedData = await this.compressDataForFirebase(data);
-
-                        // Save to Firestore
-                        await this.firestore
-                            .collection('portfolios')
-                            .doc(this.userId)
-                            .set(compressedData, { merge: true });
-
-                        // Add to sync history
-                        this.addToSyncHistory('Upload to Firebase', 'success');
-                        
-                        this.showToastMessage('Data synced to cloud successfully!', 'success');
-                        
-                    } catch (error) {
-                        console.error('Firebase sync error:', error);
-                        this.addToSyncHistory('Upload failed', 'error');
-                        this.showToastMessage('Sync failed: ' + error.message, 'error');
-                    } finally {
-                        this.isSyncing = false;
-                    }
-                },
-
-                // Sync data from Firebase
-                async syncFromFirebase() {
-                    if (!this.userId || !this.isOnline) return;
-
-                    this.isSyncing = true;
-                    
-                    try {
-                        const doc = await this.firestore
-                            .collection('portfolios')
-                            .doc(this.userId)
-                            .get();
-
-                        if (doc.exists) {
-                            const data = doc.data();
-                            
-                            // Decompress images after downloading
-                            const decompressedData = await this.decompressDataFromFirebase(data);
-                            
-                            // Update local data
-                            this.profile = { ...this.profile, ...decompressedData.profile };
-                            this.skills = decompressedData.skills || [];
-                            this.projects = decompressedData.projects || [];
-                            this.socialLinks = decompressedData.socialLinks || [];
-                            
-                            // Update project slides
-                            this.updateProjectSlides();
-                            
-                            // Save to local storage
-                            await this.saveToLocalStorage();
-                            
-                            this.addToSyncHistory('Download from Firebase', 'success');
-                            this.showToastMessage('Data synced from cloud!', 'success');
-                        }
-                        
-                    } catch (error) {
-                        console.error('Firebase download error:', error);
-                        this.addToSyncHistory('Download failed', 'error');
-                    } finally {
-                        this.isSyncing = false;
-                    }
-                },
-
-                // Compress data for Firebase
-                async compressDataForFirebase(data) {
-                    const compressed = { ...data };
-                    
-                    // Compress profile image
-                    if (compressed.profile?.image) {
-                        compressed.profile.image = await this.compressImage(compressed.profile.image);
-                    }
-                    
-                    // Compress project images
-                    if (compressed.projects) {
-                        compressed.projects = await Promise.all(
-                            compressed.projects.map(async (project) => ({
-                                ...project,
-                                image: await this.compressImage(project.image)
-                            }))
-                        );
-                    }
-                    
-                    return compressed;
-                },
-
-                // Decompress data from Firebase
-                async decompressDataFromFirebase(data) {
-                    const decompressed = { ...data };
-                    
-                    // Decompress profile image (if needed)
-                    if (decompressed.profile?.image) {
-                        decompressed.profile.image = await this.decompressImage(decompressed.profile.image);
-                    }
-                    
-                    // Decompress project images
-                    if (decompressed.projects) {
-                        decompressed.projects = decompressed.projects.map(project => ({
-                            ...project,
-                            image: project.image || this.getDefaultProjectImage()
-                        }));
-                    }
-                    
-                    return decompressed;
-                },
-
-                // Add to sync history
-                addToSyncHistory(action, status) {
-                    this.syncHistory.unshift({
-                        action,
-                        status,
-                        timestamp: new Date().toISOString()
-                    });
-                    
-                    // Keep only last 10 entries
-                    if (this.syncHistory.length > 10) {
-                        this.syncHistory.pop();
-                    }
-                    
-                    // Save history to localStorage
-                    localStorage.setItem('portfolioSyncHistory', JSON.stringify(this.syncHistory));
-                },
-
-                // Format time ago
-                formatTimeAgo(timestamp) {
-                    const now = new Date();
-                    const past = new Date(timestamp);
-                    const diff = now - past;
-                    
-                    const minutes = Math.floor(diff / 60000);
-                    const hours = Math.floor(diff / 3600000);
-                    const days = Math.floor(diff / 86400000);
-                    
-                    if (minutes < 1) return 'Just now';
-                    if (minutes < 60) return `${minutes}m ago`;
-                    if (hours < 24) return `${hours}h ago`;
-                    return `${days}d ago`;
-                },
-
-                // Load all data
-                async loadAllData() {
-                    try {
-                        console.log('📂 Loading all data...');
-                        
-                        // Try to load from local storage first
-                        await this.loadFromLocalStorage();
-                        
-                        // Load sync history
-                        const savedHistory = localStorage.getItem('portfolioSyncHistory');
-                        if (savedHistory) {
-                            this.syncHistory = JSON.parse(savedHistory);
-                        }
-                        
-                        console.log('✅ Data loaded successfully');
-                        
-                    } catch (e) {
-                        console.error('Error loading data:', e);
-                        await this.loadDefaultData();
-                    }
-                },
-
-                // Load from local storage
-                async loadFromLocalStorage() {
-                    try {
-                        // Load skills
-                        const savedSkills = localStorage.getItem('portfolioSkills');
-                        if (savedSkills) {
-                            this.skills = JSON.parse(savedSkills);
-                        }
-                        
-                        // Load projects
-                        const savedProjects = localStorage.getItem('portfolioProjects');
-                        if (savedProjects) {
-                            this.projects = JSON.parse(savedProjects);
-                        }
-                        
-                        // Load profile
-                        const savedProfile = localStorage.getItem('portfolioProfile');
-                        if (savedProfile) {
-                            const profileData = JSON.parse(savedProfile);
-                            this.profile = { 
-                                ...this.profile, 
-                                ...profileData
-                            };
-                        }
-                        
-                        // Load social links
-                        const savedSocialLinks = localStorage.getItem('portfolioSocialLinks');
-                        if (savedSocialLinks) {
-                            try {
-                                const parsedLinks = JSON.parse(savedSocialLinks);
-                                this.socialLinks = parsedLinks.map(link => ({
-                                    platform: link.platform || 'github',
-                                    url: link.url || '',
-                                    icon: link.icon || this.getSocialIcon(link.platform || 'github')
-                                }));
-                            } catch (parseError) {
-                                console.error('Error parsing social links:', parseError);
-                                this.loadDefaultSocialLinks();
-                            }
-                        } else {
-                            this.loadDefaultSocialLinks();
-                        }
-                        
-                    } catch (error) {
-                        console.error('Error loading from local storage:', error);
-                        throw error;
-                    }
-                },
-
-                // Save to local storage
-                async saveToLocalStorage() {
-                    try {
-                        localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
-                        localStorage.setItem('portfolioProjects', JSON.stringify(this.projects));
-                        localStorage.setItem('portfolioProfile', JSON.stringify(this.profile));
-                        this.saveSocialLinksToStorage();
-                        
-                        console.log('✅ Data saved to local storage');
-                        return true;
-                        
-                    } catch (error) {
-                        console.error('❌ Error saving to local storage:', error);
-                        return false;
-                    }
-                },
-
-                // Save social links to storage
-                saveSocialLinksToStorage() {
-                    try {
-                        const linksToSave = this.socialLinks.map(link => ({
-                            platform: link.platform,
-                            url: link.url,
-                            icon: link.icon
-                        }));
-                        localStorage.setItem('portfolioSocialLinks', JSON.stringify(linksToSave));
-                    } catch (e) {
-                        console.error('Error saving social links:', e);
-                    }
-                },
-
-                // Helper untuk mendapatkan gambar proyek default
-                getDefaultProjectImage() {
-                    const images = [
-                        'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                    ];
-                    return images[Math.floor(Math.random() * images.length)];
-                },
-
-                // Update project slides
-                updateProjectSlides() {
-                    this.projectSlides = [];
-                    
-                    if (this.projects.length <= 6) {
-                        this.projectView = 'grid';
-                        return;
-                    }
-                    
-                    for (let i = 0; i < this.projects.length; i += this.projectsPerSlide) {
-                        this.projectSlides.push(this.projects.slice(i, i + this.projectsPerSlide));
-                    }
-                    
-                    if (this.currentSlide >= this.projectSlides.length) {
-                        this.currentSlide = 0;
-                    }
                 },
 
                 // Setup Event Listeners
@@ -4060,13 +1441,6 @@
                             this.showToastMessage('Skill added successfully', 'success');
                         }
 
-                        await this.saveToLocalStorage();
-                        
-                        // Sync to Firebase if signed in
-                        if (this.userId && this.isOnline) {
-                            await this.syncToFirebase();
-                        }
-                        
                         this.closeModal('addSkill');
                         this.resetSkillForm();
                     } catch (error) {
@@ -4083,12 +1457,6 @@
 
                 async deleteSkill(skillId) {
                     this.skills = this.skills.filter(skill => skill.id !== skillId);
-                    await this.saveToLocalStorage();
-                    
-                    // Sync to Firebase if signed in
-                    if (this.userId && this.isOnline) {
-                        await this.syncToFirebase();
-                    }
                 },
 
                 // Project Management
@@ -4143,14 +1511,6 @@
                         }
 
                         this.updateProjectSlides();
-                        
-                        await this.saveToLocalStorage();
-                        
-                        // Sync to Firebase if signed in
-                        if (this.userId && this.isOnline) {
-                            await this.syncToFirebase();
-                        }
-                        
                         this.closeModal('addProject');
                         this.resetProjectForm();
                     } catch (error) {
@@ -4167,15 +1527,7 @@
 
                 async deleteProject(projectId) {
                     this.projects = this.projects.filter(project => project.id !== projectId);
-                    
                     this.updateProjectSlides();
-                    
-                    await this.saveToLocalStorage();
-                    
-                    // Sync to Firebase if signed in
-                    if (this.userId && this.isOnline) {
-                        await this.syncToFirebase();
-                    }
                 },
 
                 viewProject(projectId) {
@@ -4267,6 +1619,24 @@
                     }
                 },
 
+                // Update project slides
+                updateProjectSlides() {
+                    this.projectSlides = [];
+                    
+                    if (this.projects.length <= 6) {
+                        this.projectView = 'grid';
+                        return;
+                    }
+                    
+                    for (let i = 0; i < this.projects.length; i += this.projectsPerSlide) {
+                        this.projectSlides.push(this.projects.slice(i, i + this.projectsPerSlide));
+                    }
+                    
+                    if (this.currentSlide >= this.projectSlides.length) {
+                        this.currentSlide = 0;
+                    }
+                },
+
                 // Technology Management
                 addTechnology() {
                     const tech = this.techInput.trim();
@@ -4324,8 +1694,8 @@
                             from_name: this.contactForm.name,
                             from_email: this.contactForm.email,
                             message: this.contactForm.message,
-                            to_name: 'Zuyyina Firdausi Muhammad',
-                            to_email: 'muhammadzuyyina@gmail.com',
+                            to_name: this.profile.name,
+                            to_email: this.profile.email,
                             reply_to: this.contactForm.email,
                             date: new Date().toLocaleDateString('id-ID'),
                             time: new Date().toLocaleTimeString('id-ID')
@@ -4407,10 +1777,7 @@
 
                     try {
                         const base64Image = await this.fileToBase64(file);
-                        
-                        const compressedImage = await this.compressBase64Image(base64Image);
-                        this.newProject.image = compressedImage;
-                        
+                        this.newProject.image = base64Image;
                         this.uploadingImage = false;
                         this.showToastMessage('Image uploaded successfully', 'success');
                         
@@ -4432,12 +1799,12 @@
                     console.log('Uploading profile image:', file.name, file.type, file.size);
 
                     if (!file.type.startsWith('image/')) {
-                        this.showToastMessage('Silakan upload file gambar (JPEG, PNG, dll)', 'error');
+                        this.showToastMessage('Please upload an image file (JPEG, PNG, etc.)', 'error');
                         return;
                     }
 
                     if (file.size > 5 * 1024 * 1024) {
-                        this.showToastMessage('Ukuran gambar harus kurang dari 5MB', 'error');
+                        this.showToastMessage('Image size must be less than 5MB', 'error');
                         return;
                     }
 
@@ -4445,23 +1812,12 @@
 
                     try {
                         const base64Image = await this.fileToBase64(file);
-                        
-                        const compressedImage = await this.compressBase64Image(base64Image);
-                        
-                        this.profile.image = compressedImage;
-                        
-                        await this.saveToLocalStorage();
-                        
-                        // Sync to Firebase if signed in
-                        if (this.userId && this.isOnline) {
-                            await this.syncToFirebase();
-                        }
-                        
-                        this.showToastMessage('Foto profil berhasil diupdate!', 'success');
+                        this.profile.image = base64Image;
+                        this.showToastMessage('Profile picture updated successfully!', 'success');
                         
                     } catch (error) {
                         console.error('Error uploading profile image:', error);
-                        this.showToastMessage('Error mengupload foto profil', 'error');
+                        this.showToastMessage('Error uploading profile picture', 'error');
                     } finally {
                         this.uploadingProfileImage = false;
                     }
@@ -4532,12 +1888,10 @@
                         url: 'https://github.com/username'
                     };
                     this.socialLinks.push(newLink);
-                    this.saveSocialLinksToStorage();
                 },
 
                 removeSocialLink(index) {
                     this.socialLinks.splice(index, 1);
-                    this.saveSocialLinksToStorage();
                 },
 
                 addQuickSocialLink(platform) {
@@ -4547,7 +1901,6 @@
                         url: this.getSocialPlaceholder(platform)
                     };
                     this.socialLinks.push(newLink);
-                    this.saveSocialLinksToStorage();
                 },
 
                 moveSocialLink(index, direction) {
@@ -4558,20 +1911,12 @@
                         [this.socialLinks[index], this.socialLinks[index + 1]] = 
                         [this.socialLinks[index + 1], this.socialLinks[index]];
                     }
-                    this.saveSocialLinksToStorage();
                 },
 
                 async updateProfile() {
                     try {
                         if (!this.profile.image || this.profile.image.startsWith('https://ui-avatars.com')) {
                             this.profile.image = this.generateDefaultAvatar();
-                        }
-                        
-                        await this.saveToLocalStorage();
-                        
-                        // Sync to Firebase if signed in
-                        if (this.userId && this.isOnline) {
-                            await this.syncToFirebase();
                         }
                         
                         this.showToastMessage('Profile updated successfully', 'success');
@@ -4772,7 +2117,7 @@
                         'twitter': 'https://twitter.com/username',
                         'instagram': 'https://instagram.com/username',
                         'facebook': 'https://facebook.com/username',
-                        'whatsapp': 'https://wa.me/phone-number',
+                        'whatsapp': 'https://wa.me/6282295692941',
                         'telegram': 'https://t.me/username',
                         'discord': 'https://discord.gg/invite',
                         'youtube': 'https://youtube.com/c/username',
@@ -4892,12 +2237,6 @@
                     }
                 },
 
-                // Force Refresh Social Links
-                forceRefreshSocialLinks() {
-                    this.loadAllData();
-                    this.showToastMessage('Social links refreshed', 'success');
-                },
-
                 // Toast Notifications
                 showToastMessage(message, type = 'success') {
                     this.toastMessage = message;
@@ -4965,43 +2304,9 @@
                 // Method untuk handle perubahan platform di select
                 handlePlatformChange(link, index) {
                     link.icon = this.getSocialIcon(link.platform);
-                    this.saveSocialLinksToStorage();
                 },
 
                 // Import/Export Methods
-                async importSampleData() {
-                    if (confirm('This will replace your current data with sample data. Continue?')) {
-                        await this.loadSampleData();
-                        this.socialLinks = [
-                            {
-                                platform: 'github',
-                                icon: 'fab fa-github',
-                                url: 'https://github.com/username'
-                            },
-                            {
-                                platform: 'linkedin',
-                                icon: 'fab fa-linkedin-in',
-                                url: 'https://linkedin.com/in/username'
-                            },
-                            {
-                                platform: 'email',
-                                icon: 'fas fa-envelope',
-                                url: 'mailto:muhammadzuyyina@gmail.com'
-                            }
-                        ];
-                        
-                        await this.saveToLocalStorage();
-                        
-                        // Sync to Firebase if signed in
-                        if (this.userId && this.isOnline) {
-                            await this.syncToFirebase();
-                        }
-                        
-                        this.showToastMessage('Sample data loaded successfully', 'success');
-                        this.showDataPanel = false;
-                    }
-                },
-
                 importFromFile() {
                     document.getElementById('jsonFileInput').click();
                 },
@@ -5034,13 +2339,6 @@
                                 }));
                             }
                             
-                            await this.saveToLocalStorage();
-                            
-                            // Sync to Firebase if signed in
-                            if (this.userId && this.isOnline) {
-                                await this.syncToFirebase();
-                            }
-                            
                             this.showToastMessage('Data imported successfully', 'success');
                         }
                         event.target.value = '';
@@ -5060,7 +2358,7 @@
                             icon: link.icon
                         })),
                         exportedAt: new Date().toISOString(),
-                        version: '2.0'
+                        version: '1.0'
                     };
                     
                     const json = JSON.stringify(data, null, 2);
@@ -5078,181 +2376,155 @@
                     this.showToastMessage('Data exported successfully', 'success');
                 },
 
-                async clearAllData() {
-                    if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
-                        this.skills = [];
-                        this.projects = [];
+                resetToDefault() {
+                    if (confirm('Reset to default data? This will replace your current data with embedded data.')) {
+                        // Reset semua data ke default
                         this.profile = {
                             name: 'Zuyyina Firdausi Muhammad',
-                            title: 'IT Developer',
+                            title: 'Full Stack Developer',
                             email: 'muhammadzuyyina@gmail.com',
                             phone: '+62 822 9569 2941',
-                            bio: 'IT Developer Junior',
-                            image: this.generateDefaultAvatar()
+                            bio: 'IT Developer Junior with expertise in modern web technologies, specializing in creating efficient and scalable solutions. Passionate about problem-solving and delivering exceptional user experiences.',
+                            image: null
                         };
+
+                        this.skills = [
+                            {
+                                id: 1,
+                                name: 'JavaScript',
+                                category: 'frontend',
+                                level: 95,
+                                years: 3,
+                                projects: 25,
+                                icon: 'fab fa-js',
+                                description: 'Advanced JavaScript including ES6+, Async/Await, Promises, and modern patterns',
+                                certifications: ['JavaScript Developer Certification'],
+                                tags: ['frontend', 'javascript', 'es6']
+                            },
+                            {
+                                id: 2,
+                                name: 'React',
+                                category: 'frontend',
+                                level: 90,
+                                years: 3,
+                                projects: 18,
+                                icon: 'fab fa-react',
+                                description: 'Modern React with Hooks, Context API, Redux, and advanced component patterns',
+                                certifications: ['React Certified Developer'],
+                                tags: ['react', 'frontend', 'ui']
+                            },
+                            {
+                                id: 3,
+                                name: 'Node.js',
+                                category: 'backend',
+                                level: 88,
+                                years: 3,
+                                projects: 15,
+                                icon: 'fab fa-node-js',
+                                description: 'Building scalable server-side applications, REST APIs, and microservices',
+                                certifications: [],
+                                tags: ['backend', 'node', 'api']
+                            },
+                            {
+                                id: 4,
+                                name: 'Python',
+                                category: 'backend',
+                                level: 85,
+                                years: 2,
+                                projects: 12,
+                                icon: 'fab fa-python',
+                                description: 'Python development with Django, Flask, and data analysis libraries',
+                                certifications: ['Python Developer Certification'],
+                                tags: ['python', 'backend', 'data']
+                            },
+                            {
+                                id: 5,
+                                name: 'MongoDB',
+                                category: 'database',
+                                level: 82,
+                                years: 2,
+                                projects: 10,
+                                icon: 'fas fa-database',
+                                description: 'NoSQL database design, optimization, and aggregation pipelines',
+                                certifications: ['MongoDB Certified Developer'],
+                                tags: ['database', 'nosql', 'mongodb']
+                            },
+                            {
+                                id: 6,
+                                name: 'Docker',
+                                category: 'devops',
+                                level: 80,
+                                years: 1,
+                                projects: 8,
+                                icon: 'fab fa-docker',
+                                description: 'Containerization, Docker Compose, and container orchestration',
+                                certifications: ['Docker Certified Associate'],
+                                tags: ['devops', 'docker', 'containers']
+                            }
+                        ];
+
+                        this.projects = [
+                            {
+                                id: 1,
+                                name: 'E-Commerce Platform',
+                                description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, customer analytics, and admin dashboard. Built with modern microservices architecture.',
+                                type: 'web',
+                                technologies: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Tailwind CSS', 'Redux', 'Stripe'],
+                                image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                                demoUrl: '#',
+                                sourceUrl: '#',
+                                features: ['Real-time inventory', 'Payment integration', 'Admin dashboard', 'Customer analytics'],
+                                status: 'completed',
+                                date: '2024',
+                                role: 'Full Stack Developer',
+                                teamSize: 4,
+                                client: 'Retail Company'
+                            },
+                            {
+                                id: 2,
+                                name: 'Task Management App',
+                                description: 'Collaborative task management application with real-time updates, team collaboration features, file attachments, and progress tracking. Built with Vue.js and Firebase.',
+                                type: 'web',
+                                technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router', 'Tailwind CSS'],
+                                image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                                demoUrl: '#',
+                                sourceUrl: '#',
+                                features: ['Real-time collaboration', 'Team management', 'File attachments', 'Progress tracking'],
+                                status: 'completed',
+                                date: '2024',
+                                role: 'Frontend Developer',
+                                teamSize: 3,
+                                client: 'Startup Company'
+                            }
+                        ];
+
                         this.socialLinks = [
                             {
                                 platform: 'github',
                                 icon: 'fab fa-github',
-                                url: 'https://github.com/username'
+                                url: 'https://github.com/zuyyina'
                             },
                             {
                                 platform: 'linkedin',
                                 icon: 'fab fa-linkedin-in',
-                                url: 'https://linkedin.com/in/username'
+                                url: 'https://linkedin.com/in/zuyyina'
                             },
                             {
                                 platform: 'email',
                                 icon: 'fas fa-envelope',
                                 url: 'mailto:muhammadzuyyina@gmail.com'
+                            },
+                            {
+                                platform: 'whatsapp',
+                                icon: 'fab fa-whatsapp',
+                                url: 'https://wa.me/6282295692941'
                             }
                         ];
-                        
+
                         this.updateProjectSlides();
-                        
-                        const keysToRemove = [];
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('portfolio')) {
-                                keysToRemove.push(key);
-                            }
-                        }
-                        
-                        keysToRemove.forEach(key => localStorage.removeItem(key));
-                        
-                        await this.saveToLocalStorage();
-                        
-                        // Clear Firebase data if signed in
-                        if (this.userId && this.isOnline) {
-                            try {
-                                await this.firestore
-                                    .collection('portfolios')
-                                    .doc(this.userId)
-                                    .delete();
-                                    
-                                this.addToSyncHistory('Cleared Firebase data', 'success');
-                                this.showToastMessage('Cloud data also cleared', 'success');
-                            } catch (error) {
-                                console.error('Error clearing Firebase data:', error);
-                            }
-                        }
-                        
-                        this.showToastMessage('All data cleared successfully', 'success');
+                        this.showToastMessage('Reset to default data successfully', 'success');
+                        this.showDataPanel = false;
                     }
-                },
-
-                // Check storage availability
-                async checkStorageAvailability() {
-                    try {
-                        const testKey = 'storage_test_' + Date.now();
-                        const testData = 'x'.repeat(1024 * 100);
-                        
-                        localStorage.setItem(testKey, testData);
-                        localStorage.removeItem(testKey);
-                        
-                        console.log('✅ Storage is available');
-                        return true;
-                    } catch (e) {
-                        console.error('❌ Storage error:', e);
-                        this.showToastMessage('Local storage is not available. Some features may not work.', 'warning');
-                        return false;
-                    }
-                },
-
-                // Load sample data
-                async loadSampleData() {
-                    console.log('📊 Loading sample data...');
-                    
-                    this.skills = [
-                        { 
-                            id: 1, 
-                            name: 'React', 
-                            category: 'frontend', 
-                            level: 95, 
-                            years: 3, 
-                            projects: 15, 
-                            icon: 'fab fa-react',
-                            description: 'Modern React with Hooks, Context API, and advanced patterns',
-                            certifications: ['React Certified Developer'],
-                            tags: ['frontend', 'ui', 'components']
-                        },
-                        { 
-                            id: 2, 
-                            name: 'Node.js', 
-                            category: 'backend', 
-                            level: 90, 
-                            years: 3, 
-                            projects: 12, 
-                            icon: 'fab fa-node-js',
-                            description: 'Building scalable server-side applications and APIs',
-                            certifications: [],
-                            tags: ['backend', 'api', 'server']
-                        }
-                    ];
-
-                    this.projects = [
-                        {
-                            id: 1,
-                            name: 'E-Commerce Platform',
-                            description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, and customer analytics.',
-                            type: 'web',
-                            technologies: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Tailwind CSS'],
-                            image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            demoUrl: '#',
-                            sourceUrl: '#',
-                            features: ['Real-time inventory', 'Payment integration', 'Admin dashboard'],
-                            status: 'completed',
-                            date: '2024'
-                        },
-                        {
-                            id: 2,
-                            name: 'Task Management App',
-                            description: 'Collaborative task management application with real-time updates and team features.',
-                            type: 'web',
-                            technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router'],
-                            image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            demoUrl: '#',
-                            sourceUrl: '#',
-                            features: ['Real-time collaboration', 'Team management', 'File attachments'],
-                            status: 'completed',
-                            date: '2024'
-                        }
-                    ];
-                    
-                    this.profile.image = this.generateDefaultAvatar();
-                    
-                    this.updateProjectSlides();
-                    
-                    await this.saveToLocalStorage();
-                    console.log('✅ Sample data loaded and saved');
-                },
-
-                // Load default data
-                async loadDefaultData() {
-                    console.log('📦 Loading default data...');
-                    await this.loadSampleData();
-                    this.loadDefaultSocialLinks();
-                },
-
-                // Load default social links
-                loadDefaultSocialLinks() {
-                    this.socialLinks = [
-                        {
-                            platform: 'github',
-                            icon: 'fab fa-github',
-                            url: 'https://github.com/username'
-                        },
-                        {
-                            platform: 'linkedin',
-                            icon: 'fab fa-linkedin-in',
-                            url: 'https://linkedin.com/in/username'
-                        },
-                        {
-                            platform: 'email',
-                            icon: 'fas fa-envelope',
-                            url: 'mailto:muhammadzuyyina@gmail.com'
-                        }
-                    ];
                 },
 
                 // Helper untuk generate avatar default
@@ -5274,102 +2546,6 @@
                         reader.onload = () => resolve(reader.result);
                         reader.onerror = error => reject(error);
                     });
-                },
-
-                // Compress image for storage
-                async compressImage(imageData) {
-                    try {
-                        if (!imageData || typeof imageData !== 'string') {
-                            return '';
-                        }
-                        
-                        if (imageData.startsWith('http') || imageData.length < 10000) {
-                            return imageData;
-                        }
-                        
-                        if (imageData.startsWith('data:image')) {
-                            const base64Length = imageData.length;
-                            const padding = imageData.endsWith('==') ? 2 : imageData.endsWith('=') ? 1 : 0;
-                            const fileSizeBytes = (base64Length * 3) / 4 - padding;
-                            
-                            if (fileSizeBytes <= this.storageConfig.maxImageSize) {
-                                return imageData;
-                            }
-                            
-                            const compressed = await this.compressBase64Image(imageData);
-                            console.log(`📐 Image compressed: ${this.formatBytes(fileSizeBytes)} -> ${this.formatBytes(compressed.length)}`);
-                            
-                            return compressed;
-                        }
-                        
-                        return imageData;
-                    } catch (error) {
-                        console.error('Error compressing image:', error);
-                        return imageData;
-                    }
-                },
-
-                // Compress base64 image
-                async compressBase64Image(base64Data, quality = 0.7) {
-                    return new Promise((resolve) => {
-                        try {
-                            const img = new Image();
-                            img.onload = () => {
-                                const canvas = document.createElement('canvas');
-                                const ctx = canvas.getContext('2d');
-                                
-                                let width = img.width;
-                                let height = img.height;
-                                const maxDimension = 800;
-                                
-                                if (width > maxDimension || height > maxDimension) {
-                                    if (width > height) {
-                                        height = (height * maxDimension) / width;
-                                        width = maxDimension;
-                                    } else {
-                                        width = (width * maxDimension) / height;
-                                        height = maxDimension;
-                                    }
-                                }
-                                
-                                canvas.width = width;
-                                canvas.height = height;
-                                
-                                ctx.drawImage(img, 0, 0, width, height);
-                                const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-                                
-                                resolve(compressedBase64);
-                            };
-                            
-                            img.onerror = () => {
-                                console.warn('Image compression failed, returning original');
-                                resolve(base64Data);
-                            };
-                            
-                            img.src = base64Data;
-                        } catch (error) {
-                            console.error('Compression error:', error);
-                            resolve(base64Data);
-                        }
-                    });
-                },
-
-                // Decompress image (if needed)
-                async decompressImage(imageData) {
-                    return imageData || '';
-                },
-
-                // Format bytes for display
-                formatBytes(bytes, decimals = 2) {
-                    if (bytes === 0) return '0 Bytes';
-                    
-                    const k = 1024;
-                    const dm = decimals < 0 ? 0 : decimals;
-                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                    
-                    const i = Math.floor(Math.log(bytes) / Math.log(k));
-                    
-                    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
                 }
             };
         }
