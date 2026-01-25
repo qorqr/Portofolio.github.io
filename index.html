@@ -25,6 +25,12 @@
     <!-- Particle.js -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
     <style>
         :root {
             --primary: #6366f1;
@@ -1250,6 +1256,46 @@
             color: var(--text-secondary);
             margin-bottom: 2rem;
         }
+
+        /* Firebase Auth Button */
+        .firebase-auth-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 100;
+        }
+
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .connection-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        .connection-online .connection-dot {
+            background-color: #10B981;
+            box-shadow: 0 0 10px #10B981;
+        }
+
+        .connection-offline .connection-dot {
+            background-color: #EF4444;
+        }
+
+        .connection-syncing .connection-dot {
+            background-color: #F59E0B;
+            animation: pulse 1.5s infinite;
+        }
     </style>
 </head>
 <body x-bind:class="isDark ? 'dark-mode' : 'light-mode'" class="min-h-screen relative">
@@ -1260,6 +1306,21 @@
     <div class="floating-element w-96 h-96 bg-purple-500 top-20 left-20"></div>
     <div class="floating-element w-64 h-64 bg-indigo-500 bottom-20 right-20" style="animation-delay: -10s;"></div>
     <div class="floating-element w-80 h-80 bg-blue-500 top-1/2 left-1/4" style="animation-delay: -5s;"></div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" :class="{
+        'connection-online': isOnline && !isSyncing,
+        'connection-offline': !isOnline,
+        'connection-syncing': isSyncing
+    }">
+        <div class="px-4 py-2 rounded-full glass-card text-sm font-medium">
+            <span class="connection-dot"></span>
+            <span x-text="connectionStatusText"></span>
+            <span x-show="isSyncing" class="ml-2">
+                <i class="fas fa-sync-alt animate-spin"></i>
+            </span>
+        </div>
+    </div>
 
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" :style="`transform: scaleX(${scrollProgress / 100})`"></div>
@@ -1283,9 +1344,18 @@
 
             <div class="space-y-4">
                 <h2 class="text-4xl font-bold text-white tracking-wider">IT<span class="gradient-text">Developer</span></h2>
-                <p class="text-white/80 typewriter font-mono text-sm">Initializing portfolio...</p>
+                <p class="text-white/80 typewriter font-mono text-sm" x-text="loadingMessage"></p>
             </div>
         </div>
+    </div>
+
+    <!-- Firebase Auth Button -->
+    <div class="firebase-auth-btn no-print" x-show="!userId && !isLoading">
+        <button @click="initFirebaseAuth()"
+                class="btn btn-primary flex items-center gap-2 shadow-xl">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Sync with Firebase</span>
+        </button>
     </div>
 
     <!-- Floating Action Button -->
@@ -1328,6 +1398,20 @@
 
                 <!-- Right Actions -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- Firebase User Info -->
+                    <div x-show="userId" class="flex items-center space-x-3">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-xs font-semibold gradient-text truncate max-w-[120px]" 
+                               x-text="userEmail"></p>
+                            <p class="text-xs text-slate-500">Cloud Sync</p>
+                        </div>
+                        <button @click="signOut()"
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg group focus-visible"
+                                title="Sign Out">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+
                     <!-- Data Management Button -->
                     <div class="relative">
                         <button @click="toggleDataPanel"
@@ -1396,6 +1480,27 @@
                         </button>
                     </div>
 
+                    <!-- Firebase Sync Status -->
+                    <div x-show="userId" class="mb-6 p-4 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-cloud text-green-500 text-xl"></i>
+                                <div>
+                                    <h4 class="font-semibold text-green-500">Firebase Sync Active</h4>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                                        Data synchronized with cloud
+                                    </p>
+                                </div>
+                            </div>
+                            <button @click="syncToFirebase()" 
+                                    class="btn btn-secondary text-sm px-4 py-2"
+                                    :disabled="isSyncing">
+                                <i class="fas fa-sync-alt mr-2" :class="{'animate-spin': isSyncing}"></i>
+                                <span x-text="isSyncing ? 'Syncing...' : 'Sync Now'"></span>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="grid md:grid-cols-2 gap-6">
                         <!-- Import Data -->
                         <div class="space-y-4">
@@ -1457,33 +1562,21 @@
                         </div>
                     </div>
 
-                    <!-- Debug Panel -->
-                    <div class="mt-6 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
-                        <div class="flex items-center justify-between mb-3">
-                            <h4 class="font-semibold text-lg text-amber-600">
-                                <i class="fas fa-bug mr-2"></i>Debug Info
-                            </h4>
-                            <button @click="toggleDebug = !toggleDebug"
-                                    class="text-xs px-3 py-1 rounded-lg glass-card">
-                                <span x-text="toggleDebug ? 'Hide' : 'Show'"></span>
-                            </button>
-                        </div>
-                        
-                        <div x-show="toggleDebug" class="space-y-3 p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-sm">
-                            <div>
-                                <strong>Social Links in Storage:</strong>
-                                <pre class="mt-2 text-xs overflow-auto max-h-32" 
-                                     x-text="JSON.stringify(JSON.parse(localStorage.getItem('portfolioSocialLinks') || '[]'), null, 2)"></pre>
-                            </div>
-                            <div>
-                                <strong>Current Social Links:</strong>
-                                <pre class="mt-2 text-xs overflow-auto max-h-32" 
-                                     x-text="JSON.stringify(socialLinks, null, 2)"></pre>
-                            </div>
-                            <button @click="forceRefreshSocialLinks"
-                                    class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">
-                                    <i class="fas fa-sync-alt mr-2"></i>Refresh Social Links
-                            </button>
+                    <!-- Sync History -->
+                    <div x-show="syncHistory.length > 0" class="mt-6 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+                        <h4 class="font-semibold text-lg mb-4">
+                            <i class="fas fa-history mr-2"></i>Sync History
+                        </h4>
+                        <div class="space-y-2 max-h-40 overflow-y-auto">
+                            <template x-for="(sync, index) in syncHistory.slice(0, 5)" :key="index">
+                                <div class="flex items-center justify-between p-3 rounded-lg glass-card text-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <i :class="sync.status === 'success' ? 'fas fa-check-circle text-green-500' : 'fas fa-times-circle text-red-500'"></i>
+                                        <span x-text="sync.action"></span>
+                                    </div>
+                                    <span class="text-xs text-slate-500" x-text="formatTimeAgo(sync.timestamp)"></span>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -2877,7 +2970,7 @@
                                         <div class="flex gap-3 items-start p-4 rounded-xl glass-card hover:scale-[1.01] transition-transform duration-300">
                                             <div class="flex items-center justify-center w-12 h-12 rounded-lg"
                                                  :class="getSocialPlatformColorClass(link.platform)">
-                                               
+                                                <i :class="link.icon" class="text-xl text-white"></i>
                                             </div>
                                             
                                             <div class="flex-1 space-y-3">
@@ -3017,7 +3110,7 @@
                                                 <button type="button" @click="addQuickSocialLink(platform)"
                                                         class="px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2 glass-card hover:scale-105 transition-transform duration-300"
                                                         x-show="!socialLinks.find(l => l.platform === platform)">
-                                                  
+                                                    <i :class="getSocialIcon(platform)"></i>
                                                     <span x-text="getSocialPlatformName(platform)"></span>
                                                 </button>
                                             </template>
@@ -3207,2008 +3300,2079 @@
     </div>
 
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBAuVIJp4jZCzxuBIBFez2SdLMi7MNHNJk",
+            authDomain: "portofolio-4a7eb.firebaseapp.com",
+            projectId: "portofolio-4a7eb",
+            storageBucket: "portofolio-4a7eb.firebasestorage.app",
+            messagingSenderId: "36345970852",
+            appId: "1:36345970852:web:a35881e9ab7b1e18fce631"
+        };
+
         function portfolio() {
-    return {
-        // State
-        isLoading: true,
-        isDark: true,
-        mobileMenu: false,
-        activeSection: 'home',
-        scrollProgress: 0,
-        isAtTop: true,
-        showToast: false,
-        toastMessage: '',
-        toastType: 'success',
-        showDataPanel: false,
-        techInput: '',
-        certificationInput: '',
-        tagInput: '',
-        activeSkillCategory: 'all',
-        activeSkillTab: 'basic',
-        activeProjectTab: 'basic',
-        selectedProject: null,
-        editingSkill: null,
-        editingProject: null,
-        uploadingImage: false,
-        uploadingProfileImage: false,
-        isSubmitting: false,
-        deleteItem: { type: '', id: null, name: '' },
-        toggleDebug: false,
+            return {
+                // State
+                isLoading: true,
+                isDark: true,
+                mobileMenu: false,
+                activeSection: 'home',
+                scrollProgress: 0,
+                isAtTop: true,
+                showToast: false,
+                toastMessage: '',
+                toastType: 'success',
+                showDataPanel: false,
+                techInput: '',
+                certificationInput: '',
+                tagInput: '',
+                activeSkillCategory: 'all',
+                activeSkillTab: 'basic',
+                activeProjectTab: 'basic',
+                selectedProject: null,
+                editingSkill: null,
+                editingProject: null,
+                uploadingImage: false,
+                uploadingProfileImage: false,
+                isSubmitting: false,
+                deleteItem: { type: '', id: null, name: '' },
+                toggleDebug: false,
+                loadingMessage: 'Initializing portfolio...',
 
-        // Project Slider State
-        projectView: 'grid', // 'grid' or 'slider'
-        currentSlide: 0,
-        projectSlides: [],
-        autoSlideEnabled: false,
-        autoSlideInterval: null,
-        projectsPerSlide: 3, // Jumlah proyek per slide
+                // Firebase State
+                firebaseApp: null,
+                firestore: null,
+                auth: null,
+                userId: null,
+                userEmail: null,
+                isOnline: false,
+                isSyncing: false,
+                syncHistory: [],
 
-        // Storage Configuration
-        storageConfig: {
-            maxImageSize: 1 * 1024 * 1024, // 1MB
-            compressionQuality: 0.7,
-            enableCompression: true,
-            maxTotalSize: 5 * 1024 * 1024, // 5MB total storage
-            backupCount: 3
-        },
+                // Project Slider State
+                projectView: 'grid',
+                currentSlide: 0,
+                projectSlides: [],
+                autoSlideEnabled: false,
+                autoSlideInterval: null,
+                projectsPerSlide: 3,
 
-        // Profile Data
-        profile: {
-            name: 'Zuyyina Firdausi Muhammad',
-            title: 'IT Developer',
-            email: 'muhammadzuyyina@gmail.com',
-            phone: '+62 822 9569 2941',
-            bio: 'IT Developer Junior',
-            image: null
-        },
-
-        // Navigation
-        navItems: [
-            { name: 'Home', href: '#home' },
-            { name: 'Skills', href: '#skills' },
-            { name: 'Projects', href: '#projects' },
-            { name: 'Contact', href: '#contact' }
-        ],
-
-        skills: [],
-        projects: [],
-        portfolioYear: new Date().getFullYear(),
-
-        // Social Links
-        socialLinks: [],
-
-        // Skill Categories
-        skillCategories: [
-            'frontend', 'backend', 'database', 'mobile', 
-            'devops', 'cloud', 'tools', 'design', 'ai'
-        ],
-
-        // Popular Technologies
-        popularTechnologies: [
-            'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 
-            'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'Bootstrap', 'SASS/SCSS',
-            'Node.js', 'Express.js', 'Python', 'Django', 'Flask', 'PHP', 'Laravel', 
-            'Java', 'Spring Boot', 'Go', 'Ruby', 'Ruby on Rails', 'C#', '.NET',
-            'MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'Redis', 'SQLite', 'Supabase',
-            'React Native', 'Flutter', 'Electron', 'Swift', 'Kotlin',
-            'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Vercel', 'Netlify',
-            'Git', 'GitHub Actions', 'Jenkins', 'Nginx',
-            'GraphQL', 'REST API', 'Jest', 'Cypress', 'Webpack', 'Figma', 'Adobe XD'
-        ],
-
-        // New Skill Data
-        newSkill: {
-            name: '',
-            category: 'frontend',
-            level: 50,
-            years: 1,
-            projects: 0,
-            icon: 'fas fa-code',
-            description: '',
-            certifications: [],
-            tags: [],
-            customId: ''
-        },
-
-        // New Project Data
-        newProject: {
-            name: '',
-            description: '',
-            type: 'web',
-            technologies: [],
-            image: '',
-            demoUrl: '',
-            sourceUrl: '',
-            startDate: '',
-            endDate: '',
-            isOngoing: false,
-            role: '',
-            teamSize: 1,
-            status: 'completed',
-            client: '',
-            challenges: '',
-            features: []
-        },
-
-        // Contact Form
-        contactForm: {
-            name: '',
-            email: '',
-            message: ''
-        },
-
-        // Modals
-        modals: {
-            projectDetail: false,
-            addProject: false,
-            addSkill: false,
-            editProfile: false,
-            deleteConfirm: false
-        },
-
-        // Computed Properties
-        get filteredSkills() {
-            if (this.activeSkillCategory === 'all') {
-                return this.skills;
-            }
-            return this.skills.filter(skill => skill.category === this.activeSkillCategory);
-        },
-
-        get averageSkillLevel() {
-            if (this.skills.length === 0) return 0;
-            const total = this.skills.reduce((sum, skill) => sum + skill.level, 0);
-            return Math.round(total / this.skills.length);
-        },
-
-        get totalProjectCount() {
-            return this.skills.reduce((total, skill) => total + skill.projects, 0);
-        },
-
-        get totalExperienceYears() {
-            const startYear = 2023;
-            const currentYear = new Date().getFullYear();
-            return Math.max(1, currentYear - startYear);
-        },
-
-        get totalItems() {
-            return this.skills.length + this.projects.length;
-        },
-
-        // Computed property untuk gambar profil
-        get profileImageSrc() {
-            if (!this.profile.image || this.profile.image.trim() === '') {
-                return this.generateDefaultAvatar();
-            }
-            return this.profile.image;
-        },
-
-        // Initialization
-        async init() {
-            this.setupEventListeners();
-            
-            // Load theme preference
-            const savedTheme = localStorage.getItem('theme');
-            this.isDark = savedTheme ? savedTheme === 'dark' : true;
-
-            this.initParticles();
-
-            // Check storage availability
-            await this.checkStorageAvailability();
-            
-            // Load data
-            await this.loadAllData();
-            
-            // Initialize with sample data if empty
-            if (this.skills.length === 0 && this.projects.length === 0) {
-                await this.loadSampleData();
-            }
-            
-            // Setup project slides
-            this.updateProjectSlides();
-            
-            setTimeout(() => {
-                this.isLoading = false;
-                this.$nextTick(() => {
-                    console.log('Portfolio initialized successfully');
-                });
-            }, 1000);
-        },
-
-        // Update project slides for slider view
-        updateProjectSlides() {
-            this.projectSlides = [];
-            
-            // Jika proyek kurang dari atau sama dengan 6, tetap pakai grid
-            if (this.projects.length <= 6) {
-                this.projectView = 'grid';
-                return;
-            }
-            
-            // Bagi proyek menjadi slide
-            for (let i = 0; i < this.projects.length; i += this.projectsPerSlide) {
-                this.projectSlides.push(this.projects.slice(i, i + this.projectsPerSlide));
-            }
-            
-            // Reset current slide jika out of bounds
-            if (this.currentSlide >= this.projectSlides.length) {
-                this.currentSlide = 0;
-            }
-        },
-
-        // Check storage availability
-        async checkStorageAvailability() {
-            try {
-                // Test if localStorage is available and has space
-                const testKey = 'storage_test_' + Date.now();
-                const testData = 'x'.repeat(1024 * 100); // 100KB test data
-                
-                localStorage.setItem(testKey, testData);
-                localStorage.removeItem(testKey);
-                
-                console.log('✅ Storage is available');
-                return true;
-            } catch (e) {
-                console.error('❌ Storage error:', e);
-                this.showToastMessage('Local storage is not available. Some features may not work.', 'warning');
-                return false;
-            }
-        },
-
-        // Method untuk load semua data
-        async loadAllData() {
-            try {
-                console.log('📂 Loading all data from storage...');
-                
-                // Load from enhanced storage first
-                const enhancedData = localStorage.getItem('portfolio_enhanced');
-                if (enhancedData) {
-                    await this.loadFromEnhancedStorage(enhancedData);
-                    console.log('✅ Loaded from enhanced storage');
-                    return;
-                }
-                
-                // Fallback to individual storage items
-                await this.loadFromIndividualStorage();
-                console.log('✅ Loaded from individual storage');
-                
-            } catch (e) {
-                console.error('Error loading all data:', e);
-                await this.loadDefaultData();
-            }
-        },
-
-        // Load from enhanced storage
-        async loadFromEnhancedStorage(compressedData) {
-            try {
-                const data = JSON.parse(compressedData);
-                
-                if (data.skills) {
-                    this.skills = data.skills.map(skill => ({
-                        ...skill,
-                        // Convert compressed images back to base64
-                        icon: skill.icon || this.getSkillIcon(skill.category)
-                    }));
-                }
-                
-                if (data.projects) {
-                    this.projects = await Promise.all(data.projects.map(async project => ({
-                        ...project,
-                        // Decompress image if needed
-                        image: await this.decompressImage(project.image)
-                    })));
-                }
-                
-                if (data.profile) {
-                    this.profile = { 
-                        ...this.profile, 
-                        ...data.profile,
-                        image: await this.decompressImage(data.profile.image) || this.generateDefaultAvatar()
-                    };
-                }
-                
-                if (data.socialLinks) {
-                    this.socialLinks = data.socialLinks.map(link => ({
-                        platform: link.platform || 'github',
-                        url: link.url || '',
-                        icon: link.icon || this.getSocialIcon(link.platform || 'github')
-                    }));
-                }
-                
-            } catch (error) {
-                console.error('Error loading from enhanced storage:', error);
-                throw error;
-            }
-        },
-
-        // Load from individual storage items
-        async loadFromIndividualStorage() {
-            try {
-                // Load skills
-                const savedSkills = localStorage.getItem('portfolioSkills');
-                if (savedSkills) {
-                    this.skills = JSON.parse(savedSkills);
-                }
-                
-                // Load projects
-                const savedProjects = localStorage.getItem('portfolioProjects');
-                if (savedProjects) {
-                    const projects = JSON.parse(savedProjects);
-                    this.projects = await Promise.all(projects.map(async project => ({
-                        ...project,
-                        image: await this.decompressImage(project.image) || project.image
-                    })));
-                }
-                
-                // Load profile
-                const savedProfile = localStorage.getItem('portfolioProfile');
-                if (savedProfile) {
-                    const profileData = JSON.parse(savedProfile);
-                    this.profile = { 
-                        ...this.profile, 
-                        ...profileData,
-                        image: await this.decompressImage(profileData.image) || this.generateDefaultAvatar()
-                    };
-                }
-                
-                // Load social links
-                const savedSocialLinks = localStorage.getItem('portfolioSocialLinks');
-                if (savedSocialLinks) {
-                    try {
-                        const parsedLinks = JSON.parse(savedSocialLinks);
-                        this.socialLinks = parsedLinks.map(link => ({
-                            platform: link.platform || 'github',
-                            url: link.url || '',
-                            icon: link.icon || this.getSocialIcon(link.platform || 'github')
-                        }));
-                    } catch (parseError) {
-                        console.error('Error parsing social links:', parseError);
-                        this.loadDefaultSocialLinks();
-                    }
-                } else {
-                    this.loadDefaultSocialLinks();
-                }
-                
-            } catch (error) {
-                console.error('Error loading from individual storage:', error);
-                throw error;
-            }
-        },
-
-        // Load default data
-        async loadDefaultData() {
-            console.log('📦 Loading default data...');
-            await this.loadSampleData();
-            this.loadDefaultSocialLinks();
-        },
-
-        // Helper untuk generate avatar default
-        generateDefaultAvatar() {
-            const name = this.profile.name || 'John Doe';
-            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-            const bgColor = '6366f1';
-            const textColor = 'ffffff';
-            const size = '400';
-            
-            return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${bgColor}&color=${textColor}&size=${size}&bold=true&font-size=0.5`;
-        },
-
-        // Method untuk load default social links
-        loadDefaultSocialLinks() {
-            this.socialLinks = [
-                {
-                    platform: 'github',
-                    icon: 'fab fa-github',
-                    url: 'https://github.com/username'
+                // Storage Configuration
+                storageConfig: {
+                    maxImageSize: 1 * 1024 * 1024,
+                    compressionQuality: 0.7,
+                    enableCompression: true,
+                    maxTotalSize: 5 * 1024 * 1024,
+                    backupCount: 3
                 },
-                {
-                    platform: 'linkedin',
-                    icon: 'fab fa-linkedin-in',
-                    url: 'https://linkedin.com/in/username'
-                },
-                {
-                    platform: 'email',
-                    icon: 'fas fa-envelope',
-                    url: 'mailto:muhammadzuyyina@gmail.com'
-                }
-            ];
-        },
 
-        initParticles() {
-            if (typeof particlesJS === 'function') {
-                particlesJS('particles-js', {
-                    particles: {
-                        number: { 
-                            value: 80, 
-                            density: { 
-                                enable: true, 
-                                value_area: 800 
-                            } 
-                        },
-                        color: { 
-                            value: this.isDark ? "#ffffff" : "#6366f1" 
-                        },
-                        shape: { 
-                            type: "circle" 
-                        },
-                        opacity: { 
-                            value: 0.3, 
-                            random: true
-                        },
-                        size: { 
-                            value: 3, 
-                            random: true
-                        },
-                        line_linked: {
-                            enable: true,
-                            distance: 150,
-                            color: this.isDark ? "#ffffff" : "#6366f1",
-                            opacity: 0.2,
-                            width: 1
-                        },
-                        move: {
-                            enable: true,
-                            speed: 1,
-                            direction: "none",
-                            random: true,
-                            straight: false
-                        }
-                    },
-                    interactivity: {
-                        events: {
-                            onhover: { 
-                                enable: true, 
-                                mode: "grab" 
-                            }
-                        }
-                    }
-                });
-            }
-        },
-
-        async loadSampleData() {
-            console.log('📊 Loading sample data...');
-            
-            // Sample Skills
-            this.skills = [
-                { 
-                    id: 1, 
-                    name: 'React', 
-                    category: 'frontend', 
-                    level: 95, 
-                    years: 3, 
-                    projects: 15, 
-                    icon: 'fab fa-react',
-                    description: 'Modern React with Hooks, Context API, and advanced patterns',
-                    certifications: ['React Certified Developer'],
-                    tags: ['frontend', 'ui', 'components']
-                },
-                { 
-                    id: 2, 
-                    name: 'Node.js', 
-                    category: 'backend', 
-                    level: 90, 
-                    years: 3, 
-                    projects: 12, 
-                    icon: 'fab fa-node-js',
-                    description: 'Building scalable server-side applications and APIs',
-                    certifications: [],
-                    tags: ['backend', 'api', 'server']
-                }
-            ];
-
-            // Sample Projects dengan gambar valid
-            this.projects = [
-                {
-                    id: 1,
-                    name: 'E-Commerce Platform',
-                    description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, and customer analytics.',
-                    type: 'web',
-                    technologies: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Tailwind CSS'],
-                    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    demoUrl: '#',
-                    sourceUrl: '#',
-                    features: ['Real-time inventory', 'Payment integration', 'Admin dashboard'],
-                    status: 'completed',
-                    date: '2024'
-                },
-                {
-                    id: 2,
-                    name: 'Task Management App',
-                    description: 'Collaborative task management application with real-time updates and team features.',
-                    type: 'web',
-                    technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router'],
-                    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    demoUrl: '#',
-                    sourceUrl: '#',
-                    features: ['Real-time collaboration', 'Team management', 'File attachments'],
-                    status: 'completed',
-                    date: '2024'
-                }
-            ];
-            
-            // Set default profile image
-            this.profile.image = this.generateDefaultAvatar();
-            
-            // Update project slides
-            this.updateProjectSlides();
-            
-            // Save sample data
-            await this.saveToStorage();
-            console.log('✅ Sample data loaded and saved');
-        },
-
-        // Event Listeners
-        setupEventListeners() {
-            window.addEventListener('scroll', this.handleScroll.bind(this));
-            window.addEventListener('resize', this.handleResize.bind(this));
-        },
-
-        handleScroll() {
-            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            this.scrollProgress = height > 0 ? (winScroll / height) * 100 : 0;
-            
-            this.isAtTop = window.scrollY < 50;
-            
-            // Update active section
-            const sections = ['home', 'skills', 'projects', 'contact'];
-            for (const section of sections) {
-                const element = document.getElementById(section);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top <= 100 && rect.bottom >= 100) {
-                        this.activeSection = section;
-                        break;
-                    }
-                }
-            }
-        },
-
-        handleResize() {
-            // Adjust projects per slide based on screen size
-            if (window.innerWidth < 768) {
-                this.projectsPerSlide = 1;
-            } else if (window.innerWidth < 1024) {
-                this.projectsPerSlide = 2;
-            } else {
-                this.projectsPerSlide = 3;
-            }
-            
-            // Update slides
-            this.updateProjectSlides();
-        },
-
-        // Project Image Error Handling
-        handleProjectImageError(event, projectId) {
-            console.log('Project image error for project:', projectId);
-            // Replace with fallback image
-            event.target.src = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-        },
-
-        // Theme Management
-        toggleTheme() {
-            this.isDark = !this.isDark;
-            localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
-            
-            // Update particles if available
-            if (window.pJSDom && window.pJSDom.length > 0) {
-                const particles = window.pJSDom[0].pJS;
-                if (particles) {
-                    particles.particles.color.value = this.isDark ? "#ffffff" : "#6366f1";
-                    particles.particles.line_linked.color = this.isDark ? "#ffffff" : "#6366f1";
-                    particles.fn.particlesRefresh();
-                }
-            }
-        },
-
-        // Navigation
-        scrollTo(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                const offset = 80;
-                const elementPosition = element.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-            this.mobileMenu = false;
-        },
-
-        // Modal Management
-        openModal(modalName) {
-            this.modals[modalName] = true;
-            document.body.style.overflow = 'hidden';
-        },
-
-        closeModal(modalName) {
-            this.modals[modalName] = false;
-            document.body.style.overflow = 'auto';
-            
-            if (modalName === 'addSkill') {
-                this.resetSkillForm();
-            } else if (modalName === 'addProject') {
-                this.resetProjectForm();
-            }
-        },
-
-        // Delete Confirmation
-        confirmDelete(type, id, name) {
-            this.deleteItem = { type, id, name };
-            this.openModal('deleteConfirm');
-        },
-
-        async executeDelete() {
-            try {
-                if (this.deleteItem.type === 'skill') {
-                    await this.deleteSkill(this.deleteItem.id);
-                } else if (this.deleteItem.type === 'project') {
-                    await this.deleteProject(this.deleteItem.id);
-                }
-                this.showToastMessage(`${this.deleteItem.type} deleted successfully`, 'success');
-            } catch (error) {
-                this.showToastMessage(`Error deleting ${this.deleteItem.type}`, 'error');
-            } finally {
-                this.closeModal('deleteConfirm');
-            }
-        },
-
-        // Skill Management
-        resetSkillForm() {
-            this.newSkill = {
-                name: '',
-                category: 'frontend',
-                level: 50,
-                years: 1,
-                projects: 0,
-                icon: 'fas fa-code',
-                description: '',
-                certifications: [],
-                tags: [],
-                customId: ''
-            };
-            this.certificationInput = '';
-            this.tagInput = '';
-            this.editingSkill = null;
-        },
-
-        editSkill(skill) {
-            this.newSkill = { ...skill };
-            this.editingSkill = skill;
-            this.openModal('addSkill');
-        },
-
-        async addNewSkill() {
-            try {
-                this.isSubmitting = true;
-
-                const newSkill = {
-                    id: this.editingSkill ? this.editingSkill.id : Date.now(),
-                    ...this.newSkill,
-                    icon: this.getSkillIcon(this.newSkill.category)
-                };
-
-                if (this.editingSkill) {
-                    const index = this.skills.findIndex(s => s.id === this.editingSkill.id);
-                    if (index !== -1) {
-                        this.skills[index] = newSkill;
-                    }
-                    this.showToastMessage('Skill updated successfully', 'success');
-                } else {
-                    this.skills.push(newSkill);
-                    this.showToastMessage('Skill added successfully', 'success');
-                }
-
-                await this.saveToStorage();
-                this.closeModal('addSkill');
-                this.resetSkillForm();
-            } catch (error) {
-                this.showToastMessage('Error saving skill', 'error');
-                console.error('Error adding skill:', error);
-            } finally {
-                this.isSubmitting = false;
-            }
-        },
-
-        updateSkill() {
-            this.addNewSkill();
-        },
-
-        async deleteSkill(skillId) {
-            this.skills = this.skills.filter(skill => skill.id !== skillId);
-            await this.saveToStorage();
-        },
-
-        // Project Management
-        resetProjectForm() {
-            this.newProject = {
-                name: '',
-                description: '',
-                type: 'web',
-                technologies: [],
-                image: '',
-                demoUrl: '',
-                sourceUrl: '',
-                startDate: '',
-                endDate: '',
-                isOngoing: false,
-                role: '',
-                teamSize: 1,
-                status: 'completed',
-                client: '',
-                challenges: '',
-                features: []
-            };
-            this.techInput = '';
-            this.editingProject = null;
-        },
-
-        editProject(project) {
-            this.newProject = { ...project };
-            this.editingProject = project;
-            this.openModal('addProject');
-        },
-
-        async addNewProject() {
-            try {
-                this.isSubmitting = true;
-
-                const newProject = {
-                    id: this.editingProject ? this.editingProject.id : Date.now(),
-                    ...this.newProject,
-                    date: new Date().getFullYear().toString()
-                };
-
-                if (this.editingProject) {
-                    const index = this.projects.findIndex(p => p.id === this.editingProject.id);
-                    if (index !== -1) {
-                        this.projects[index] = newProject;
-                    }
-                    this.showToastMessage('Project updated successfully', 'success');
-                } else {
-                    this.projects.push(newProject);
-                    this.showToastMessage('Project added successfully', 'success');
-                }
-
-                // Update project slides
-                this.updateProjectSlides();
-                
-                await this.saveToStorage();
-                this.closeModal('addProject');
-                this.resetProjectForm();
-            } catch (error) {
-                this.showToastMessage('Error saving project', 'error');
-                console.error('Error adding project:', error);
-            } finally {
-                this.isSubmitting = false;
-            }
-        },
-
-        updateProject() {
-            this.addNewProject();
-        },
-
-        async deleteProject(projectId) {
-            this.projects = this.projects.filter(project => project.id !== projectId);
-            
-            // Update project slides
-            this.updateProjectSlides();
-            
-            await this.saveToStorage();
-        },
-
-        viewProject(projectId) {
-            this.selectedProject = this.projects.find(p => p.id === projectId);
-            this.openModal('projectDetail');
-        },
-
-        // Project Slider Functions
-        setProjectView(view) {
-            this.projectView = view;
-            
-            // Jika pindah ke slider view, start auto slide
-            if (view === 'slider' && this.autoSlideEnabled) {
-                this.startAutoSlide();
-            } else {
-                this.stopAutoSlide();
-            }
-        },
-
-        prevSlide() {
-            if (this.currentSlide > 0) {
-                this.currentSlide--;
-                this.animateSlideChange('prev');
-            }
-        },
-
-        nextSlide() {
-            if (this.currentSlide < this.projectSlides.length - 1) {
-                this.currentSlide++;
-                this.animateSlideChange('next');
-            }
-        },
-
-        goToSlide(index) {
-            if (index >= 0 && index < this.projectSlides.length) {
-                const direction = index > this.currentSlide ? 'next' : 'prev';
-                this.currentSlide = index;
-                this.animateSlideChange(direction);
-            }
-        },
-
-        animateSlideChange(direction) {
-            // Simple animation effect
-            const slides = document.querySelectorAll('.project-slide.active');
-            slides.forEach(slide => {
-                slide.classList.add('slide-out');
-                setTimeout(() => {
-                    slide.classList.remove('slide-out');
-                }, 300);
-            });
-            
-            // Reset auto slide timer
-            if (this.autoSlideEnabled) {
-                this.resetAutoSlide();
-            }
-        },
-
-        toggleAutoSlide() {
-            this.autoSlideEnabled = !this.autoSlideEnabled;
-            
-            if (this.autoSlideEnabled && this.projectView === 'slider') {
-                this.startAutoSlide();
-                this.showToastMessage('Auto slide enabled', 'success');
-            } else {
-                this.stopAutoSlide();
-                this.showToastMessage('Auto slide disabled', 'info');
-            }
-        },
-
-        startAutoSlide() {
-            this.stopAutoSlide(); // Stop existing interval
-            this.autoSlideInterval = setInterval(() => {
-                if (this.currentSlide < this.projectSlides.length - 1) {
-                    this.currentSlide++;
-                } else {
-                    this.currentSlide = 0;
-                }
-            }, 5000); // Change slide every 5 seconds
-        },
-
-        stopAutoSlide() {
-            if (this.autoSlideInterval) {
-                clearInterval(this.autoSlideInterval);
-                this.autoSlideInterval = null;
-            }
-        },
-
-        resetAutoSlide() {
-            if (this.autoSlideEnabled) {
-                this.stopAutoSlide();
-                this.startAutoSlide();
-            }
-        },
-
-        // Technology Management
-        addTechnology() {
-            const tech = this.techInput.trim();
-            if (tech && !this.newProject.technologies.includes(tech)) {
-                this.newProject.technologies.push(tech);
-                this.techInput = '';
-            }
-        },
-
-        addTechFromSuggestion(tech) {
-            if (!this.newProject.technologies.includes(tech)) {
-                this.newProject.technologies.push(tech);
-            }
-        },
-
-        removeTech(tech) {
-            this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
-        },
-
-        // Contact Form
-        async submitContact() {
-            try {
-                this.isSubmitting = true;
-                
-                // Validasi form
-                if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) {
-                    this.showToastMessage('Please fill in all fields', 'error');
-                    this.isSubmitting = false;
-                    return;
-                }
-                
-                // Validasi email format
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(this.contactForm.email)) {
-                    this.showToastMessage('Please enter a valid email address', 'error');
-                    this.isSubmitting = false;
-                    return;
-                }
-                
-                console.log('Starting email sending process...');
-                
-                // Konfigurasi EmailJS - SILAKAN GANTI DENGAN MILIK ANDA
-                const serviceID = 'service_fkkrcdr';
-                const templateID = 'template_g9cfnn2';
-                const publicKey = 'GIIXeb6Xt3whWfqvo';
-                
-                // Cek jika EmailJS sudah tersedia
-                if (typeof emailjs === 'undefined') {
-                    console.error('EmailJS is not loaded');
-                    this.showToastMessage('Email service not available. Please refresh the page.', 'error');
-                    this.isSubmitting = false;
-                    return;
-                }
-                
-                // Inisialisasi EmailJS
-                console.log('Initializing EmailJS...');
-                emailjs.init(publicKey);
-                
-                // Parameter untuk email
-                const templateParams = {
-                    from_name: this.contactForm.name,
-                    from_email: this.contactForm.email,
-                    message: this.contactForm.message,
-                    to_name: 'Zuyyina Firdausi Muhammad',
-                    to_email: 'muhammadzuyyina@gmail.com',
-                    reply_to: this.contactForm.email,
-                    date: new Date().toLocaleDateString('id-ID'),
-                    time: new Date().toLocaleTimeString('id-ID')
-                };
-                
-                console.log('Sending email with params:', templateParams);
-                
-                // Kirim email
-                const response = await emailjs.send(serviceID, templateID, templateParams);
-                console.log('Email response:', response);
-                
-                if (response.status === 200) {
-                    this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
-                    
-                    // Reset form
-                    this.contactForm = {
-                        name: '',
-                        email: '',
-                        message: ''
-                    };
-                } else {
-                    throw new Error(`EmailJS responded with status: ${response.status}`);
-                }
-                
-            } catch (error) {
-                console.error('Email sending error:', error);
-                
-                let errorMessage = 'Error sending message. Please try again later.';
-                
-                if (error.text) {
-                    console.error('EmailJS error text:', error.text);
-                    
-                    if (error.text.includes('Invalid login credentials')) {
-                        errorMessage = 'Email configuration error. Please check EmailJS settings.';
-                    } else if (error.text.includes('Service not found')) {
-                        errorMessage = 'Email service not found. Please check Service ID.';
-                    } else if (error.text.includes('Template not found')) {
-                        errorMessage = 'Email template not found. Please check Template ID.';
-                    }
-                }
-                
-                this.showToastMessage(errorMessage, 'error');
-            } finally {
-                this.isSubmitting = false;
-            }
-        },
-
-        // Data Management
-        toggleDataPanel() {
-            this.showDataPanel = !this.showDataPanel;
-        },
-
-        // Enhanced Storage Methods
-        async saveToStorage() {
-            try {
-                console.log('💾 Saving data to storage...');
-                
-                // Check storage space
-                if (!await this.checkStorageSpace()) {
-                    await this.cleanupStorage();
-                }
-                
-                // Prepare data for storage
-                const storageData = {
-                    skills: this.skills,
-                    projects: await Promise.all(this.projects.map(async project => ({
-                        ...project,
-                        image: await this.compressImage(project.image)
-                    }))),
-                    profile: {
-                        ...this.profile,
-                        image: await this.compressImage(this.profile.image)
-                    },
-                    socialLinks: this.socialLinks.map(link => ({
-                        platform: link.platform,
-                        url: link.url,
-                        icon: link.icon
-                    })),
-                    meta: {
-                        version: '2.0',
-                        savedAt: new Date().toISOString(),
-                        totalSize: 0
-                    }
-                };
-                
-                // Calculate total size
-                const dataString = JSON.stringify(storageData);
-                storageData.meta.totalSize = dataString.length;
-                
-                console.log(`📊 Data size: ${this.formatBytes(dataString.length)}`);
-                
-                // Save to enhanced storage
-                localStorage.setItem('portfolio_enhanced', dataString);
-                
-                // Also save individual items for backward compatibility
-                localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
-                localStorage.setItem('portfolioProjects', JSON.stringify(await Promise.all(this.projects.map(async project => ({
-                    ...project,
-                    image: await this.compressImage(project.image)
-                })))));
-                localStorage.setItem('portfolioProfile', JSON.stringify({
-                    ...this.profile,
-                    image: await this.compressImage(this.profile.image)
-                }));
-                this.saveSocialLinksToStorage();
-                
-                // Create backup
-                await this.createBackup();
-                
-                console.log('✅ Data saved successfully');
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Error saving to storage:', error);
-                
-                // Try fallback method
-                try {
-                    await this.saveToStorageFallback();
-                    return true;
-                } catch (fallbackError) {
-                    console.error('❌ Fallback save also failed:', fallbackError);
-                    this.showToastMessage('Error saving data. Storage might be full.', 'error');
-                    return false;
-                }
-            }
-        },
-
-        // Check storage space
-        async checkStorageSpace() {
-            try {
-                const testData = 'x'.repeat(1024 * 100); // 100KB test
-                const testKey = 'storage_test_' + Date.now();
-                
-                localStorage.setItem(testKey, testData);
-                localStorage.removeItem(testKey);
-                
-                // Estimate current usage
-                let totalUsage = 0;
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith('portfolio')) {
-                        totalUsage += localStorage.getItem(key).length;
-                    }
-                }
-                
-                const availableSpace = 5 * 1024 * 1024 - totalUsage; // 5MB total
-                console.log(`📦 Storage: ${this.formatBytes(totalUsage)} used, ${this.formatBytes(availableSpace)} available`);
-                
-                return availableSpace > 500 * 1024; // Need at least 500KB free
-            } catch (error) {
-                console.error('Error checking storage space:', error);
-                return false;
-            }
-        },
-
-        // Cleanup storage
-        async cleanupStorage() {
-            try {
-                console.log('🧹 Cleaning up storage...');
-                
-                // Remove old backups
-                const backupKeys = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith('portfolio_backup_')) {
-                        backupKeys.push(key);
-                    }
-                }
-                
-                // Keep only 3 most recent backups
-                backupKeys.sort().reverse();
-                for (let i = 3; i < backupKeys.length; i++) {
-                    localStorage.removeItem(backupKeys[i]);
-                }
-                
-                // Remove old cache items
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && (key.startsWith('temp_') || key.startsWith('cache_'))) {
-                        localStorage.removeItem(key);
-                    }
-                }
-                
-                console.log('✅ Storage cleanup completed');
-                return true;
-            } catch (error) {
-                console.error('Error cleaning storage:', error);
-                return false;
-            }
-        },
-
-        // Compress image for storage
-        async compressImage(imageData) {
-            try {
-                if (!imageData || typeof imageData !== 'string') {
-                    return '';
-                }
-                
-                // If it's already a URL or small base64, return as is
-                if (imageData.startsWith('http') || imageData.length < 10000) {
-                    return imageData;
-                }
-                
-                // If it's base64 and too large, compress it
-                if (imageData.startsWith('data:image')) {
-                    const base64Length = imageData.length;
-                    const padding = imageData.endsWith('==') ? 2 : imageData.endsWith('=') ? 1 : 0;
-                    const fileSizeBytes = (base64Length * 3) / 4 - padding;
-                    
-                    // If image is already under 1MB, return as is
-                    if (fileSizeBytes <= this.storageConfig.maxImageSize) {
-                        return imageData;
-                    }
-                    
-                    // Compress the image
-                    const compressed = await this.compressBase64Image(imageData);
-                    console.log(`📐 Image compressed: ${this.formatBytes(fileSizeBytes)} -> ${this.formatBytes(compressed.length)}`);
-                    
-                    return compressed;
-                }
-                
-                return imageData;
-            } catch (error) {
-                console.error('Error compressing image:', error);
-                return imageData;
-            }
-        },
-
-        // Compress base64 image
-        async compressBase64Image(base64Data, quality = 0.7) {
-            return new Promise((resolve) => {
-                try {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        // Calculate new dimensions to reduce size
-                        let width = img.width;
-                        let height = img.height;
-                        const maxDimension = 800;
-                        
-                        if (width > maxDimension || height > maxDimension) {
-                            if (width > height) {
-                                height = (height * maxDimension) / width;
-                                width = maxDimension;
-                            } else {
-                                width = (width * maxDimension) / height;
-                                height = maxDimension;
-                            }
-                        }
-                        
-                        canvas.width = width;
-                        canvas.height = height;
-                        
-                        // Draw and compress
-                        ctx.drawImage(img, 0, 0, width, height);
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-                        
-                        resolve(compressedBase64);
-                    };
-                    
-                    img.onerror = () => {
-                        console.warn('Image compression failed, returning original');
-                        resolve(base64Data);
-                    };
-                    
-                    img.src = base64Data;
-                } catch (error) {
-                    console.error('Compression error:', error);
-                    resolve(base64Data);
-                }
-            });
-        },
-
-        // Decompress image (if needed)
-        async decompressImage(imageData) {
-            // For now, just return as is since we're not actually decompressing
-            // In a real implementation, you might want to handle different compression formats
-            return imageData || '';
-        },
-
-        // Format bytes for display
-        formatBytes(bytes, decimals = 2) {
-            if (bytes === 0) return '0 Bytes';
-            
-            const k = 1024;
-            const dm = decimals < 0 ? 0 : decimals;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        },
-
-        // Create backup
-        async createBackup() {
-            try {
-                const backupKey = `portfolio_backup_${Date.now()}`;
-                const data = {
-                    skills: this.skills,
-                    projects: this.projects,
-                    profile: this.profile,
-                    socialLinks: this.socialLinks,
-                    timestamp: new Date().toISOString()
-                };
-                
-                localStorage.setItem(backupKey, JSON.stringify(data));
-                console.log(`💾 Backup created: ${backupKey}`);
-                
-                return true;
-            } catch (error) {
-                console.error('Error creating backup:', error);
-                return false;
-            }
-        },
-
-        // Fallback save method
-        async saveToStorageFallback() {
-            try {
-                console.log('🔄 Using fallback save method...');
-                
-                // Save without images if storage is full
-                const projectsWithoutImages = this.projects.map(project => ({
-                    ...project,
-                    image: project.image && project.image.startsWith('data:image') ? '' : project.image
-                }));
-                
-                localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
-                localStorage.setItem('portfolioProjects', JSON.stringify(projectsWithoutImages));
-                localStorage.setItem('portfolioProfile', JSON.stringify({
-                    ...this.profile,
-                    image: this.profile.image && this.profile.image.startsWith('data:image') 
-                        ? this.generateDefaultAvatar() 
-                        : this.profile.image
-                }));
-                this.saveSocialLinksToStorage();
-                
-                console.log('✅ Fallback save completed');
-                return true;
-            } catch (error) {
-                console.error('Fallback save failed:', error);
-                throw error;
-            }
-        },
-
-        // Method khusus untuk menyimpan social links
-        saveSocialLinksToStorage() {
-            try {
-                const linksToSave = this.socialLinks.map(link => ({
-                    platform: link.platform,
-                    url: link.url,
-                    icon: link.icon
-                }));
-                localStorage.setItem('portfolioSocialLinks', JSON.stringify(linksToSave));
-            } catch (e) {
-                console.error('Error saving social links:', e);
-            }
-        },
-
-        // Import/Export Methods
-        async importSampleData() {
-            if (confirm('This will replace your current data with sample data. Continue?')) {
-                await this.loadSampleData();
-                this.socialLinks = [
-                    {
-                        platform: 'github',
-                        icon: 'fab fa-github',
-                        url: 'https://github.com/username'
-                    },
-                    {
-                        platform: 'linkedin',
-                        icon: 'fab fa-linkedin-in',
-                        url: 'https://linkedin.com/in/username'
-                    },
-                    {
-                        platform: 'email',
-                        icon: 'fas fa-envelope',
-                        url: 'mailto:muhammadzuyyina@gmail.com'
-                    }
-                ];
-                await this.saveToStorage();
-                this.showToastMessage('Sample data loaded successfully', 'success');
-                this.showDataPanel = false;
-            }
-        },
-
-        importFromFile() {
-            document.getElementById('jsonFileInput').click();
-        },
-
-        // Method untuk handle perubahan platform di select
-        handlePlatformChange(link, index) {
-            link.icon = this.getSocialIcon(link.platform);
-            this.saveSocialLinksToStorage();
-        },
-
-        async handleFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            try {
-                const text = await file.text();
-                const data = JSON.parse(text);
-                
-                if (confirm('Import data from file? This will replace your current data.')) {
-                    if (data.skills) this.skills = data.skills;
-                    if (data.projects) {
-                        this.projects = data.projects;
-                        this.updateProjectSlides();
-                    }
-                    if (data.profile) {
-                        this.profile = {
-                            ...this.profile,
-                            ...data.profile
-                        };
-                    }
-                    if (data.socialLinks) {
-                        this.socialLinks = data.socialLinks.map(link => ({
-                            platform: link.platform,
-                            url: link.url || '',
-                            icon: link.icon || this.getSocialIcon(link.platform)
-                        }));
-                    }
-                    
-                    await this.saveToStorage();
-                    this.showToastMessage('Data imported successfully', 'success');
-                }
-                event.target.value = '';
-            } catch (error) {
-                this.showToastMessage('Error importing data. Please check file format.', 'error');
-            }
-        },
-
-        exportToJSON() {
-            const data = {
-                skills: this.skills,
-                projects: this.projects,
-                profile: this.profile,
-                socialLinks: this.socialLinks.map(link => ({
-                    platform: link.platform,
-                    url: link.url,
-                    icon: link.icon
-                })),
-                exportedAt: new Date().toISOString(),
-                version: '2.0'
-            };
-            
-            const json = JSON.stringify(data, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `portfolio-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            this.showToastMessage('Data exported successfully', 'success');
-        },
-
-        async clearAllData() {
-            if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
-                this.skills = [];
-                this.projects = [];
-                this.profile = {
+                // Profile Data
+                profile: {
                     name: 'Zuyyina Firdausi Muhammad',
                     title: 'IT Developer',
                     email: 'muhammadzuyyina@gmail.com',
                     phone: '+62 822 9569 2941',
                     bio: 'IT Developer Junior',
-                    image: this.generateDefaultAvatar()
-                };
-                this.socialLinks = [
-                    {
-                        platform: 'github',
-                        icon: 'fab fa-github',
-                        url: 'https://github.com/username'
-                    },
-                    {
-                        platform: 'linkedin',
-                        icon: 'fab fa-linkedin-in',
-                        url: 'https://linkedin.com/in/username'
-                    },
-                    {
-                        platform: 'email',
-                        icon: 'fas fa-envelope',
-                        url: 'mailto:muhammadzuyyina@gmail.com'
+                    image: null
+                },
+
+                // Navigation
+                navItems: [
+                    { name: 'Home', href: '#home' },
+                    { name: 'Skills', href: '#skills' },
+                    { name: 'Projects', href: '#projects' },
+                    { name: 'Contact', href: '#contact' }
+                ],
+
+                skills: [],
+                projects: [],
+                portfolioYear: new Date().getFullYear(),
+
+                // Social Links
+                socialLinks: [],
+
+                // Skill Categories
+                skillCategories: [
+                    'frontend', 'backend', 'database', 'mobile', 
+                    'devops', 'cloud', 'tools', 'design', 'ai'
+                ],
+
+                // Popular Technologies
+                popularTechnologies: [
+                    'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 
+                    'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'Bootstrap', 'SASS/SCSS',
+                    'Node.js', 'Express.js', 'Python', 'Django', 'Flask', 'PHP', 'Laravel', 
+                    'Java', 'Spring Boot', 'Go', 'Ruby', 'Ruby on Rails', 'C#', '.NET',
+                    'MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'Redis', 'SQLite', 'Supabase',
+                    'React Native', 'Flutter', 'Electron', 'Swift', 'Kotlin',
+                    'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Vercel', 'Netlify',
+                    'Git', 'GitHub Actions', 'Jenkins', 'Nginx',
+                    'GraphQL', 'REST API', 'Jest', 'Cypress', 'Webpack', 'Figma', 'Adobe XD'
+                ],
+
+                // New Skill Data
+                newSkill: {
+                    name: '',
+                    category: 'frontend',
+                    level: 50,
+                    years: 1,
+                    projects: 0,
+                    icon: 'fas fa-code',
+                    description: '',
+                    certifications: [],
+                    tags: [],
+                    customId: ''
+                },
+
+                // New Project Data
+                newProject: {
+                    name: '',
+                    description: '',
+                    type: 'web',
+                    technologies: [],
+                    image: '',
+                    demoUrl: '',
+                    sourceUrl: '',
+                    startDate: '',
+                    endDate: '',
+                    isOngoing: false,
+                    role: '',
+                    teamSize: 1,
+                    status: 'completed',
+                    client: '',
+                    challenges: '',
+                    features: []
+                },
+
+                // Contact Form
+                contactForm: {
+                    name: '',
+                    email: '',
+                    message: ''
+                },
+
+                // Modals
+                modals: {
+                    projectDetail: false,
+                    addProject: false,
+                    addSkill: false,
+                    editProfile: false,
+                    deleteConfirm: false
+                },
+
+                // Computed Properties
+                get filteredSkills() {
+                    if (this.activeSkillCategory === 'all') {
+                        return this.skills;
                     }
-                ];
-                
+                    return this.skills.filter(skill => skill.category === this.activeSkillCategory);
+                },
+
+                get averageSkillLevel() {
+                    if (this.skills.length === 0) return 0;
+                    const total = this.skills.reduce((sum, skill) => sum + skill.level, 0);
+                    return Math.round(total / this.skills.length);
+                },
+
+                get totalProjectCount() {
+                    return this.skills.reduce((total, skill) => total + skill.projects, 0);
+                },
+
+                get totalExperienceYears() {
+                    const startYear = 2023;
+                    const currentYear = new Date().getFullYear();
+                    return Math.max(1, currentYear - startYear);
+                },
+
+                get totalItems() {
+                    return this.skills.length + this.projects.length;
+                },
+
+                get connectionStatusText() {
+                    if (!this.isOnline) return 'Offline';
+                    if (this.isSyncing) return 'Syncing...';
+                    if (this.userId) return 'Cloud Sync Active';
+                    return 'Ready to Sync';
+                },
+
+                // Computed property untuk gambar profil
+                get profileImageSrc() {
+                    if (!this.profile.image || this.profile.image.trim() === '') {
+                        return this.generateDefaultAvatar();
+                    }
+                    return this.profile.image;
+                },
+
+                // Initialization
+                async init() {
+                    this.setupEventListeners();
+                    
+                    // Load theme preference
+                    const savedTheme = localStorage.getItem('theme');
+                    this.isDark = savedTheme ? savedTheme === 'dark' : true;
+
+                    this.initParticles();
+
+                    // Check online status
+                    this.isOnline = navigator.onLine;
+                    window.addEventListener('online', () => {
+                        this.isOnline = true;
+                        this.showToastMessage('You are back online', 'success');
+                        if (this.userId) this.syncFromFirebase();
+                    });
+                    window.addEventListener('offline', () => {
+                        this.isOnline = false;
+                        this.showToastMessage('You are offline', 'warning');
+                    });
+
+                    // Initialize Firebase
+                    await this.initFirebase();
+
+                    // Check storage availability
+                    await this.checkStorageAvailability();
+                    
+                    // Load data
+                    await this.loadAllData();
+                    
+                    // Initialize with sample data if empty
+                    if (this.skills.length === 0 && this.projects.length === 0) {
+                        await this.loadSampleData();
+                    }
+                    
+                    // Setup project slides
+                    this.updateProjectSlides();
+                    
+                    setTimeout(() => {
+                        this.isLoading = false;
+                        this.$nextTick(() => {
+                            console.log('Portfolio initialized successfully');
+                        });
+                    }, 1000);
+                },
+
+                // Initialize Firebase
+                async initFirebase() {
+                    try {
+                        this.loadingMessage = 'Connecting to Firebase...';
+                        
+                        // Initialize Firebase
+                        this.firebaseApp = firebase.initializeApp(firebaseConfig);
+                        this.firestore = firebase.firestore(this.firebaseApp);
+                        this.auth = firebase.auth(this.firebaseApp);
+                        
+                        // Check if user is already signed in
+                        this.auth.onAuthStateChanged((user) => {
+                            if (user) {
+                                this.userId = user.uid;
+                                this.userEmail = user.email;
+                                this.showToastMessage('Firebase connected successfully', 'success');
+                                this.syncFromFirebase();
+                            }
+                        });
+                        
+                        console.log('✅ Firebase initialized');
+                    } catch (error) {
+                        console.error('❌ Firebase initialization error:', error);
+                        this.showToastMessage('Firebase connection failed. Using local storage only.', 'warning');
+                    }
+                },
+
+                // Initialize Firebase Auth
+                async initFirebaseAuth() {
+                    try {
+                        const provider = new firebase.auth.GoogleAuthProvider();
+                        provider.addScope('profile');
+                        provider.addScope('email');
+                        
+                        const result = await this.auth.signInWithPopup(provider);
+                        this.userId = result.user.uid;
+                        this.userEmail = result.user.email;
+                        
+                        this.showToastMessage('Signed in successfully!', 'success');
+                        
+                        // Sync data to Firebase after sign in
+                        await this.syncToFirebase();
+                        
+                    } catch (error) {
+                        console.error('Auth error:', error);
+                        this.showToastMessage('Authentication failed. Please try again.', 'error');
+                    }
+                },
+
+                // Sign Out
+                async signOut() {
+                    try {
+                        await this.auth.signOut();
+                        this.userId = null;
+                        this.userEmail = null;
+                        this.showToastMessage('Signed out successfully', 'success');
+                    } catch (error) {
+                        console.error('Sign out error:', error);
+                        this.showToastMessage('Sign out failed', 'error');
+                    }
+                },
+
+                // Sync data to Firebase
+                async syncToFirebase() {
+                    if (!this.userId || !this.isOnline) {
+                        this.showToastMessage('Cannot sync: Not signed in or offline', 'warning');
+                        return;
+                    }
+
+                    this.isSyncing = true;
+                    
+                    try {
+                        const data = {
+                            profile: this.profile,
+                            skills: this.skills,
+                            projects: this.projects,
+                            socialLinks: this.socialLinks,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                            syncId: Date.now()
+                        };
+
+                        // Compress images before uploading
+                        const compressedData = await this.compressDataForFirebase(data);
+
+                        // Save to Firestore
+                        await this.firestore
+                            .collection('portfolios')
+                            .doc(this.userId)
+                            .set(compressedData, { merge: true });
+
+                        // Add to sync history
+                        this.addToSyncHistory('Upload to Firebase', 'success');
+                        
+                        this.showToastMessage('Data synced to cloud successfully!', 'success');
+                        
+                    } catch (error) {
+                        console.error('Firebase sync error:', error);
+                        this.addToSyncHistory('Upload failed', 'error');
+                        this.showToastMessage('Sync failed: ' + error.message, 'error');
+                    } finally {
+                        this.isSyncing = false;
+                    }
+                },
+
+                // Sync data from Firebase
+                async syncFromFirebase() {
+                    if (!this.userId || !this.isOnline) return;
+
+                    this.isSyncing = true;
+                    
+                    try {
+                        const doc = await this.firestore
+                            .collection('portfolios')
+                            .doc(this.userId)
+                            .get();
+
+                        if (doc.exists) {
+                            const data = doc.data();
+                            
+                            // Decompress images after downloading
+                            const decompressedData = await this.decompressDataFromFirebase(data);
+                            
+                            // Update local data
+                            this.profile = { ...this.profile, ...decompressedData.profile };
+                            this.skills = decompressedData.skills || [];
+                            this.projects = decompressedData.projects || [];
+                            this.socialLinks = decompressedData.socialLinks || [];
+                            
+                            // Update project slides
+                            this.updateProjectSlides();
+                            
+                            // Save to local storage
+                            await this.saveToLocalStorage();
+                            
+                            this.addToSyncHistory('Download from Firebase', 'success');
+                            this.showToastMessage('Data synced from cloud!', 'success');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Firebase download error:', error);
+                        this.addToSyncHistory('Download failed', 'error');
+                    } finally {
+                        this.isSyncing = false;
+                    }
+                },
+
+                // Compress data for Firebase
+                async compressDataForFirebase(data) {
+                    const compressed = { ...data };
+                    
+                    // Compress profile image
+                    if (compressed.profile?.image) {
+                        compressed.profile.image = await this.compressImage(compressed.profile.image);
+                    }
+                    
+                    // Compress project images
+                    if (compressed.projects) {
+                        compressed.projects = await Promise.all(
+                            compressed.projects.map(async (project) => ({
+                                ...project,
+                                image: await this.compressImage(project.image)
+                            }))
+                        );
+                    }
+                    
+                    return compressed;
+                },
+
+                // Decompress data from Firebase
+                async decompressDataFromFirebase(data) {
+                    const decompressed = { ...data };
+                    
+                    // Decompress profile image (if needed)
+                    if (decompressed.profile?.image) {
+                        decompressed.profile.image = await this.decompressImage(decompressed.profile.image);
+                    }
+                    
+                    // Decompress project images
+                    if (decompressed.projects) {
+                        decompressed.projects = decompressed.projects.map(project => ({
+                            ...project,
+                            image: project.image || this.getDefaultProjectImage()
+                        }));
+                    }
+                    
+                    return decompressed;
+                },
+
+                // Add to sync history
+                addToSyncHistory(action, status) {
+                    this.syncHistory.unshift({
+                        action,
+                        status,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    // Keep only last 10 entries
+                    if (this.syncHistory.length > 10) {
+                        this.syncHistory.pop();
+                    }
+                    
+                    // Save history to localStorage
+                    localStorage.setItem('portfolioSyncHistory', JSON.stringify(this.syncHistory));
+                },
+
+                // Format time ago
+                formatTimeAgo(timestamp) {
+                    const now = new Date();
+                    const past = new Date(timestamp);
+                    const diff = now - past;
+                    
+                    const minutes = Math.floor(diff / 60000);
+                    const hours = Math.floor(diff / 3600000);
+                    const days = Math.floor(diff / 86400000);
+                    
+                    if (minutes < 1) return 'Just now';
+                    if (minutes < 60) return `${minutes}m ago`;
+                    if (hours < 24) return `${hours}h ago`;
+                    return `${days}d ago`;
+                },
+
+                // Load all data
+                async loadAllData() {
+                    try {
+                        console.log('📂 Loading all data...');
+                        
+                        // Try to load from local storage first
+                        await this.loadFromLocalStorage();
+                        
+                        // Load sync history
+                        const savedHistory = localStorage.getItem('portfolioSyncHistory');
+                        if (savedHistory) {
+                            this.syncHistory = JSON.parse(savedHistory);
+                        }
+                        
+                        console.log('✅ Data loaded successfully');
+                        
+                    } catch (e) {
+                        console.error('Error loading data:', e);
+                        await this.loadDefaultData();
+                    }
+                },
+
+                // Load from local storage
+                async loadFromLocalStorage() {
+                    try {
+                        // Load skills
+                        const savedSkills = localStorage.getItem('portfolioSkills');
+                        if (savedSkills) {
+                            this.skills = JSON.parse(savedSkills);
+                        }
+                        
+                        // Load projects
+                        const savedProjects = localStorage.getItem('portfolioProjects');
+                        if (savedProjects) {
+                            this.projects = JSON.parse(savedProjects);
+                        }
+                        
+                        // Load profile
+                        const savedProfile = localStorage.getItem('portfolioProfile');
+                        if (savedProfile) {
+                            const profileData = JSON.parse(savedProfile);
+                            this.profile = { 
+                                ...this.profile, 
+                                ...profileData
+                            };
+                        }
+                        
+                        // Load social links
+                        const savedSocialLinks = localStorage.getItem('portfolioSocialLinks');
+                        if (savedSocialLinks) {
+                            try {
+                                const parsedLinks = JSON.parse(savedSocialLinks);
+                                this.socialLinks = parsedLinks.map(link => ({
+                                    platform: link.platform || 'github',
+                                    url: link.url || '',
+                                    icon: link.icon || this.getSocialIcon(link.platform || 'github')
+                                }));
+                            } catch (parseError) {
+                                console.error('Error parsing social links:', parseError);
+                                this.loadDefaultSocialLinks();
+                            }
+                        } else {
+                            this.loadDefaultSocialLinks();
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error loading from local storage:', error);
+                        throw error;
+                    }
+                },
+
+                // Save to local storage
+                async saveToLocalStorage() {
+                    try {
+                        localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
+                        localStorage.setItem('portfolioProjects', JSON.stringify(this.projects));
+                        localStorage.setItem('portfolioProfile', JSON.stringify(this.profile));
+                        this.saveSocialLinksToStorage();
+                        
+                        console.log('✅ Data saved to local storage');
+                        return true;
+                        
+                    } catch (error) {
+                        console.error('❌ Error saving to local storage:', error);
+                        return false;
+                    }
+                },
+
+                // Save social links to storage
+                saveSocialLinksToStorage() {
+                    try {
+                        const linksToSave = this.socialLinks.map(link => ({
+                            platform: link.platform,
+                            url: link.url,
+                            icon: link.icon
+                        }));
+                        localStorage.setItem('portfolioSocialLinks', JSON.stringify(linksToSave));
+                    } catch (e) {
+                        console.error('Error saving social links:', e);
+                    }
+                },
+
+                // Helper untuk mendapatkan gambar proyek default
+                getDefaultProjectImage() {
+                    const images = [
+                        'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    ];
+                    return images[Math.floor(Math.random() * images.length)];
+                },
+
                 // Update project slides
-                this.updateProjectSlides();
-                
-                // Clear all portfolio-related storage
-                const keysToRemove = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith('portfolio')) {
-                        keysToRemove.push(key);
+                updateProjectSlides() {
+                    this.projectSlides = [];
+                    
+                    if (this.projects.length <= 6) {
+                        this.projectView = 'grid';
+                        return;
                     }
-                }
-                
-                keysToRemove.forEach(key => localStorage.removeItem(key));
-                
-                await this.saveToStorage();
-                this.showToastMessage('All data cleared successfully', 'success');
-            }
-        },
+                    
+                    for (let i = 0; i < this.projects.length; i += this.projectsPerSlide) {
+                        this.projectSlides.push(this.projects.slice(i, i + this.projectsPerSlide));
+                    }
+                    
+                    if (this.currentSlide >= this.projectSlides.length) {
+                        this.currentSlide = 0;
+                    }
+                },
 
-        // Image Upload Methods
-        triggerFileInput() {
-            document.getElementById('projectImageInput').click();
-        },
+                // Setup Event Listeners
+                setupEventListeners() {
+                    window.addEventListener('scroll', this.handleScroll.bind(this));
+                    window.addEventListener('resize', this.handleResize.bind(this));
+                },
 
-        handleDrop(event) {
-            event.preventDefault();
-            const files = event.dataTransfer.files;
-            if (files.length > 0) {
-                this.uploadImage({ target: { files } });
-            }
-        },
+                handleScroll() {
+                    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    this.scrollProgress = height > 0 ? (winScroll / height) * 100 : 0;
+                    
+                    this.isAtTop = window.scrollY < 50;
+                    
+                    const sections = ['home', 'skills', 'projects', 'contact'];
+                    for (const section of sections) {
+                        const element = document.getElementById(section);
+                        if (element) {
+                            const rect = element.getBoundingClientRect();
+                            if (rect.top <= 100 && rect.bottom >= 100) {
+                                this.activeSection = section;
+                                break;
+                            }
+                        }
+                    }
+                },
 
-        async uploadImage(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+                handleResize() {
+                    if (window.innerWidth < 768) {
+                        this.projectsPerSlide = 1;
+                    } else if (window.innerWidth < 1024) {
+                        this.projectsPerSlide = 2;
+                    } else {
+                        this.projectsPerSlide = 3;
+                    }
+                    
+                    this.updateProjectSlides();
+                },
 
-            if (!file.type.startsWith('image/')) {
-                this.showToastMessage('Please upload an image file', 'error');
-                return;
-            }
+                // Project Image Error Handling
+                handleProjectImageError(event, projectId) {
+                    console.log('Project image error for project:', projectId);
+                    event.target.src = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                },
 
-            if (file.size > 5 * 1024 * 1024) {
-                this.showToastMessage('Image size should be less than 5MB', 'error');
-                return;
-            }
+                // Theme Management
+                toggleTheme() {
+                    this.isDark = !this.isDark;
+                    localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
+                    
+                    if (window.pJSDom && window.pJSDom.length > 0) {
+                        const particles = window.pJSDom[0].pJS;
+                        if (particles) {
+                            particles.particles.color.value = this.isDark ? "#ffffff" : "#6366f1";
+                            particles.particles.line_linked.color = this.isDark ? "#ffffff" : "#6366f1";
+                            particles.fn.particlesRefresh();
+                        }
+                    }
+                },
 
-            this.uploadingImage = true;
+                // Navigation
+                scrollTo(sectionId) {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        const offset = 80;
+                        const elementPosition = element.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-            try {
-                const base64Image = await this.fileToBase64(file);
-                
-                // Compress image if needed
-                const compressedImage = await this.compressBase64Image(base64Image);
-                this.newProject.image = compressedImage;
-                
-                this.uploadingImage = false;
-                this.showToastMessage('Image uploaded successfully', 'success');
-                
-            } catch (error) {
-                console.error('Error uploading image:', error);
-                this.uploadingImage = false;
-                this.showToastMessage('Error uploading image', 'error');
-            }
-        },
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                    this.mobileMenu = false;
+                },
 
-        // Helper function untuk convert file ke base64
-        fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        },
+                // Modal Management
+                openModal(modalName) {
+                    this.modals[modalName] = true;
+                    document.body.style.overflow = 'hidden';
+                },
 
-        // Profile Image Upload
-        async uploadProfileImage(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                console.log('No file selected');
-                return;
-            }
+                closeModal(modalName) {
+                    this.modals[modalName] = false;
+                    document.body.style.overflow = 'auto';
+                    
+                    if (modalName === 'addSkill') {
+                        this.resetSkillForm();
+                    } else if (modalName === 'addProject') {
+                        this.resetProjectForm();
+                    }
+                },
 
-            console.log('Uploading profile image:', file.name, file.type, file.size);
+                // Delete Confirmation
+                confirmDelete(type, id, name) {
+                    this.deleteItem = { type, id, name };
+                    this.openModal('deleteConfirm');
+                },
 
-            if (!file.type.startsWith('image/')) {
-                this.showToastMessage('Silakan upload file gambar (JPEG, PNG, dll)', 'error');
-                return;
-            }
+                async executeDelete() {
+                    try {
+                        if (this.deleteItem.type === 'skill') {
+                            await this.deleteSkill(this.deleteItem.id);
+                        } else if (this.deleteItem.type === 'project') {
+                            await this.deleteProject(this.deleteItem.id);
+                        }
+                        this.showToastMessage(`${this.deleteItem.type} deleted successfully`, 'success');
+                    } catch (error) {
+                        this.showToastMessage(`Error deleting ${this.deleteItem.type}`, 'error');
+                    } finally {
+                        this.closeModal('deleteConfirm');
+                    }
+                },
 
-            if (file.size > 5 * 1024 * 1024) {
-                this.showToastMessage('Ukuran gambar harus kurang dari 5MB', 'error');
-                return;
-            }
+                // Skill Management
+                resetSkillForm() {
+                    this.newSkill = {
+                        name: '',
+                        category: 'frontend',
+                        level: 50,
+                        years: 1,
+                        projects: 0,
+                        icon: 'fas fa-code',
+                        description: '',
+                        certifications: [],
+                        tags: [],
+                        customId: ''
+                    };
+                    this.certificationInput = '';
+                    this.tagInput = '';
+                    this.editingSkill = null;
+                },
 
-            this.uploadingProfileImage = true;
+                editSkill(skill) {
+                    this.newSkill = { ...skill };
+                    this.editingSkill = skill;
+                    this.openModal('addSkill');
+                },
 
-            try {
-                // Convert ke Base64
-                const base64Image = await this.fileToBase64(file);
-                
-                // Compress image
-                const compressedImage = await this.compressBase64Image(base64Image);
-                
-                // Simpan gambar ke state
-                this.profile.image = compressedImage;
-                
-                // Simpan ke localStorage
-                await this.saveToStorage();
-                
-                this.showToastMessage('Foto profil berhasil diupdate!', 'success');
-                
-            } catch (error) {
-                console.error('Error uploading profile image:', error);
-                this.showToastMessage('Error mengupload foto profil', 'error');
-            } finally {
-                this.uploadingProfileImage = false;
-            }
-        },
+                async addNewSkill() {
+                    try {
+                        this.isSubmitting = true;
 
-        // Tab Navigation
-        nextSkillTab() {
-            const tabs = ['basic', 'details', 'advanced'];
-            const currentIndex = tabs.indexOf(this.activeSkillTab);
-            if (currentIndex < tabs.length - 1) {
-                this.activeSkillTab = tabs[currentIndex + 1];
-            }
-        },
+                        const newSkill = {
+                            id: this.editingSkill ? this.editingSkill.id : Date.now(),
+                            ...this.newSkill,
+                            icon: this.getSkillIcon(this.newSkill.category)
+                        };
 
-        prevSkillTab() {
-            const tabs = ['basic', 'details', 'advanced'];
-            const currentIndex = tabs.indexOf(this.activeSkillTab);
-            if (currentIndex > 0) {
-                this.activeSkillTab = tabs[currentIndex - 1];
-            }
-        },
+                        if (this.editingSkill) {
+                            const index = this.skills.findIndex(s => s.id === this.editingSkill.id);
+                            if (index !== -1) {
+                                this.skills[index] = newSkill;
+                            }
+                            this.showToastMessage('Skill updated successfully', 'success');
+                        } else {
+                            this.skills.push(newSkill);
+                            this.showToastMessage('Skill added successfully', 'success');
+                        }
 
-        nextProjectTab() {
-            const tabs = ['basic', 'tech', 'media', 'details'];
-            const currentIndex = tabs.indexOf(this.activeProjectTab);
-            if (currentIndex < tabs.length - 1) {
-                this.activeProjectTab = tabs[currentIndex + 1];
-            }
-        },
+                        await this.saveToLocalStorage();
+                        
+                        // Sync to Firebase if signed in
+                        if (this.userId && this.isOnline) {
+                            await this.syncToFirebase();
+                        }
+                        
+                        this.closeModal('addSkill');
+                        this.resetSkillForm();
+                    } catch (error) {
+                        this.showToastMessage('Error saving skill', 'error');
+                        console.error('Error adding skill:', error);
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
 
-        prevProjectTab() {
-            const tabs = ['basic', 'tech', 'media', 'details'];
-            const currentIndex = tabs.indexOf(this.activeProjectTab);
-            if (currentIndex > 0) {
-                this.activeProjectTab = tabs[currentIndex - 1];
-            }
-        },
+                updateSkill() {
+                    this.addNewSkill();
+                },
 
-        // Certification Management
-        addCertification() {
-            if (this.certificationInput.trim()) {
-                this.newSkill.certifications.push(this.certificationInput.trim());
-                this.certificationInput = '';
-            }
-        },
+                async deleteSkill(skillId) {
+                    this.skills = this.skills.filter(skill => skill.id !== skillId);
+                    await this.saveToLocalStorage();
+                    
+                    // Sync to Firebase if signed in
+                    if (this.userId && this.isOnline) {
+                        await this.syncToFirebase();
+                    }
+                },
 
-        removeCertification(index) {
-            this.newSkill.certifications.splice(index, 1);
-        },
+                // Project Management
+                resetProjectForm() {
+                    this.newProject = {
+                        name: '',
+                        description: '',
+                        type: 'web',
+                        technologies: [],
+                        image: '',
+                        demoUrl: '',
+                        sourceUrl: '',
+                        startDate: '',
+                        endDate: '',
+                        isOngoing: false,
+                        role: '',
+                        teamSize: 1,
+                        status: 'completed',
+                        client: '',
+                        challenges: '',
+                        features: []
+                    };
+                    this.techInput = '';
+                    this.editingProject = null;
+                },
 
-        // Tag Management
-        addTag() {
-            if (this.tagInput.trim()) {
-                this.newSkill.tags.push(this.tagInput.trim());
-                this.tagInput = '';
-            }
-        },
+                editProject(project) {
+                    this.newProject = { ...project };
+                    this.editingProject = project;
+                    this.openModal('addProject');
+                },
 
-        removeTag(index) {
-            this.newSkill.tags.splice(index, 1);
-        },
+                async addNewProject() {
+                    try {
+                        this.isSubmitting = true;
 
-        // Social Links Management
-        addSocialLink() {
-            const newLink = {
-                platform: 'github',
-                icon: this.getSocialIcon('github'),
-                url: 'https://github.com/username'
-            };
-            this.socialLinks.push(newLink);
-            this.saveSocialLinksToStorage();
-        },
+                        const newProject = {
+                            id: this.editingProject ? this.editingProject.id : Date.now(),
+                            ...this.newProject,
+                            date: new Date().getFullYear().toString()
+                        };
 
-        removeSocialLink(index) {
-            this.socialLinks.splice(index, 1);
-            this.saveSocialLinksToStorage();
-        },
+                        if (this.editingProject) {
+                            const index = this.projects.findIndex(p => p.id === this.editingProject.id);
+                            if (index !== -1) {
+                                this.projects[index] = newProject;
+                            }
+                            this.showToastMessage('Project updated successfully', 'success');
+                        } else {
+                            this.projects.push(newProject);
+                            this.showToastMessage('Project added successfully', 'success');
+                        }
 
-        addQuickSocialLink(platform) {
-            const newLink = {
-                platform: platform,
-                icon: this.getSocialIcon(platform),
-                url: this.getSocialPlaceholder(platform)
-            };
-            this.socialLinks.push(newLink);
-            this.saveSocialLinksToStorage();
-        },
+                        this.updateProjectSlides();
+                        
+                        await this.saveToLocalStorage();
+                        
+                        // Sync to Firebase if signed in
+                        if (this.userId && this.isOnline) {
+                            await this.syncToFirebase();
+                        }
+                        
+                        this.closeModal('addProject');
+                        this.resetProjectForm();
+                    } catch (error) {
+                        this.showToastMessage('Error saving project', 'error');
+                        console.error('Error adding project:', error);
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
 
-        moveSocialLink(index, direction) {
-            if (direction === 'up' && index > 0) {
-                [this.socialLinks[index], this.socialLinks[index - 1]] = 
-                [this.socialLinks[index - 1], this.socialLinks[index]];
-            } else if (direction === 'down' && index < this.socialLinks.length - 1) {
-                [this.socialLinks[index], this.socialLinks[index + 1]] = 
-                [this.socialLinks[index + 1], this.socialLinks[index]];
-            }
-            this.saveSocialLinksToStorage();
-        },
+                updateProject() {
+                    this.addNewProject();
+                },
 
-        async updateProfile() {
-            try {
-                // Jika nama berubah, update avatar default
-                if (!this.profile.image || this.profile.image.startsWith('https://ui-avatars.com')) {
+                async deleteProject(projectId) {
+                    this.projects = this.projects.filter(project => project.id !== projectId);
+                    
+                    this.updateProjectSlides();
+                    
+                    await this.saveToLocalStorage();
+                    
+                    // Sync to Firebase if signed in
+                    if (this.userId && this.isOnline) {
+                        await this.syncToFirebase();
+                    }
+                },
+
+                viewProject(projectId) {
+                    this.selectedProject = this.projects.find(p => p.id === projectId);
+                    this.openModal('projectDetail');
+                },
+
+                // Project Slider Functions
+                setProjectView(view) {
+                    this.projectView = view;
+                    
+                    if (view === 'slider' && this.autoSlideEnabled) {
+                        this.startAutoSlide();
+                    } else {
+                        this.stopAutoSlide();
+                    }
+                },
+
+                prevSlide() {
+                    if (this.currentSlide > 0) {
+                        this.currentSlide--;
+                        this.animateSlideChange('prev');
+                    }
+                },
+
+                nextSlide() {
+                    if (this.currentSlide < this.projectSlides.length - 1) {
+                        this.currentSlide++;
+                        this.animateSlideChange('next');
+                    }
+                },
+
+                goToSlide(index) {
+                    if (index >= 0 && index < this.projectSlides.length) {
+                        const direction = index > this.currentSlide ? 'next' : 'prev';
+                        this.currentSlide = index;
+                        this.animateSlideChange(direction);
+                    }
+                },
+
+                animateSlideChange(direction) {
+                    const slides = document.querySelectorAll('.project-slide.active');
+                    slides.forEach(slide => {
+                        slide.classList.add('slide-out');
+                        setTimeout(() => {
+                            slide.classList.remove('slide-out');
+                        }, 300);
+                    });
+                    
+                    if (this.autoSlideEnabled) {
+                        this.resetAutoSlide();
+                    }
+                },
+
+                toggleAutoSlide() {
+                    this.autoSlideEnabled = !this.autoSlideEnabled;
+                    
+                    if (this.autoSlideEnabled && this.projectView === 'slider') {
+                        this.startAutoSlide();
+                        this.showToastMessage('Auto slide enabled', 'success');
+                    } else {
+                        this.stopAutoSlide();
+                        this.showToastMessage('Auto slide disabled', 'info');
+                    }
+                },
+
+                startAutoSlide() {
+                    this.stopAutoSlide();
+                    this.autoSlideInterval = setInterval(() => {
+                        if (this.currentSlide < this.projectSlides.length - 1) {
+                            this.currentSlide++;
+                        } else {
+                            this.currentSlide = 0;
+                        }
+                    }, 5000);
+                },
+
+                stopAutoSlide() {
+                    if (this.autoSlideInterval) {
+                        clearInterval(this.autoSlideInterval);
+                        this.autoSlideInterval = null;
+                    }
+                },
+
+                resetAutoSlide() {
+                    if (this.autoSlideEnabled) {
+                        this.stopAutoSlide();
+                        this.startAutoSlide();
+                    }
+                },
+
+                // Technology Management
+                addTechnology() {
+                    const tech = this.techInput.trim();
+                    if (tech && !this.newProject.technologies.includes(tech)) {
+                        this.newProject.technologies.push(tech);
+                        this.techInput = '';
+                    }
+                },
+
+                addTechFromSuggestion(tech) {
+                    if (!this.newProject.technologies.includes(tech)) {
+                        this.newProject.technologies.push(tech);
+                    }
+                },
+
+                removeTech(tech) {
+                    this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
+                },
+
+                // Contact Form
+                async submitContact() {
+                    try {
+                        this.isSubmitting = true;
+                        
+                        if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) {
+                            this.showToastMessage('Please fill in all fields', 'error');
+                            this.isSubmitting = false;
+                            return;
+                        }
+                        
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(this.contactForm.email)) {
+                            this.showToastMessage('Please enter a valid email address', 'error');
+                            this.isSubmitting = false;
+                            return;
+                        }
+                        
+                        console.log('Starting email sending process...');
+                        
+                        const serviceID = 'service_fkkrcdr';
+                        const templateID = 'template_g9cfnn2';
+                        const publicKey = 'GIIXeb6Xt3whWfqvo';
+                        
+                        if (typeof emailjs === 'undefined') {
+                            console.error('EmailJS is not loaded');
+                            this.showToastMessage('Email service not available. Please refresh the page.', 'error');
+                            this.isSubmitting = false;
+                            return;
+                        }
+                        
+                        console.log('Initializing EmailJS...');
+                        emailjs.init(publicKey);
+                        
+                        const templateParams = {
+                            from_name: this.contactForm.name,
+                            from_email: this.contactForm.email,
+                            message: this.contactForm.message,
+                            to_name: 'Zuyyina Firdausi Muhammad',
+                            to_email: 'muhammadzuyyina@gmail.com',
+                            reply_to: this.contactForm.email,
+                            date: new Date().toLocaleDateString('id-ID'),
+                            time: new Date().toLocaleTimeString('id-ID')
+                        };
+                        
+                        console.log('Sending email with params:', templateParams);
+                        
+                        const response = await emailjs.send(serviceID, templateID, templateParams);
+                        console.log('Email response:', response);
+                        
+                        if (response.status === 200) {
+                            this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+                            
+                            this.contactForm = {
+                                name: '',
+                                email: '',
+                                message: ''
+                            };
+                        } else {
+                            throw new Error(`EmailJS responded with status: ${response.status}`);
+                        }
+                        
+                    } catch (error) {
+                        console.error('Email sending error:', error);
+                        
+                        let errorMessage = 'Error sending message. Please try again later.';
+                        
+                        if (error.text) {
+                            console.error('EmailJS error text:', error.text);
+                            
+                            if (error.text.includes('Invalid login credentials')) {
+                                errorMessage = 'Email configuration error. Please check EmailJS settings.';
+                            } else if (error.text.includes('Service not found')) {
+                                errorMessage = 'Email service not found. Please check Service ID.';
+                            } else if (error.text.includes('Template not found')) {
+                                errorMessage = 'Email template not found. Please check Template ID.';
+                            }
+                        }
+                        
+                        this.showToastMessage(errorMessage, 'error');
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
+
+                // Data Management
+                toggleDataPanel() {
+                    this.showDataPanel = !this.showDataPanel;
+                },
+
+                // Image Upload Methods
+                triggerFileInput() {
+                    document.getElementById('projectImageInput').click();
+                },
+
+                handleDrop(event) {
+                    event.preventDefault();
+                    const files = event.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.uploadImage({ target: { files } });
+                    }
+                },
+
+                async uploadImage(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    if (!file.type.startsWith('image/')) {
+                        this.showToastMessage('Please upload an image file', 'error');
+                        return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                        this.showToastMessage('Image size should be less than 5MB', 'error');
+                        return;
+                    }
+
+                    this.uploadingImage = true;
+
+                    try {
+                        const base64Image = await this.fileToBase64(file);
+                        
+                        const compressedImage = await this.compressBase64Image(base64Image);
+                        this.newProject.image = compressedImage;
+                        
+                        this.uploadingImage = false;
+                        this.showToastMessage('Image uploaded successfully', 'success');
+                        
+                    } catch (error) {
+                        console.error('Error uploading image:', error);
+                        this.uploadingImage = false;
+                        this.showToastMessage('Error uploading image', 'error');
+                    }
+                },
+
+                // Profile Image Upload
+                async uploadProfileImage(event) {
+                    const file = event.target.files[0];
+                    if (!file) {
+                        console.log('No file selected');
+                        return;
+                    }
+
+                    console.log('Uploading profile image:', file.name, file.type, file.size);
+
+                    if (!file.type.startsWith('image/')) {
+                        this.showToastMessage('Silakan upload file gambar (JPEG, PNG, dll)', 'error');
+                        return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                        this.showToastMessage('Ukuran gambar harus kurang dari 5MB', 'error');
+                        return;
+                    }
+
+                    this.uploadingProfileImage = true;
+
+                    try {
+                        const base64Image = await this.fileToBase64(file);
+                        
+                        const compressedImage = await this.compressBase64Image(base64Image);
+                        
+                        this.profile.image = compressedImage;
+                        
+                        await this.saveToLocalStorage();
+                        
+                        // Sync to Firebase if signed in
+                        if (this.userId && this.isOnline) {
+                            await this.syncToFirebase();
+                        }
+                        
+                        this.showToastMessage('Foto profil berhasil diupdate!', 'success');
+                        
+                    } catch (error) {
+                        console.error('Error uploading profile image:', error);
+                        this.showToastMessage('Error mengupload foto profil', 'error');
+                    } finally {
+                        this.uploadingProfileImage = false;
+                    }
+                },
+
+                // Tab Navigation
+                nextSkillTab() {
+                    const tabs = ['basic', 'details', 'advanced'];
+                    const currentIndex = tabs.indexOf(this.activeSkillTab);
+                    if (currentIndex < tabs.length - 1) {
+                        this.activeSkillTab = tabs[currentIndex + 1];
+                    }
+                },
+
+                prevSkillTab() {
+                    const tabs = ['basic', 'details', 'advanced'];
+                    const currentIndex = tabs.indexOf(this.activeSkillTab);
+                    if (currentIndex > 0) {
+                        this.activeSkillTab = tabs[currentIndex - 1];
+                    }
+                },
+
+                nextProjectTab() {
+                    const tabs = ['basic', 'tech', 'media', 'details'];
+                    const currentIndex = tabs.indexOf(this.activeProjectTab);
+                    if (currentIndex < tabs.length - 1) {
+                        this.activeProjectTab = tabs[currentIndex + 1];
+                    }
+                },
+
+                prevProjectTab() {
+                    const tabs = ['basic', 'tech', 'media', 'details'];
+                    const currentIndex = tabs.indexOf(this.activeProjectTab);
+                    if (currentIndex > 0) {
+                        this.activeProjectTab = tabs[currentIndex - 1];
+                    }
+                },
+
+                // Certification Management
+                addCertification() {
+                    if (this.certificationInput.trim()) {
+                        this.newSkill.certifications.push(this.certificationInput.trim());
+                        this.certificationInput = '';
+                    }
+                },
+
+                removeCertification(index) {
+                    this.newSkill.certifications.splice(index, 1);
+                },
+
+                // Tag Management
+                addTag() {
+                    if (this.tagInput.trim()) {
+                        this.newSkill.tags.push(this.tagInput.trim());
+                        this.tagInput = '';
+                    }
+                },
+
+                removeTag(index) {
+                    this.newSkill.tags.splice(index, 1);
+                },
+
+                // Social Links Management
+                addSocialLink() {
+                    const newLink = {
+                        platform: 'github',
+                        icon: this.getSocialIcon('github'),
+                        url: 'https://github.com/username'
+                    };
+                    this.socialLinks.push(newLink);
+                    this.saveSocialLinksToStorage();
+                },
+
+                removeSocialLink(index) {
+                    this.socialLinks.splice(index, 1);
+                    this.saveSocialLinksToStorage();
+                },
+
+                addQuickSocialLink(platform) {
+                    const newLink = {
+                        platform: platform,
+                        icon: this.getSocialIcon(platform),
+                        url: this.getSocialPlaceholder(platform)
+                    };
+                    this.socialLinks.push(newLink);
+                    this.saveSocialLinksToStorage();
+                },
+
+                moveSocialLink(index, direction) {
+                    if (direction === 'up' && index > 0) {
+                        [this.socialLinks[index], this.socialLinks[index - 1]] = 
+                        [this.socialLinks[index - 1], this.socialLinks[index]];
+                    } else if (direction === 'down' && index < this.socialLinks.length - 1) {
+                        [this.socialLinks[index], this.socialLinks[index + 1]] = 
+                        [this.socialLinks[index + 1], this.socialLinks[index]];
+                    }
+                    this.saveSocialLinksToStorage();
+                },
+
+                async updateProfile() {
+                    try {
+                        if (!this.profile.image || this.profile.image.startsWith('https://ui-avatars.com')) {
+                            this.profile.image = this.generateDefaultAvatar();
+                        }
+                        
+                        await this.saveToLocalStorage();
+                        
+                        // Sync to Firebase if signed in
+                        if (this.userId && this.isOnline) {
+                            await this.syncToFirebase();
+                        }
+                        
+                        this.showToastMessage('Profile updated successfully', 'success');
+                        this.closeModal('editProfile');
+                        
+                    } catch (error) {
+                        console.error('Error updating profile:', error);
+                        this.showToastMessage('Error updating profile', 'error');
+                    }
+                },
+
+                // Helper Methods
+                getCategoryName(category) {
+                    const names = {
+                        'frontend': 'Frontend',
+                        'backend': 'Backend',
+                        'database': 'Database',
+                        'mobile': 'Mobile',
+                        'devops': 'DevOps',
+                        'cloud': 'Cloud',
+                        'tools': 'Tools',
+                        'design': 'Design',
+                        'ai': 'AI/ML'
+                    };
+                    return names[category] || category;
+                },
+
+                getCategoryIcon(category) {
+                    const icons = {
+                        'frontend': 'fas fa-code',
+                        'backend': 'fas fa-server',
+                        'database': 'fas fa-database',
+                        'mobile': 'fas fa-mobile-alt',
+                        'devops': 'fas fa-cogs',
+                        'cloud': 'fas fa-cloud',
+                        'tools': 'fas fa-tools',
+                        'design': 'fas fa-palette',
+                        'ai': 'fas fa-brain'
+                    };
+                    return icons[category] || 'fas fa-code';
+                },
+
+                getSkillCategoryColor(category) {
+                    const colors = {
+                        'frontend': 'bg-blue-500',
+                        'backend': 'bg-green-500',
+                        'database': 'bg-yellow-500',
+                        'mobile': 'bg-purple-500',
+                        'devops': 'bg-red-500',
+                        'cloud': 'bg-indigo-500',
+                        'tools': 'bg-pink-500',
+                        'design': 'bg-teal-500',
+                        'ai': 'bg-orange-500'
+                    };
+                    return colors[category] || 'bg-slate-500';
+                },
+
+                getSkillIcon(category) {
+                    return this.getCategoryIcon(category);
+                },
+
+                getProficiencyLevel(level) {
+                    if (level >= 90) return 'Expert';
+                    if (level >= 70) return 'Advanced';
+                    if (level >= 50) return 'Intermediate';
+                    if (level >= 30) return 'Beginner';
+                    return 'Novice';
+                },
+
+                getProficiencyClass(level) {
+                    if (level >= 90) return 'status-success';
+                    if (level >= 70) return 'status-success';
+                    if (level >= 50) return 'status-warning';
+                    return 'status-error';
+                },
+
+                getProficiencyIcon(level) {
+                    if (level >= 90) return 'fas fa-fire';
+                    if (level >= 70) return 'fas fa-chart-line';
+                    if (level >= 50) return 'fas fa-seedling';
+                    return 'fas fa-leaf';
+                },
+
+                getProjectTypeName(type) {
+                    const names = {
+                        'web': 'Web App',
+                        'mobile': 'Mobile App',
+                        'api': 'API',
+                        'desktop': 'Desktop',
+                        'ai': 'AI/ML',
+                        'saas': 'SaaS'
+                    };
+                    return names[type] || type;
+                },
+
+                getTechIcon(tech) {
+                    const iconMap = {
+                        'HTML5': 'fab fa-html5',
+                        'CSS3': 'fab fa-css3-alt',
+                        'JavaScript': 'fab fa-js-square',
+                        'TypeScript': 'fas fa-code',
+                        'React': 'fab fa-react',
+                        'Vue.js': 'fab fa-vuejs',
+                        'Angular': 'fab fa-angular',
+                        'Svelte': 'fas fa-bolt',
+                        'Next.js': 'fas fa-arrow-right',
+                        'Nuxt.js': 'fab fa-vuejs',
+                        'Tailwind CSS': 'fas fa-palette',
+                        'Bootstrap': 'fab fa-bootstrap',
+                        'SASS/SCSS': 'fab fa-sass',
+                        'Node.js': 'fab fa-node-js',
+                        'Express.js': 'fas fa-server',
+                        'Python': 'fab fa-python',
+                        'Django': 'fab fa-python',
+                        'Flask': 'fab fa-python',
+                        'PHP': 'fab fa-php',
+                        'Laravel': 'fab fa-laravel',
+                        'Java': 'fab fa-java',
+                        'Spring Boot': 'fab fa-java',
+                        'Go': 'fab fa-golang',
+                        'Ruby': 'fas fa-gem',
+                        'Ruby on Rails': 'fas fa-gem',
+                        'C#': 'fas fa-code',
+                        '.NET': 'fas fa-code',
+                        'MongoDB': 'fas fa-database',
+                        'MySQL': 'fas fa-database',
+                        'PostgreSQL': 'fas fa-database',
+                        'Firebase': 'fas fa-fire',
+                        'Redis': 'fas fa-database',
+                        'SQLite': 'fas fa-database',
+                        'Supabase': 'fas fa-database',
+                        'React Native': 'fab fa-react',
+                        'Flutter': 'fab fa-google',
+                        'Electron': 'fas fa-desktop',
+                        'Swift': 'fab fa-apple',
+                        'Kotlin': 'fab fa-android',
+                        'Docker': 'fab fa-docker',
+                        'Kubernetes': 'fas fa-ship',
+                        'AWS': 'fab fa-aws',
+                        'Google Cloud': 'fab fa-google',
+                        'Azure': 'fab fa-microsoft',
+                        'Vercel': 'fas fa-cloud',
+                        'Netlify': 'fas fa-cloud',
+                        'Git': 'fab fa-git-alt',
+                        'GitHub Actions': 'fab fa-github',
+                        'Jenkins': 'fas fa-cogs',
+                        'Nginx': 'fas fa-server',
+                        'GraphQL': 'fas fa-project-diagram',
+                        'REST API': 'fas fa-exchange-alt',
+                        'Jest': 'fas fa-vial',
+                        'Cypress': 'fas fa-bug',
+                        'Webpack': 'fas fa-cube',
+                        'Figma': 'fab fa-figma',
+                        'Adobe XD': 'fas fa-pen-nib'
+                    };
+                    return iconMap[tech] || 'fas fa-code';
+                },
+
+                getSocialIcon(platform) {
+                    const iconMap = {
+                        'github': 'fab fa-github',
+                        'gitlab': 'fab fa-gitlab',
+                        'bitbucket': 'fab fa-bitbucket',
+                        'linkedin': 'fab fa-linkedin-in',
+                        'twitter': 'fab fa-twitter',
+                        'instagram': 'fab fa-instagram',
+                        'facebook': 'fab fa-facebook-f',
+                        'whatsapp': 'fab fa-whatsapp',
+                        'telegram': 'fab fa-telegram',
+                        'discord': 'fab fa-discord',
+                        'youtube': 'fab fa-youtube',
+                        'tiktok': 'fab fa-tiktok',
+                        'twitch': 'fab fa-twitch',
+                        'medium': 'fab fa-medium',
+                        'devto': 'fab fa-dev',
+                        'hashnode': 'fab fa-hashnode',
+                        'dribbble': 'fab fa-dribbble',
+                        'behance': 'fab fa-behance',
+                        'figma': 'fab fa-figma',
+                        'stackoverflow': 'fab fa-stack-overflow',
+                        'codepen': 'fab fa-codepen',
+                        'upwork': 'fab fa-upwork',
+                        'udemy': 'fab fa-udemy',
+                        'coursera': 'fas fa-graduation-cap',
+                        'notion': 'fas fa-sticky-note',
+                        'email': 'fas fa-envelope',
+                        'personal': 'fas fa-globe',
+                        'other': 'fas fa-external-link-alt'
+                    };
+                    
+                    return iconMap[platform] || 'fas fa-external-link-alt';
+                },
+
+                getSocialPlaceholder(platform) {
+                    const placeholders = {
+                        'github': 'https://github.com/username',
+                        'linkedin': 'https://linkedin.com/in/username',
+                        'twitter': 'https://twitter.com/username',
+                        'instagram': 'https://instagram.com/username',
+                        'facebook': 'https://facebook.com/username',
+                        'whatsapp': 'https://wa.me/phone-number',
+                        'telegram': 'https://t.me/username',
+                        'discord': 'https://discord.gg/invite',
+                        'youtube': 'https://youtube.com/c/username',
+                        'tiktok': 'https://tiktok.com/@username',
+                        'twitch': 'https://twitch.tv/username',
+                        'medium': 'https://medium.com/@username',
+                        'devto': 'https://dev.to/username',
+                        'hashnode': 'https://username.hashnode.dev',
+                        'dribbble': 'https://dribbble.com/username',
+                        'behance': 'https://behance.net/username',
+                        'figma': 'https://figma.com/@username',
+                        'stackoverflow': 'https://stackoverflow.com/users/username',
+                        'codepen': 'https://codepen.io/username',
+                        'upwork': 'https://upwork.com/freelancers/~username',
+                        'udemy': 'https://udemy.com/user/username',
+                        'coursera': 'https://coursera.org/user/username',
+                        'notion': 'https://notion.so/username',
+                        'email': 'mailto:email@example.com',
+                        'personal': 'https://yourwebsite.com',
+                        'other': 'https://example.com'
+                    };
+                    return placeholders[platform] || 'https://example.com';
+                },
+
+                getSocialPlatformName(platform) {
+                    const names = {
+                        'github': 'GitHub',
+                        'gitlab': 'GitLab',
+                        'bitbucket': 'Bitbucket',
+                        'linkedin': 'LinkedIn',
+                        'twitter': 'Twitter',
+                        'instagram': 'Instagram',
+                        'facebook': 'Facebook',
+                        'whatsapp': 'WhatsApp',
+                        'telegram': 'Telegram',
+                        'discord': 'Discord',
+                        'youtube': 'YouTube',
+                        'tiktok': 'TikTok',
+                        'twitch': 'Twitch',
+                        'medium': 'Medium',
+                        'devto': 'Dev.to',
+                        'hashnode': 'Hashnode',
+                        'dribbble': 'Dribbble',
+                        'behance': 'Behance',
+                        'figma': 'Figma',
+                        'stackoverflow': 'Stack Overflow',
+                        'codepen': 'CodePen',
+                        'upwork': 'Upwork',
+                        'udemy': 'Udemy',
+                        'coursera': 'Coursera',
+                        'notion': 'Notion',
+                        'email': 'Email',
+                        'personal': 'Personal Website',
+                        'other': 'Other'
+                    };
+                    return names[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+                },
+
+                getSocialPlatformColorClass(platform) {
+                    const colorMap = {
+                        'github': 'bg-gray-800 hover:bg-gray-900',
+                        'gitlab': 'bg-orange-600 hover:bg-orange-700',
+                        'bitbucket': 'bg-blue-600 hover:bg-blue-700',
+                        'linkedin': 'bg-blue-700 hover:bg-blue-800',
+                        'twitter': 'bg-blue-400 hover:bg-blue-500',
+                        'instagram': 'bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600',
+                        'facebook': 'bg-blue-600 hover:bg-blue-700',
+                        'whatsapp': 'bg-green-500 hover:bg-green-600',
+                        'telegram': 'bg-blue-500 hover:bg-blue-600',
+                        'discord': 'bg-indigo-600 hover:bg-indigo-700',
+                        'youtube': 'bg-red-600 hover:bg-red-700',
+                        'tiktok': 'bg-black hover:bg-gray-900',
+                        'twitch': 'bg-purple-600 hover:bg-purple-700',
+                        'medium': 'bg-gray-800 hover:bg-gray-900',
+                        'devto': 'bg-gray-900 hover:bg-black',
+                        'hashnode': 'bg-blue-600 hover:bg-blue-700',
+                        'dribbble': 'bg-pink-500 hover:bg-pink-600',
+                        'behance': 'bg-blue-800 hover:bg-blue-900',
+                        'figma': 'bg-orange-500 hover:bg-orange-600',
+                        'stackoverflow': 'bg-orange-500 hover:bg-orange-600',
+                        'codepen': 'bg-gray-800 hover:bg-gray-900',
+                        'upwork': 'bg-green-600 hover:bg-green-700',
+                        'fiverr': 'bg-green-500 hover:bg-green-600',
+                        'freelancer': 'bg-blue-500 hover:bg-blue-600',
+                        'udemy': 'bg-purple-700 hover:bg-purple-800',
+                        'coursera': 'bg-blue-800 hover:bg-blue-900',
+                        'pluralsight': 'bg-orange-500 hover:bg-orange-600',
+                        'email': 'bg-gray-600 hover:bg-gray-700',
+                        'personal': 'bg-indigo-600 hover:bg-indigo-700',
+                        'other': 'bg-slate-600 hover:bg-slate-700'
+                    };
+                    return colorMap[platform] || 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700';
+                },
+
+                getSocialUsername(url) {
+                    if (!url) return '';
+                    try {
+                        const urlObj = new URL(url);
+                        const pathname = urlObj.pathname.replace('/', '');
+                        if (url.includes('github.com')) return pathname;
+                        if (url.includes('linkedin.com')) return pathname.replace('in/', '');
+                        if (url.includes('twitter.com')) return pathname.replace('@', '');
+                        if (url.includes('instagram.com')) return pathname;
+                        if (url.includes('mailto:')) return url.replace('mailto:', '');
+                        return pathname;
+                    } catch {
+                        return url;
+                    }
+                },
+
+                isValidUrl(url) {
+                    try {
+                        new URL(url);
+                        return true;
+                    } catch {
+                        return false;
+                    }
+                },
+
+                // Force Refresh Social Links
+                forceRefreshSocialLinks() {
+                    this.loadAllData();
+                    this.showToastMessage('Social links refreshed', 'success');
+                },
+
+                // Toast Notifications
+                showToastMessage(message, type = 'success') {
+                    this.toastMessage = message;
+                    this.toastType = type;
+                    this.showToast = true;
+                    
+                    setTimeout(() => {
+                        this.showToast = false;
+                    }, 3000);
+                },
+
+                // Particle.js
+                initParticles() {
+                    if (typeof particlesJS === 'function') {
+                        particlesJS('particles-js', {
+                            particles: {
+                                number: { 
+                                    value: 80, 
+                                    density: { 
+                                        enable: true, 
+                                        value_area: 800 
+                                    } 
+                                },
+                                color: { 
+                                    value: this.isDark ? "#ffffff" : "#6366f1" 
+                                },
+                                shape: { 
+                                    type: "circle" 
+                                },
+                                opacity: { 
+                                    value: 0.3, 
+                                    random: true
+                                },
+                                size: { 
+                                    value: 3, 
+                                    random: true
+                                },
+                                line_linked: {
+                                    enable: true,
+                                    distance: 150,
+                                    color: this.isDark ? "#ffffff" : "#6366f1",
+                                    opacity: 0.2,
+                                    width: 1
+                                },
+                                move: {
+                                    enable: true,
+                                    speed: 1,
+                                    direction: "none",
+                                    random: true,
+                                    straight: false
+                                }
+                            },
+                            interactivity: {
+                                events: {
+                                    onhover: { 
+                                        enable: true, 
+                                        mode: "grab" 
+                                    }
+                                }
+                            }
+                        });
+                    }
+                },
+
+                // Method untuk handle perubahan platform di select
+                handlePlatformChange(link, index) {
+                    link.icon = this.getSocialIcon(link.platform);
+                    this.saveSocialLinksToStorage();
+                },
+
+                // Import/Export Methods
+                async importSampleData() {
+                    if (confirm('This will replace your current data with sample data. Continue?')) {
+                        await this.loadSampleData();
+                        this.socialLinks = [
+                            {
+                                platform: 'github',
+                                icon: 'fab fa-github',
+                                url: 'https://github.com/username'
+                            },
+                            {
+                                platform: 'linkedin',
+                                icon: 'fab fa-linkedin-in',
+                                url: 'https://linkedin.com/in/username'
+                            },
+                            {
+                                platform: 'email',
+                                icon: 'fas fa-envelope',
+                                url: 'mailto:muhammadzuyyina@gmail.com'
+                            }
+                        ];
+                        
+                        await this.saveToLocalStorage();
+                        
+                        // Sync to Firebase if signed in
+                        if (this.userId && this.isOnline) {
+                            await this.syncToFirebase();
+                        }
+                        
+                        this.showToastMessage('Sample data loaded successfully', 'success');
+                        this.showDataPanel = false;
+                    }
+                },
+
+                importFromFile() {
+                    document.getElementById('jsonFileInput').click();
+                },
+
+                async handleFileImport(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    try {
+                        const text = await file.text();
+                        const data = JSON.parse(text);
+                        
+                        if (confirm('Import data from file? This will replace your current data.')) {
+                            if (data.skills) this.skills = data.skills;
+                            if (data.projects) {
+                                this.projects = data.projects;
+                                this.updateProjectSlides();
+                            }
+                            if (data.profile) {
+                                this.profile = {
+                                    ...this.profile,
+                                    ...data.profile
+                                };
+                            }
+                            if (data.socialLinks) {
+                                this.socialLinks = data.socialLinks.map(link => ({
+                                    platform: link.platform,
+                                    url: link.url || '',
+                                    icon: link.icon || this.getSocialIcon(link.platform)
+                                }));
+                            }
+                            
+                            await this.saveToLocalStorage();
+                            
+                            // Sync to Firebase if signed in
+                            if (this.userId && this.isOnline) {
+                                await this.syncToFirebase();
+                            }
+                            
+                            this.showToastMessage('Data imported successfully', 'success');
+                        }
+                        event.target.value = '';
+                    } catch (error) {
+                        this.showToastMessage('Error importing data. Please check file format.', 'error');
+                    }
+                },
+
+                exportToJSON() {
+                    const data = {
+                        skills: this.skills,
+                        projects: this.projects,
+                        profile: this.profile,
+                        socialLinks: this.socialLinks.map(link => ({
+                            platform: link.platform,
+                            url: link.url,
+                            icon: link.icon
+                        })),
+                        exportedAt: new Date().toISOString(),
+                        version: '2.0'
+                    };
+                    
+                    const json = JSON.stringify(data, null, 2);
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `portfolio-${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    this.showToastMessage('Data exported successfully', 'success');
+                },
+
+                async clearAllData() {
+                    if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                        this.skills = [];
+                        this.projects = [];
+                        this.profile = {
+                            name: 'Zuyyina Firdausi Muhammad',
+                            title: 'IT Developer',
+                            email: 'muhammadzuyyina@gmail.com',
+                            phone: '+62 822 9569 2941',
+                            bio: 'IT Developer Junior',
+                            image: this.generateDefaultAvatar()
+                        };
+                        this.socialLinks = [
+                            {
+                                platform: 'github',
+                                icon: 'fab fa-github',
+                                url: 'https://github.com/username'
+                            },
+                            {
+                                platform: 'linkedin',
+                                icon: 'fab fa-linkedin-in',
+                                url: 'https://linkedin.com/in/username'
+                            },
+                            {
+                                platform: 'email',
+                                icon: 'fas fa-envelope',
+                                url: 'mailto:muhammadzuyyina@gmail.com'
+                            }
+                        ];
+                        
+                        this.updateProjectSlides();
+                        
+                        const keysToRemove = [];
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key && key.startsWith('portfolio')) {
+                                keysToRemove.push(key);
+                            }
+                        }
+                        
+                        keysToRemove.forEach(key => localStorage.removeItem(key));
+                        
+                        await this.saveToLocalStorage();
+                        
+                        // Clear Firebase data if signed in
+                        if (this.userId && this.isOnline) {
+                            try {
+                                await this.firestore
+                                    .collection('portfolios')
+                                    .doc(this.userId)
+                                    .delete();
+                                    
+                                this.addToSyncHistory('Cleared Firebase data', 'success');
+                                this.showToastMessage('Cloud data also cleared', 'success');
+                            } catch (error) {
+                                console.error('Error clearing Firebase data:', error);
+                            }
+                        }
+                        
+                        this.showToastMessage('All data cleared successfully', 'success');
+                    }
+                },
+
+                // Check storage availability
+                async checkStorageAvailability() {
+                    try {
+                        const testKey = 'storage_test_' + Date.now();
+                        const testData = 'x'.repeat(1024 * 100);
+                        
+                        localStorage.setItem(testKey, testData);
+                        localStorage.removeItem(testKey);
+                        
+                        console.log('✅ Storage is available');
+                        return true;
+                    } catch (e) {
+                        console.error('❌ Storage error:', e);
+                        this.showToastMessage('Local storage is not available. Some features may not work.', 'warning');
+                        return false;
+                    }
+                },
+
+                // Load sample data
+                async loadSampleData() {
+                    console.log('📊 Loading sample data...');
+                    
+                    this.skills = [
+                        { 
+                            id: 1, 
+                            name: 'React', 
+                            category: 'frontend', 
+                            level: 95, 
+                            years: 3, 
+                            projects: 15, 
+                            icon: 'fab fa-react',
+                            description: 'Modern React with Hooks, Context API, and advanced patterns',
+                            certifications: ['React Certified Developer'],
+                            tags: ['frontend', 'ui', 'components']
+                        },
+                        { 
+                            id: 2, 
+                            name: 'Node.js', 
+                            category: 'backend', 
+                            level: 90, 
+                            years: 3, 
+                            projects: 12, 
+                            icon: 'fab fa-node-js',
+                            description: 'Building scalable server-side applications and APIs',
+                            certifications: [],
+                            tags: ['backend', 'api', 'server']
+                        }
+                    ];
+
+                    this.projects = [
+                        {
+                            id: 1,
+                            name: 'E-Commerce Platform',
+                            description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, and customer analytics.',
+                            type: 'web',
+                            technologies: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Tailwind CSS'],
+                            image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                            demoUrl: '#',
+                            sourceUrl: '#',
+                            features: ['Real-time inventory', 'Payment integration', 'Admin dashboard'],
+                            status: 'completed',
+                            date: '2024'
+                        },
+                        {
+                            id: 2,
+                            name: 'Task Management App',
+                            description: 'Collaborative task management application with real-time updates and team features.',
+                            type: 'web',
+                            technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router'],
+                            image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                            demoUrl: '#',
+                            sourceUrl: '#',
+                            features: ['Real-time collaboration', 'Team management', 'File attachments'],
+                            status: 'completed',
+                            date: '2024'
+                        }
+                    ];
+                    
                     this.profile.image = this.generateDefaultAvatar();
+                    
+                    this.updateProjectSlides();
+                    
+                    await this.saveToLocalStorage();
+                    console.log('✅ Sample data loaded and saved');
+                },
+
+                // Load default data
+                async loadDefaultData() {
+                    console.log('📦 Loading default data...');
+                    await this.loadSampleData();
+                    this.loadDefaultSocialLinks();
+                },
+
+                // Load default social links
+                loadDefaultSocialLinks() {
+                    this.socialLinks = [
+                        {
+                            platform: 'github',
+                            icon: 'fab fa-github',
+                            url: 'https://github.com/username'
+                        },
+                        {
+                            platform: 'linkedin',
+                            icon: 'fab fa-linkedin-in',
+                            url: 'https://linkedin.com/in/username'
+                        },
+                        {
+                            platform: 'email',
+                            icon: 'fas fa-envelope',
+                            url: 'mailto:muhammadzuyyina@gmail.com'
+                        }
+                    ];
+                },
+
+                // Helper untuk generate avatar default
+                generateDefaultAvatar() {
+                    const name = this.profile.name || 'John Doe';
+                    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                    const bgColor = '6366f1';
+                    const textColor = 'ffffff';
+                    const size = '400';
+                    
+                    return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${bgColor}&color=${textColor}&size=${size}&bold=true&font-size=0.5`;
+                },
+
+                // Helper function untuk convert file ke base64
+                fileToBase64(file) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = error => reject(error);
+                    });
+                },
+
+                // Compress image for storage
+                async compressImage(imageData) {
+                    try {
+                        if (!imageData || typeof imageData !== 'string') {
+                            return '';
+                        }
+                        
+                        if (imageData.startsWith('http') || imageData.length < 10000) {
+                            return imageData;
+                        }
+                        
+                        if (imageData.startsWith('data:image')) {
+                            const base64Length = imageData.length;
+                            const padding = imageData.endsWith('==') ? 2 : imageData.endsWith('=') ? 1 : 0;
+                            const fileSizeBytes = (base64Length * 3) / 4 - padding;
+                            
+                            if (fileSizeBytes <= this.storageConfig.maxImageSize) {
+                                return imageData;
+                            }
+                            
+                            const compressed = await this.compressBase64Image(imageData);
+                            console.log(`📐 Image compressed: ${this.formatBytes(fileSizeBytes)} -> ${this.formatBytes(compressed.length)}`);
+                            
+                            return compressed;
+                        }
+                        
+                        return imageData;
+                    } catch (error) {
+                        console.error('Error compressing image:', error);
+                        return imageData;
+                    }
+                },
+
+                // Compress base64 image
+                async compressBase64Image(base64Data, quality = 0.7) {
+                    return new Promise((resolve) => {
+                        try {
+                            const img = new Image();
+                            img.onload = () => {
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                
+                                let width = img.width;
+                                let height = img.height;
+                                const maxDimension = 800;
+                                
+                                if (width > maxDimension || height > maxDimension) {
+                                    if (width > height) {
+                                        height = (height * maxDimension) / width;
+                                        width = maxDimension;
+                                    } else {
+                                        width = (width * maxDimension) / height;
+                                        height = maxDimension;
+                                    }
+                                }
+                                
+                                canvas.width = width;
+                                canvas.height = height;
+                                
+                                ctx.drawImage(img, 0, 0, width, height);
+                                const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                                
+                                resolve(compressedBase64);
+                            };
+                            
+                            img.onerror = () => {
+                                console.warn('Image compression failed, returning original');
+                                resolve(base64Data);
+                            };
+                            
+                            img.src = base64Data;
+                        } catch (error) {
+                            console.error('Compression error:', error);
+                            resolve(base64Data);
+                        }
+                    });
+                },
+
+                // Decompress image (if needed)
+                async decompressImage(imageData) {
+                    return imageData || '';
+                },
+
+                // Format bytes for display
+                formatBytes(bytes, decimals = 2) {
+                    if (bytes === 0) return '0 Bytes';
+                    
+                    const k = 1024;
+                    const dm = decimals < 0 ? 0 : decimals;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
                 }
-                
-                // Simpan ke storage
-                await this.saveToStorage();
-                
-                this.showToastMessage('Profile updated successfully', 'success');
-                this.closeModal('editProfile');
-                
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                this.showToastMessage('Error updating profile', 'error');
-            }
-        },
-
-        // Helper Methods
-        getCategoryName(category) {
-            const names = {
-                'frontend': 'Frontend',
-                'backend': 'Backend',
-                'database': 'Database',
-                'mobile': 'Mobile',
-                'devops': 'DevOps',
-                'cloud': 'Cloud',
-                'tools': 'Tools',
-                'design': 'Design',
-                'ai': 'AI/ML'
             };
-            return names[category] || category;
-        },
-
-        getCategoryIcon(category) {
-            const icons = {
-                'frontend': 'fas fa-code',
-                'backend': 'fas fa-server',
-                'database': 'fas fa-database',
-                'mobile': 'fas fa-mobile-alt',
-                'devops': 'fas fa-cogs',
-                'cloud': 'fas fa-cloud',
-                'tools': 'fas fa-tools',
-                'design': 'fas fa-palette',
-                'ai': 'fas fa-brain'
-            };
-            return icons[category] || 'fas fa-code';
-        },
-
-        getSkillCategoryColor(category) {
-            const colors = {
-                'frontend': 'bg-blue-500',
-                'backend': 'bg-green-500',
-                'database': 'bg-yellow-500',
-                'mobile': 'bg-purple-500',
-                'devops': 'bg-red-500',
-                'cloud': 'bg-indigo-500',
-                'tools': 'bg-pink-500',
-                'design': 'bg-teal-500',
-                'ai': 'bg-orange-500'
-            };
-            return colors[category] || 'bg-slate-500';
-        },
-
-        getSkillIcon(category) {
-            return this.getCategoryIcon(category);
-        },
-
-        getProficiencyLevel(level) {
-            if (level >= 90) return 'Expert';
-            if (level >= 70) return 'Advanced';
-            if (level >= 50) return 'Intermediate';
-            if (level >= 30) return 'Beginner';
-            return 'Novice';
-        },
-
-        getProficiencyClass(level) {
-            if (level >= 90) return 'status-success';
-            if (level >= 70) return 'status-success';
-            if (level >= 50) return 'status-warning';
-            return 'status-error';
-        },
-
-        getProficiencyIcon(level) {
-            if (level >= 90) return 'fas fa-fire';
-            if (level >= 70) return 'fas fa-chart-line';
-            if (level >= 50) return 'fas fa-seedling';
-            return 'fas fa-leaf';
-        },
-
-        getProjectTypeName(type) {
-            const names = {
-                'web': 'Web App',
-                'mobile': 'Mobile App',
-                'api': 'API',
-                'desktop': 'Desktop',
-                'ai': 'AI/ML',
-                'saas': 'SaaS'
-            };
-            return names[type] || type;
-        },
-
-        getTechIcon(tech) {
-            const iconMap = {
-                'HTML5': 'fab fa-html5',
-                'CSS3': 'fab fa-css3-alt',
-                'JavaScript': 'fab fa-js-square',
-                'TypeScript': 'fas fa-code',
-                'React': 'fab fa-react',
-                'Vue.js': 'fab fa-vuejs',
-                'Angular': 'fab fa-angular',
-                'Svelte': 'fas fa-bolt',
-                'Next.js': 'fas fa-arrow-right',
-                'Nuxt.js': 'fab fa-vuejs',
-                'Tailwind CSS': 'fas fa-palette',
-                'Bootstrap': 'fab fa-bootstrap',
-                'SASS/SCSS': 'fab fa-sass',
-                'Node.js': 'fab fa-node-js',
-                'Express.js': 'fas fa-server',
-                'Python': 'fab fa-python',
-                'Django': 'fab fa-python',
-                'Flask': 'fab fa-python',
-                'PHP': 'fab fa-php',
-                'Laravel': 'fab fa-laravel',
-                'Java': 'fab fa-java',
-                'Spring Boot': 'fab fa-java',
-                'Go': 'fab fa-golang',
-                'Ruby': 'fas fa-gem',
-                'Ruby on Rails': 'fas fa-gem',
-                'C#': 'fas fa-code',
-                '.NET': 'fas fa-code',
-                'MongoDB': 'fas fa-database',
-                'MySQL': 'fas fa-database',
-                'PostgreSQL': 'fas fa-database',
-                'Firebase': 'fas fa-fire',
-                'Redis': 'fas fa-database',
-                'SQLite': 'fas fa-database',
-                'Supabase': 'fas fa-database',
-                'React Native': 'fab fa-react',
-                'Flutter': 'fab fa-google',
-                'Electron': 'fas fa-desktop',
-                'Swift': 'fab fa-apple',
-                'Kotlin': 'fab fa-android',
-                'Docker': 'fab fa-docker',
-                'Kubernetes': 'fas fa-ship',
-                'AWS': 'fab fa-aws',
-                'Google Cloud': 'fab fa-google',
-                'Azure': 'fab fa-microsoft',
-                'Vercel': 'fas fa-cloud',
-                'Netlify': 'fas fa-cloud',
-                'Git': 'fab fa-git-alt',
-                'GitHub Actions': 'fab fa-github',
-                'Jenkins': 'fas fa-cogs',
-                'Nginx': 'fas fa-server',
-                'GraphQL': 'fas fa-project-diagram',
-                'REST API': 'fas fa-exchange-alt',
-                'Jest': 'fas fa-vial',
-                'Cypress': 'fas fa-bug',
-                'Webpack': 'fas fa-cube',
-                'Figma': 'fab fa-figma',
-                'Adobe XD': 'fas fa-pen-nib'
-            };
-            return iconMap[tech] || 'fas fa-code';
-        },
-
-        getSocialIcon(platform) {
-            const iconMap = {
-                'github': 'fab fa-github',
-                'gitlab': 'fab fa-gitlab',
-                'bitbucket': 'fab fa-bitbucket',
-                'linkedin': 'fab fa-linkedin-in',
-                'twitter': 'fab fa-twitter',
-                'instagram': 'fab fa-instagram',
-                'facebook': 'fab fa-facebook-f',
-                'whatsapp': 'fab fa-whatsapp',
-                'telegram': 'fab fa-telegram',
-                'discord': 'fab fa-discord',
-                'youtube': 'fab fa-youtube',
-                'tiktok': 'fab fa-tiktok',
-                'twitch': 'fab fa-twitch',
-                'medium': 'fab fa-medium',
-                'devto': 'fab fa-dev',
-                'hashnode': 'fab fa-hashnode',
-                'dribbble': 'fab fa-dribbble',
-                'behance': 'fab fa-behance',
-                'figma': 'fab fa-figma',
-                'stackoverflow': 'fab fa-stack-overflow',
-                'codepen': 'fab fa-codepen',
-                'upwork': 'fab fa-upwork',
-                'udemy': 'fab fa-udemy',
-                'coursera': 'fas fa-graduation-cap',
-                'notion': 'fas fa-sticky-note',
-                'email': 'fas fa-envelope',
-                'personal': 'fas fa-globe',
-                'other': 'fas fa-external-link-alt'
-            };
-            
-            return iconMap[platform] || 'fas fa-external-link-alt';
-        },
-
-        getSocialPlaceholder(platform) {
-            const placeholders = {
-                'github': 'https://github.com/username',
-                'linkedin': 'https://linkedin.com/in/username',
-                'twitter': 'https://twitter.com/username',
-                'instagram': 'https://instagram.com/username',
-                'facebook': 'https://facebook.com/username',
-                'whatsapp': 'https://wa.me/phone-number',
-                'telegram': 'https://t.me/username',
-                'discord': 'https://discord.gg/invite',
-                'youtube': 'https://youtube.com/c/username',
-                'tiktok': 'https://tiktok.com/@username',
-                'twitch': 'https://twitch.tv/username',
-                'medium': 'https://medium.com/@username',
-                'devto': 'https://dev.to/username',
-                'hashnode': 'https://username.hashnode.dev',
-                'dribbble': 'https://dribbble.com/username',
-                'behance': 'https://behance.net/username',
-                'figma': 'https://figma.com/@username',
-                'stackoverflow': 'https://stackoverflow.com/users/username',
-                'codepen': 'https://codepen.io/username',
-                'upwork': 'https://upwork.com/freelancers/~username',
-                'udemy': 'https://udemy.com/user/username',
-                'coursera': 'https://coursera.org/user/username',
-                'notion': 'https://notion.so/username',
-                'email': 'mailto:email@example.com',
-                'personal': 'https://yourwebsite.com',
-                'other': 'https://example.com'
-            };
-            return placeholders[platform] || 'https://example.com';
-        },
-
-        getSocialPlatformName(platform) {
-            const names = {
-                'github': 'GitHub',
-                'gitlab': 'GitLab',
-                'bitbucket': 'Bitbucket',
-                'linkedin': 'LinkedIn',
-                'twitter': 'Twitter',
-                'instagram': 'Instagram',
-                'facebook': 'Facebook',
-                'whatsapp': 'WhatsApp',
-                'telegram': 'Telegram',
-                'discord': 'Discord',
-                'youtube': 'YouTube',
-                'tiktok': 'TikTok',
-                'twitch': 'Twitch',
-                'medium': 'Medium',
-                'devto': 'Dev.to',
-                'hashnode': 'Hashnode',
-                'dribbble': 'Dribbble',
-                'behance': 'Behance',
-                'figma': 'Figma',
-                'stackoverflow': 'Stack Overflow',
-                'codepen': 'CodePen',
-                'upwork': 'Upwork',
-                'udemy': 'Udemy',
-                'coursera': 'Coursera',
-                'notion': 'Notion',
-                'email': 'Email',
-                'personal': 'Personal Website',
-                'other': 'Other'
-            };
-            return names[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
-        },
-
-        getSocialPlatformColorClass(platform) {
-            const colorMap = {
-                'github': 'bg-gray-800 hover:bg-gray-900',
-                'gitlab': 'bg-orange-600 hover:bg-orange-700',
-                'bitbucket': 'bg-blue-600 hover:bg-blue-700',
-                'linkedin': 'bg-blue-700 hover:bg-blue-800',
-                'twitter': 'bg-blue-400 hover:bg-blue-500',
-                'instagram': 'bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600',
-                'facebook': 'bg-blue-600 hover:bg-blue-700',
-                'whatsapp': 'bg-green-500 hover:bg-green-600',
-                'telegram': 'bg-blue-500 hover:bg-blue-600',
-                'discord': 'bg-indigo-600 hover:bg-indigo-700',
-                'youtube': 'bg-red-600 hover:bg-red-700',
-                'tiktok': 'bg-black hover:bg-gray-900',
-                'twitch': 'bg-purple-600 hover:bg-purple-700',
-                'medium': 'bg-gray-800 hover:bg-gray-900',
-                'devto': 'bg-gray-900 hover:bg-black',
-                'hashnode': 'bg-blue-600 hover:bg-blue-700',
-                'dribbble': 'bg-pink-500 hover:bg-pink-600',
-                'behance': 'bg-blue-800 hover:bg-blue-900',
-                'figma': 'bg-orange-500 hover:bg-orange-600',
-                'stackoverflow': 'bg-orange-500 hover:bg-orange-600',
-                'codepen': 'bg-gray-800 hover:bg-gray-900',
-                'upwork': 'bg-green-600 hover:bg-green-700',
-                'fiverr': 'bg-green-500 hover:bg-green-600',
-                'freelancer': 'bg-blue-500 hover:bg-blue-600',
-                'udemy': 'bg-purple-700 hover:bg-purple-800',
-                'coursera': 'bg-blue-800 hover:bg-blue-900',
-                'pluralsight': 'bg-orange-500 hover:bg-orange-600',
-                'email': 'bg-gray-600 hover:bg-gray-700',
-                'personal': 'bg-indigo-600 hover:bg-indigo-700',
-                'other': 'bg-slate-600 hover:bg-slate-700'
-            };
-            return colorMap[platform] || 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700';
-        },
-
-        getSocialUsername(url) {
-            if (!url) return '';
-            try {
-                const urlObj = new URL(url);
-                const pathname = urlObj.pathname.replace('/', '');
-                if (url.includes('github.com')) return pathname;
-                if (url.includes('linkedin.com')) return pathname.replace('in/', '');
-                if (url.includes('twitter.com')) return pathname.replace('@', '');
-                if (url.includes('instagram.com')) return pathname;
-                if (url.includes('mailto:')) return url.replace('mailto:', '');
-                return pathname;
-            } catch {
-                return url;
-            }
-        },
-
-        isValidUrl(url) {
-            try {
-                new URL(url);
-                return true;
-            } catch {
-                return false;
-            }
-        },
-
-        // Force Refresh Social Links
-        forceRefreshSocialLinks() {
-            this.loadAllData();
-            this.showToastMessage('Social links refreshed', 'success');
-        },
-
-        // Toast Notifications
-        showToastMessage(message, type = 'success') {
-            this.toastMessage = message;
-            this.toastType = type;
-            this.showToast = true;
-            
-            setTimeout(() => {
-                this.showToast = false;
-            }, 3000);
         }
-    };
-}
     </script>
 </body>
 </html>
