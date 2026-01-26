@@ -3524,1610 +3524,301 @@
             </div>
         </div>
     </div>
+
 <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBAuVIJp4jZCzxuBIBFez2SdLMi7MNHNJk",
+        authDomain: "portofolio-4a7eb.firebaseapp.com",
+        projectId: "portofolio-4a7eb",
+        storageBucket: "portofolio-4a7eb.firebasestorage.app",
+        messagingSenderId: "36345970852",
+        appId: "1:36345970852:web:d0a47e15126f7038fce631"
+    };
+
+    // Predefined public portfolio data
+    const predefinedPublicData = {
+        profile: {
+            name: 'Zuyyina Firdausi Muhammad',
+            title: 'Full Stack Developer',
+            email: 'muhammadzuyyina@gmail.com',
+            phone: '+62 822 9569 2941',
+            bio: 'Experienced Full Stack Developer with expertise in modern web technologies. Passionate about creating efficient, scalable, and user-friendly applications.',
+            image: null
+        },
+        skills: [
+            {
+                id: 1,
+                name: 'React',
+                category: 'frontend',
+                level: 95,
+                years: 3,
+                projects: 15,
+                icon: 'fab fa-react',
+                description: 'Modern React with Hooks, Context API, and advanced patterns'
+            },
+            {
+                id: 2,
+                name: 'Node.js',
+                category: 'backend',
+                level: 90,
+                years: 3,
+                projects: 12,
+                icon: 'fab fa-node-js',
+                description: 'Building scalable server-side applications and APIs'
+            },
+            {
+                id: 3,
+                name: 'MongoDB',
+                category: 'database',
+                level: 85,
+                years: 2,
+                projects: 8,
+                icon: 'fas fa-database',
+                description: 'NoSQL database design and optimization'
+            },
+            {
+                id: 4,
+                name: 'Tailwind CSS',
+                category: 'frontend',
+                level: 90,
+                years: 2,
+                projects: 10,
+                icon: 'fas fa-paint-brush',
+                description: 'Utility-first CSS framework for rapid UI development'
+            },
+            {
+                id: 5,
+                name: 'Docker',
+                category: 'devops',
+                level: 80,
+                years: 1,
+                projects: 5,
+                icon: 'fab fa-docker',
+                description: 'Containerization and deployment automation'
+            },
+            {
+                id: 6,
+                name: 'Python',
+                category: 'backend',
+                level: 75,
+                years: 2,
+                projects: 7,
+                icon: 'fab fa-python',
+                description: 'Backend development and automation scripts'
+            }
+        ],
+        projects: [
+            {
+                id: 1,
+                name: 'E-Commerce Platform',
+                description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, and customer analytics. Built with React, Node.js, and MongoDB.',
+                type: 'web',
+                technologies: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Tailwind CSS', 'Stripe API'],
+                image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                demoUrl: '#',
+                sourceUrl: '#',
+                features: ['Real-time inventory', 'Payment integration', 'Admin dashboard', 'Customer analytics'],
+                status: 'completed',
+                date: '2024'
+            },
+            {
+                id: 2,
+                name: 'Task Management App',
+                description: 'Collaborative task management application with real-time updates, team features, and drag-and-drop interface. Built with Vue.js and Firebase.',
+                type: 'web',
+                technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router', 'Tailwind CSS'],
+                image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                demoUrl: '#',
+                sourceUrl: '#',
+                features: ['Real-time collaboration', 'Team management', 'File attachments', 'Drag & drop'],
+                status: 'completed',
+                date: '2024'
+            },
+            {
+                id: 3,
+                name: 'Weather Dashboard',
+                description: 'Real-time weather dashboard with multiple city support, 7-day forecast, and interactive maps. Uses OpenWeather API and Chart.js.',
+                type: 'web',
+                technologies: ['React', 'Chart.js', 'OpenWeather API', 'Leaflet.js', 'CSS3'],
+                image: 'https://images.unsplash.com/photo-1592210454359-9043f067919b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                demoUrl: '#',
+                sourceUrl: '#',
+                features: ['Multiple cities', '7-day forecast', 'Interactive maps', 'Data visualization'],
+                status: 'completed',
+                date: '2023'
+            },
+            {
+                id: 4,
+                name: 'Fitness Tracker App',
+                description: 'Mobile fitness tracking application with workout plans, progress tracking, and social features. Built with React Native and Firebase.',
+                type: 'mobile',
+                technologies: ['React Native', 'Firebase', 'Redux', 'Expo', 'Chart.js'],
+                image: 'https://images.unsplash.com/photo-1536922246289-88c42f957773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                demoUrl: '#',
+                sourceUrl: '#',
+                features: ['Workout plans', 'Progress tracking', 'Social features', 'Offline mode'],
+                status: 'completed',
+                date: '2023'
+            },
+            {
+                id: 5,
+                name: 'Chat Application',
+                description: 'Real-time chat application with group chat, file sharing, and voice messages. Built with Socket.io, Node.js, and React.',
+                type: 'web',
+                technologies: ['React', 'Socket.io', 'Node.js', 'Express', 'MongoDB'],
+                image: 'https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                demoUrl: '#',
+                sourceUrl: '#',
+                features: ['Group chat', 'File sharing', 'Voice messages', 'Typing indicators'],
+                status: 'completed',
+                date: '2023'
+            },
+            {
+                id: 6,
+                name: 'Portfolio CMS',
+                description: 'Content management system for managing portfolio projects, skills, and blog posts. Built with Next.js and Sanity.io.',
+                type: 'web',
+                technologies: ['Next.js', 'Sanity.io', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+                image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                demoUrl: '#',
+                sourceUrl: '#',
+                features: ['Content management', 'Blog system', 'SEO optimized', 'Dark mode'],
+                status: 'completed',
+                date: '2024'
+            }
+        ],
+        socialLinks: [
+            {
+                platform: 'github',
+                icon: 'fab fa-github',
+                url: 'https://github.com/username'
+            },
+            {
+                platform: 'linkedin',
+                icon: 'fab fa-linkedin-in',
+                url: 'https://linkedin.com/in/username'
+            },
+            {
+                platform: 'twitter',
+                icon: 'fab fa-twitter',
+                url: 'https://twitter.com/username'
+            },
+            {
+                platform: 'email',
+                icon: 'fas fa-envelope',
+                url: 'mailto:muhammadzuyyina@gmail.com'
+            }
+        ]
+    };
+
     function portfolio() {
-    return {
-        // STATE BARU: Mode Management
-        isPublicMode: true,
-        showAuthModal: false,
-        
-        // STATE YANG DIUPDATE: Load status
-        isLoading: true,
-        loadingMessage: 'Loading portfolio...',
-        loadingProgress: 0,
-        portfolioDataLoaded: false,
-
-        // State lainnya tetap sama
-        isDark: true,
-        mobileMenu: false,
-        activeSection: 'home',
-        scrollProgress: 0,
-        isAtTop: true,
-        showToast: false,
-        toastMessage: '',
-        toastType: 'success',
-        showDataPanel: false,
-        techInput: '',
-        certificationInput: '',
-        tagInput: '',
-        activeSkillCategory: 'all',
-        activeSkillTab: 'basic',
-        activeProjectTab: 'basic',
-        selectedProject: null,
-        editingSkill: null,
-        editingProject: null,
-        uploadingImage: false,
-        uploadingProfileImage: false,
-        isSubmitting: false,
-        deleteItem: { type: '', id: null, name: '' },
-
-        // Firebase State
-        firebaseApp: null,
-        firestore: null,
-        auth: null,
-        userId: null,
-        userEmail: null,
-        isOnline: false,
-        isSyncing: false,
-        syncHistory: [],
-        lastSyncTime: 'Never',
-
-        // Data Status
-        dataStatus: 'synced',
-        storageAvailable: true,
-        dataIntegrity: false,
-        storageUsage: '0 KB',
-
-        // Project Slider State
-        projectView: 'grid',
-        currentSlide: 0,
-        projectSlides: [],
-        autoSlideEnabled: false,
-        autoSlideInterval: null,
-        projectsPerSlide: 3,
-
-        // Storage Configuration
-        storageConfig: {
-            maxImageSize: 1 * 1024 * 1024,
-            compressionQuality: 0.7,
-            enableCompression: true,
-            maxTotalSize: 5 * 1024 * 1024,
-            backupCount: 3
-        },
-
-        // Profile Data (akan di-override oleh data dari Firebase)
-        profile: { ...predefinedPublicData.profile },
-        skills: [...predefinedPublicData.skills],
-        projects: [...predefinedPublicData.projects],
-        socialLinks: [...predefinedPublicData.socialLinks],
-        portfolioYear: new Date().getFullYear(),
-
-        // Navigation
-        navItems: [
-            { name: 'Home', href: '#home' },
-            { name: 'Skills', href: '#skills' },
-            { name: 'Projects', href: '#projects' },
-            { name: 'Contact', href: '#contact' }
-        ],
-
-        // Skill Categories
-        skillCategories: [
-            'frontend', 'backend', 'database', 'mobile', 
-            'devops', 'cloud', 'tools', 'design', 'ai'
-        ],
-
-        // Popular Technologies
-        popularTechnologies: [
-            'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 
-            'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'Bootstrap', 'SASS/SCSS',
-            'Node.js', 'Express.js', 'Python', 'Django', 'Flask', 'PHP', 'Laravel', 
-            'Java', 'Spring Boot', 'Go', 'Ruby', 'Ruby on Rails', 'C#', '.NET',
-            'MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'Redis', 'SQLite', 'Supabase',
-            'React Native', 'Flutter', 'Electron', 'Swift', 'Kotlin',
-            'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Vercel', 'Netlify',
-            'Git', 'GitHub Actions', 'Jenkins', 'Nginx',
-            'GraphQL', 'REST API', 'Jest', 'Cypress', 'Webpack', 'Figma', 'Adobe XD'
-        ],
-
-        // New Skill Data
-        newSkill: {
-            name: '',
-            category: 'frontend',
-            level: 50,
-            years: 1,
-            projects: 0,
-            icon: 'fas fa-code',
-            description: '',
-            certifications: [],
-            tags: [],
-            customId: ''
-        },
-
-        // New Project Data
-        newProject: {
-            name: '',
-            description: '',
-            type: 'web',
-            technologies: [],
-            image: '',
-            demoUrl: '',
-            sourceUrl: '',
-            startDate: '',
-            endDate: '',
-            isOngoing: false,
-            role: '',
-            teamSize: 1,
-            status: 'completed',
-            client: '',
-            challenges: '',
-            features: []
-        },
-
-        // Contact Form
-        contactForm: {
-            name: '',
-            email: '',
-            message: ''
-        },
-
-        // Modals
-        modals: {
-            projectDetail: false,
-            addProject: false,
-            addSkill: false,
-            editProfile: false,
-            deleteConfirm: false
-        },
-
-        // COMPUTED PROPERTIES
-        get filteredSkills() {
-            if (this.activeSkillCategory === 'all') {
-                return this.skills;
-            }
-            return this.skills.filter(skill => skill.category === this.activeSkillCategory);
-        },
-
-        get averageSkillLevel() {
-            if (this.skills.length === 0) return 0;
-            const total = this.skills.reduce((sum, skill) => sum + skill.level, 0);
-            return Math.round(total / this.skills.length);
-        },
-
-        get totalProjectCount() {
-            return this.skills.reduce((total, skill) => total + skill.projects, 0);
-        },
-
-        get totalExperienceYears() {
-            const startYear = 2023;
-            const currentYear = new Date().getFullYear();
-            return Math.max(1, currentYear - startYear);
-        },
-
-        get totalItems() {
-            return this.skills.length + this.projects.length;
-        },
-
-        get connectionStatusText() {
-            if (!this.isOnline) return 'Offline';
-            if (this.isSyncing) return 'Syncing...';
-            if (this.userId) return 'Cloud Sync Active';
-            return 'Cloud Data Loaded';
-        },
-
-        get dataStatusText() {
-            if (this.dataStatus === 'synced') return 'Data Synced';
-            if (this.dataStatus === 'unsynced') return 'Data Not Synced';
-            return 'Data Error';
-        },
-
-        get profileImageSrc() {
-            if (!this.profile.image || this.profile.image.trim() === '') {
-                return this.generateDefaultAvatar();
-            }
-            return this.profile.image;
-        },
-
-        // INITIALIZATION
-        init() {
-            console.log('🚀 Portfolio initialization started');
+        return {
+            // STATE BARU: Mode Management
+            isPublicMode: true,
+            isOwner: false,
+            showAuthModal: false,
             
-            this.setupEventListeners();
-            
-            const savedTheme = localStorage.getItem('theme');
-            this.isDark = savedTheme ? savedTheme === 'dark' : true;
-
-            this.initParticles();
-
-            this.isOnline = navigator.onLine;
-            console.log('🌐 Online status:', this.isOnline);
-            
-            window.addEventListener('online', () => {
-                this.isOnline = true;
-                console.log('🌐 Went online');
-                this.showToastMessage('You are back online', 'success');
-                if (this.isOnline) {
-                    setTimeout(() => this.initFirebasePublic(), 1000);
-                }
-            });
-            
-            window.addEventListener('offline', () => {
-                this.isOnline = false;
-                console.log('🌐 Went offline');
-                this.showToastMessage('You are offline', 'warning');
-            });
-
-            console.log('⏳ Initializing Firebase for public access...');
-            
-            // Cek login status terlebih dahulu
-            this.checkLoginStatus();
-            
-            // Inisialisasi Firebase
-            setTimeout(() => {
-                this.initFirebasePublic();
-            }, 1000);
-            
-            this.updateProjectSlides();
-            
-            setTimeout(() => {
-                this.isLoading = false;
-                console.log('✅ Portfolio loaded successfully');
-            }, 1500);
-        },
-
-        // CEK STATUS LOGIN DARI LOCALSTORAGE
-        checkLoginStatus() {
-            try {
-                const savedAuth = localStorage.getItem('firebase_auth');
-                if (savedAuth) {
-                    const authData = JSON.parse(savedAuth);
-                    if (authData.uid && authData.email) {
-                        this.userId = authData.uid;
-                        this.userEmail = authData.email;
-                        this.isPublicMode = false;
-                        console.log('✅ User logged in from localStorage:', this.userEmail);
-                        return true;
-                    }
-                }
-            } catch (error) {
-                console.error('❌ Error checking login status:', error);
-            }
-            return false;
-        },
-
-        // FIREBASE INITIALIZATION UNTUK PUBLIC ACCESS
-        initFirebasePublic() {
-            console.log('🚀 Attempting to initialize Firebase for public access...');
-            
-            try {
-                if (typeof firebase === 'undefined') {
-                    console.error('❌ Firebase SDK not loaded!');
-                    this.showToastMessage('Firebase SDK not loaded. Using predefined data.', 'warning');
-                    this.usePredefinedData();
-                    return;
-                }
-                
-                console.log('✅ Firebase SDK is loaded');
-                
-                try {
-                    if (!firebase.apps || firebase.apps.length === 0) {
-                        console.log('🔄 Initializing new Firebase app...');
-                        this.firebaseApp = firebase.initializeApp(firebaseConfig);
-                        console.log('✅ Firebase app initialized');
-                    } else {
-                        console.log('✅ Using existing Firebase app');
-                        this.firebaseApp = firebase.app();
-                    }
-                } catch (initError) {
-                    console.error('❌ Firebase app initialization error:', initError);
-                    this.showToastMessage('Using predefined portfolio data', 'info');
-                    this.usePredefinedData();
-                    return;
-                }
-                
-                try {
-                    this.firestore = firebase.firestore(this.firebaseApp);
-                    console.log('✅ Firestore initialized');
-                } catch (firestoreError) {
-                    console.error('❌ Firestore initialization error:', firestoreError);
-                    this.showToastMessage('Using predefined portfolio data', 'info');
-                    this.usePredefinedData();
-                    return;
-                }
-                
-                try {
-                    this.auth = firebase.auth(this.firebaseApp);
-                    console.log('✅ Auth initialized');
-                    
-                    // Setup auth state listener
-                    this.auth.onAuthStateChanged((user) => {
-                        if (user) {
-                            console.log('🔥 Firebase auth state: User signed in:', user.email);
-                            this.userId = user.uid;
-                            this.userEmail = user.email;
-                            this.isPublicMode = false;
-                            this.saveAuthData(user);
-                            this.showToastMessage(`Welcome back, ${user.displayName || user.email}!`, 'success');
-                            this.loadUserData();
-                        } else {
-                            console.log('🔥 Firebase auth state: No user signed in');
-                            // If we have saved auth data but Firebase says no user, clear local data
-                            if (this.userId) {
-                                console.log('⚠️ Clearing stale auth data');
-                                localStorage.removeItem('firebase_auth');
-                                this.userId = null;
-                                this.userEmail = null;
-                                this.isPublicMode = true;
-                            }
-                        }
-                    });
-                    
-                } catch (authError) {
-                    console.warn('⚠️ Auth initialization warning:', authError);
-                }
-                
-                // Load public data
-                this.loadPublicData();
-                
-            } catch (error) {
-                console.error('❌ General Firebase init error:', error);
-                this.showToastMessage('Using predefined portfolio data', 'info');
-                this.usePredefinedData();
-            }
-        },
-
-        // LOAD PUBLIC DATA DARI FIREBASE
-        loadPublicData() {
-            if (!this.firestore || !this.isOnline) {
-                console.log('⚠️ Cannot load from Firebase: Firestore or internet not available');
-                this.usePredefinedData();
-                return;
-            }
-            
-            console.log('📥 Loading public data from Firebase...');
-            
-            this.isLoading = true;
-            this.loadingMessage = 'Loading portfolio data...';
-            
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => {
-                    reject(new Error('Timeout loading data from Firebase'));
-                }, 10000);
-            });
-            
-            const loadPromise = this.firestore.collection('publicPortfolios').doc('main').get();
-            
-            Promise.race([loadPromise, timeoutPromise])
-                .then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        console.log('✅ Public data loaded successfully from Firebase');
-                        
-                        this.updateDataFromFirebase(data);
-                        
-                        if (data.lastUpdated) {
-                            this.lastSyncTime = new Date(data.lastUpdated.toDate()).toLocaleString();
-                        } else {
-                            this.lastSyncTime = 'Recently';
-                        }
-                        
-                        this.dataStatus = 'synced';
-                        this.showToastMessage('Portfolio data loaded from cloud', 'success');
-                        
-                    } else {
-                        console.log('⚠️ No public data found in Firebase, using predefined data');
-                        this.usePredefinedData();
-                    }
-                })
-                .catch((error) => {
-                    console.error('❌ Load public data error:', error);
-                    this.showToastMessage('Using predefined portfolio data', 'info');
-                    this.usePredefinedData();
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                    this.portfolioDataLoaded = true;
-                });
-        },
-
-        // UPDATE DATA DARI FIREBASE
-        updateDataFromFirebase(data) {
-            try {
-                console.log('🔄 Updating data from Firebase...');
-                
-                if (data.skills && Array.isArray(data.skills)) {
-                    this.skills = data.skills;
-                    console.log(`✅ Loaded ${this.skills.length} skills`);
-                }
-                
-                if (data.projects && Array.isArray(data.projects)) {
-                    this.projects = data.projects;
-                    this.updateProjectSlides();
-                    console.log(`✅ Loaded ${this.projects.length} projects`);
-                }
-                
-                if (data.profile) {
-                    Object.assign(this.profile, data.profile);
-                    console.log('✅ Profile data loaded');
-                }
-                
-                if (data.socialLinks) {
-                    this.socialLinks = data.socialLinks.map(link => ({
-                        platform: link.platform,
-                        url: link.url || '',
-                        icon: link.icon || this.getSocialIcon(link.platform)
-                    }));
-                    console.log(`✅ Loaded ${this.socialLinks.length} social links`);
-                }
-                
-                this.saveToLocalStorage();
-                
-            } catch (error) {
-                console.error('Error updating data from Firebase:', error);
-                this.showToastMessage('Error loading cloud data', 'warning');
-            }
-        },
-
-        // USE PREDEFINED DATA (fallback)
-        usePredefinedData() {
-            console.log('📊 Using predefined portfolio data');
-            
-            this.skills = [...predefinedPublicData.skills];
-            this.projects = [...predefinedPublicData.projects];
-            this.profile = { ...predefinedPublicData.profile };
-            this.socialLinks = [...predefinedPublicData.socialLinks];
-            
-            this.updateProjectSlides();
-            this.saveToLocalStorage();
-            
-            this.isLoading = false;
-            this.portfolioDataLoaded = true;
-        },
-
-        // TOGGLE MODE (Public/Edit) - FIXED
-        toggleMode() {
-            if (this.isPublicMode) {
-                // Switching to Edit Mode
-                if (!this.userId) {
-                    this.showToastMessage('Please login to enable edit mode', 'info');
-                    setTimeout(() => {
-                        this.initFirebaseAuth();
-                    }, 500);
-                    return;
-                }
-                this.isPublicMode = false;
-                this.showToastMessage('Edit mode enabled', 'success');
-            } else {
-                // Switching to Public Mode
-                this.isPublicMode = true;
-                this.showToastMessage('View mode enabled', 'info');
-            }
-        },
-
-        // FIREBASE AUTH (untuk edit mode) - FIXED
-        initFirebaseAuth() {
-            if (!this.auth) {
-                this.showToastMessage('Firebase Auth not available', 'error');
-                return;
-            }
-            
-            console.log('🔑 Starting Google login...');
-            
-            this.isSyncing = true;
-            this.showToastMessage('Opening Google login...', 'info');
-            
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                provider.addScope('profile');
-                provider.addScope('email');
-                provider.setCustomParameters({ prompt: 'select_account' });
-                
-                this.auth.signInWithPopup(provider)
-                    .then((result) => {
-                        console.log('🎉 Login SUCCESS!');
-                        
-                        this.userId = result.user.uid;
-                        this.userEmail = result.user.email;
-                        this.isSyncing = false;
-                        this.isPublicMode = false;
-                        
-                        this.saveAuthData(result.user);
-                        
-                        this.showToastMessage(`🎉 Welcome ${result.user.displayName || result.user.email}! Edit mode enabled.`, 'success');
-                        
-                        setTimeout(() => {
-                            this.loadUserData();
-                        }, 500);
-                        
-                    })
-                    .catch((error) => {
-                        console.error('❌ Login error:', error);
-                        this.isSyncing = false;
-                        
-                        let errorMessage = 'Login failed';
-                        if (error.code === 'auth/popup-blocked') {
-                            errorMessage = 'Login popup was blocked. Please allow pop-ups.';
-                        } else if (error.code === 'auth/popup-closed-by-user') {
-                            errorMessage = 'Login cancelled';
-                        } else if (error.code === 'auth/cancelled-popup-request') {
-                            errorMessage = 'Login popup was cancelled';
-                        }
-                        
-                        this.showToastMessage(`❌ ${errorMessage}`, 'error');
-                    });
-                    
-            } catch (setupError) {
-                console.error('❌ Login setup error:', setupError);
-                this.isSyncing = false;
-                this.showToastMessage('Login setup failed', 'error');
-            }
-        },
-
-        // SAVE AUTH DATA
-        saveAuthData(user) {
-            try {
-                const authData = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    lastLogin: new Date().toISOString(),
-                };
-                
-                localStorage.setItem('firebase_auth', JSON.stringify(authData));
-                console.log('✅ Auth data saved to localStorage');
-                
-            } catch (error) {
-                console.error('❌ Error saving auth data:', error);
-            }
-        },
-
-        // LOAD USER DATA (private data untuk edit mode)
-        loadUserData() {
-            if (!this.userId || !this.firestore || !this.isOnline) {
-                console.log('⚠️ Cannot load user data');
-                this.loadLocalData();
-                return;
-            }
-            
-            console.log('📥 Loading user data for:', this.userId);
-            
-            this.firestore.collection('portfolios').doc(this.userId).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        console.log('✅ User data loaded from cloud');
-                        
-                        this.mergeUserData(data);
-                        this.showToastMessage('Your data loaded from cloud', 'success');
-                    } else {
-                        console.log('⚠️ No user data found in cloud, using local data');
-                        this.loadLocalData();
-                    }
-                })
-                .catch((error) => {
-                    console.error('❌ Load user data error:', error);
-                    this.showToastMessage('Loading local data instead', 'info');
-                    this.loadLocalData();
-                });
-        },
-
-        // LOAD LOCAL DATA
-        loadLocalData() {
-            try {
-                const savedSkills = localStorage.getItem('portfolioSkills');
-                const savedProjects = localStorage.getItem('portfolioProjects');
-                const savedProfile = localStorage.getItem('portfolioProfile');
-                const savedSocialLinks = localStorage.getItem('portfolioSocialLinks');
-                
-                if (savedSkills) this.skills = JSON.parse(savedSkills);
-                if (savedProjects) {
-                    this.projects = JSON.parse(savedProjects);
-                    this.updateProjectSlides();
-                }
-                if (savedProfile) Object.assign(this.profile, JSON.parse(savedProfile));
-                if (savedSocialLinks) this.socialLinks = JSON.parse(savedSocialLinks);
-                
-                console.log('✅ Local data loaded');
-            } catch (error) {
-                console.error('❌ Error loading local data:', error);
-            }
-        },
-
-        // MERGE USER DATA
-        mergeUserData(userData) {
-            try {
-                if (userData.skills && Array.isArray(userData.skills)) {
-                    this.skills = userData.skills;
-                }
-                
-                if (userData.projects && Array.isArray(userData.projects)) {
-                    this.projects = userData.projects;
-                    this.updateProjectSlides();
-                }
-                
-                if (userData.profile) {
-                    Object.assign(this.profile, userData.profile);
-                }
-                
-                if (userData.socialLinks) {
-                    this.socialLinks = userData.socialLinks.map(link => ({
-                        platform: link.platform,
-                        url: link.url || '',
-                        icon: link.icon || this.getSocialIcon(link.platform)
-                    }));
-                }
-                
-                this.saveToLocalStorage();
-                
-            } catch (error) {
-                console.error('Error merging user data:', error);
-            }
-        },
-
-        // PUBLISH TO PUBLIC (hanya di edit mode)
-        publishToPublic() {
-            if (!this.userId) {
-                this.showToastMessage('Please login first to publish', 'warning');
-                setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            if (!this.firestore) {
-                this.showToastMessage('Firebase Firestore not available', 'error');
-                return;
-            }
-            
-            if (!this.isOnline) {
-                this.showToastMessage('You are offline. Cannot publish to cloud.', 'warning');
-                return;
-            }
-            
-            if (!confirm('Publish your changes to make them publicly visible?')) {
-                return;
-            }
-            
-            this.isSyncing = true;
-            this.showToastMessage('Publishing your portfolio...', 'info');
-            
-            const data = {
-                skills: this.skills,
-                projects: this.projects,
-                profile: this.profile,
-                socialLinks: this.socialLinks,
-                lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedBy: this.userEmail,
-                version: '2.0',
-                published: true
-            };
-            
-            console.log('Publishing data to public collection...');
-            
-            this.firestore.collection('publicPortfolios').doc('main')
-                .set(data, { merge: true })
-                .then(() => {
-                    console.log('✅ Published to public collection');
-                    
-                    return this.firestore.collection('portfolios').doc(this.userId)
-                        .set({ ...data, userId: this.userId }, { merge: true });
-                })
-                .then(() => {
-                    console.log('✅ Saved to user collection');
-                    
-                    this.lastSyncTime = new Date().toLocaleTimeString();
-                    this.dataStatus = 'synced';
-                    this.isSyncing = false;
-                    
-                    this.showToastMessage('✅ Portfolio published successfully!', 'success');
-                    this.addToSyncHistory('Published data', 'success');
-                    
-                })
-                .catch((error) => {
-                    console.error('❌ Publish error:', error);
-                    this.isSyncing = false;
-                    
-                    let errorMessage = 'Publish failed';
-                    if (error.code === 'permission-denied') {
-                        errorMessage = 'Permission denied. You may not have write access.';
-                    }
-                    
-                    this.showToastMessage(`❌ ${errorMessage}`, 'error');
-                    this.addToSyncHistory('Publish failed', 'error');
-                });
-        },
-
-        // SIGN OUT
-        signOut() {
-            if (!this.auth) {
-                this.showToastMessage('Firebase Auth not initialized', 'warning');
-                return;
-            }
-            
-            if (confirm('Are you sure you want to sign out?')) {
-                this.auth.signOut()
-                    .then(() => {
-                        console.log('✅ Sign out successful');
-                        
-                        localStorage.removeItem('firebase_auth');
-                        this.userId = null;
-                        this.userEmail = null;
-                        
-                        this.isPublicMode = true;
-                        
-                        this.loadPublicData();
-                        
-                        this.showToastMessage('Signed out successfully', 'success');
-                        
-                    })
-                    .catch((error) => {
-                        console.error('Sign out error:', error);
-                        this.showToastMessage('Sign out failed', 'error');
-                    });
-            }
-        },
-
-        // METHOD HELPER UNTUK PUBLIC MODE
-        setupEventListeners() {
-            window.addEventListener('scroll', this.handleScroll.bind(this));
-            window.addEventListener('resize', this.handleResize.bind(this));
-            
-            window.addEventListener('beforeunload', () => {
-                if (!this.isPublicMode) {
-                    this.saveToLocalStorage();
-                }
-            });
-        },
-
-        handleScroll() {
-            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            this.scrollProgress = height > 0 ? (winScroll / height) * 100 : 0;
-            
-            this.isAtTop = window.scrollY < 50;
-            
-            const sections = ['home', 'skills', 'projects', 'contact'];
-            for (const section of sections) {
-                const element = document.getElementById(section);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top <= 100 && rect.bottom >= 100) {
-                        this.activeSection = section;
-                        break;
-                    }
-                }
-            }
-        },
-
-        handleResize() {
-            if (window.innerWidth < 768) {
-                this.projectsPerSlide = 1;
-            } else if (window.innerWidth < 1024) {
-                this.projectsPerSlide = 2;
-            } else {
-                this.projectsPerSlide = 3;
-            }
-            
-            this.updateProjectSlides();
-        },
-
-        toggleTheme() {
-            this.isDark = !this.isDark;
-            localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
-            
-            if (window.pJSDom && window.pJSDom.length > 0) {
-                const particles = window.pJSDom[0].pJS;
-                if (particles) {
-                    particles.particles.color.value = this.isDark ? "#ffffff" : "#6366f1";
-                    particles.particles.line_linked.color = this.isDark ? "#ffffff" : "#6366f1";
-                    particles.fn.particlesRefresh();
-                }
-            }
-        },
-
-        scrollTo(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                const offset = 80;
-                const elementPosition = element.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-            this.mobileMenu = false;
-        },
-
-        // MODAL METHODS dengan pengecekan isPublicMode - FIXED
-        openModal(modalName) {
-            if (this.isPublicMode && (modalName === 'addSkill' || modalName === 'addProject' || modalName === 'editProfile' || modalName === 'deleteConfirm')) {
-                this.showToastMessage('Please switch to edit mode to make changes', 'info');
-                if (!this.userId) {
-                    setTimeout(() => {
-                        this.initFirebaseAuth();
-                    }, 1000);
-                }
-                return;
-            }
-            this.modals[modalName] = true;
-            document.body.style.overflow = 'hidden';
-        },
-
-        closeModal(modalName) {
-            this.modals[modalName] = false;
-            document.body.style.overflow = 'auto';
-            
-            if (modalName === 'addSkill') {
-                this.resetSkillForm();
-            } else if (modalName === 'addProject') {
-                this.resetProjectForm();
-            }
-        },
-
-        // SKILL METHODS dengan pengecekan isPublicMode - FIXED
-        addNewSkill() {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to add skills', 'info');
-                return;
-            }
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
-                setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            try {
-                this.isSubmitting = true;
-
-                const newSkill = {
-                    id: this.editingSkill ? this.editingSkill.id : Date.now(),
-                    ...this.newSkill,
-                    icon: this.getSkillIcon(this.newSkill.category)
-                };
-
-                if (this.editingSkill) {
-                    const index = this.skills.findIndex(s => s.id === this.editingSkill.id);
-                    if (index !== -1) {
-                        this.skills[index] = newSkill;
-                    }
-                    this.showToastMessage('Skill updated successfully', 'success');
-                } else {
-                    this.skills.push(newSkill);
-                    this.showToastMessage('Skill added successfully', 'success');
-                }
-
-                this.saveToLocalStorage();
-                this.closeModal('addSkill');
-                this.resetSkillForm();
-            } catch (error) {
-                this.showToastMessage('Error saving skill', 'error');
-                console.error('Error adding skill:', error);
-            } finally {
-                this.isSubmitting = false;
-            }
-        },
-
-        // PROJECT METHODS dengan pengecekan isPublicMode - FIXED
-        addNewProject() {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to add projects', 'info');
-                return;
-            }
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
-                setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            try {
-                this.isSubmitting = true;
-
-                const newProject = {
-                    id: this.editingProject ? this.editingProject.id : Date.now(),
-                    ...this.newProject,
-                    date: new Date().getFullYear().toString()
-                };
-
-                if (this.editingProject) {
-                    const index = this.projects.findIndex(p => p.id === this.editingProject.id);
-                    if (index !== -1) {
-                        this.projects[index] = newProject;
-                    }
-                    this.showToastMessage('Project updated successfully', 'success');
-                } else {
-                    this.projects.push(newProject);
-                    this.showToastMessage('Project added successfully', 'success');
-                }
-
-                this.updateProjectSlides();
-                this.saveToLocalStorage();
-                this.closeModal('addProject');
-                this.resetProjectForm();
-            } catch (error) {
-                this.showToastMessage('Error saving project', 'error');
-                console.error('Error adding project:', error);
-            } finally {
-                this.isSubmitting = false;
-            }
-        },
-
-        // DELETE METHODS dengan pengecekan isPublicMode - FIXED
-        confirmDelete(type, id, name) {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to delete items', 'info');
-                return;
-            }
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
-                setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            this.deleteItem = { type, id, name };
-            this.openModal('deleteConfirm');
-        },
-
-        executeDelete() {
-            if (this.isPublicMode) return;
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
-                return;
-            }
-            
-            if (this.deleteItem.type === 'skill') {
-                this.skills = this.skills.filter(skill => skill.id !== this.deleteItem.id);
-                this.showToastMessage('Skill deleted successfully', 'success');
-            } else if (this.deleteItem.type === 'project') {
-                this.projects = this.projects.filter(project => project.id !== this.deleteItem.id);
-                this.updateProjectSlides();
-                this.showToastMessage('Project deleted successfully', 'success');
-            }
-            
-            this.saveToLocalStorage();
-            this.closeModal('deleteConfirm');
-        },
-
-        // PROFILE METHODS dengan pengecekan isPublicMode - FIXED
-        updateProfile() {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to update profile', 'info');
-                return;
-            }
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
-                setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            try {
-                this.saveToLocalStorage();
-                this.showToastMessage('Profile updated successfully', 'success');
-                this.closeModal('editProfile');
-            } catch (error) {
-                this.showToastMessage('Error updating profile', 'error');
-                console.error('Error updating profile:', error);
-            }
-        },
-
-        // CONTACT FORM (bisa digunakan di public mode)
-        submitContact() {
-            try {
-                this.isSubmitting = true;
-                
-                if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) {
-                    this.showToastMessage('Please fill in all fields', 'error');
-                    this.isSubmitting = false;
-                    return;
-                }
-                
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(this.contactForm.email)) {
-                    this.showToastMessage('Please enter a valid email address', 'error');
-                    this.isSubmitting = false;
-                    return;
-                }
-                
-                console.log('Starting email sending process...');
-                
-                const serviceID = 'service_fkkrcdr';
-                const templateID = 'template_g9cfnn2';
-                const publicKey = 'GIIXeb6Xt3whWfqvo';
-                
-                if (typeof emailjs === 'undefined') {
-                    console.error('EmailJS is not loaded');
-                    this.showToastMessage('Email service not available. Please refresh the page.', 'error');
-                    this.isSubmitting = false;
-                    return;
-                }
-                
-                emailjs.init(publicKey);
-                
-                const templateParams = {
-                    from_name: this.contactForm.name,
-                    from_email: this.contactForm.email,
-                    message: this.contactForm.message,
-                    to_name: this.profile.name,
-                    to_email: this.profile.email,
-                    reply_to: this.contactForm.email
-                };
-                
-                emailjs.send(serviceID, templateID, templateParams)
-                    .then((response) => {
-                        console.log('Email response:', response);
-                        
-                        if (response.status === 200) {
-                            this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
-                            
-                            this.contactForm = {
-                                name: '',
-                                email: '',
-                                message: ''
-                            };
-                        } else {
-                            throw new Error(`EmailJS responded with status: ${response.status}`);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Email sending error:', error);
-                        
-                        let errorMessage = 'Error sending message. Please try again later.';
-                        
-                        if (error.text) {
-                            console.error('EmailJS error text:', error.text);
-                        }
-                        
-                        this.showToastMessage(errorMessage, 'error');
-                    })
-                    .finally(() => {
-                        this.isSubmitting = false;
-                    });
-                
-            } catch (error) {
-                console.error('Email sending error:', error);
-                this.showToastMessage('Error sending message. Please try again later.', 'error');
-                this.isSubmitting = false;
-            }
-        },
-
-        // HELPER METHODS
-        generateDefaultAvatar() {
-            const name = this.profile.name || 'John Doe';
-            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-            const bgColor = '6366f1';
-            const textColor = 'ffffff';
-            const size = '400';
-            
-            return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${bgColor}&color=${textColor}&size=${size}&bold=true&font-size=0.5`;
-        },
-
-        showToastMessage(message, type = 'success') {
-            this.toastMessage = message;
-            this.toastType = type;
-            this.showToast = true;
-            
-            setTimeout(() => {
-                this.showToast = false;
-            }, 3000);
-        },
-
-        initParticles() {
-            if (typeof particlesJS === 'function') {
-                particlesJS('particles-js', {
-                    particles: {
-                        number: { 
-                            value: 80, 
-                            density: { 
-                                enable: true, 
-                                value_area: 800 
-                            } 
-                        },
-                        color: { 
-                            value: this.isDark ? "#ffffff" : "#6366f1" 
-                        },
-                        shape: { 
-                            type: "circle" 
-                        },
-                        opacity: { 
-                            value: 0.3, 
-                            random: true
-                        },
-                        size: { 
-                            value: 3, 
-                            random: true
-                        },
-                        line_linked: {
-                            enable: true,
-                            distance: 150,
-                            color: this.isDark ? "#ffffff" : "#6366f1",
-                            opacity: 0.2,
-                            width: 1
-                        },
-                        move: {
-                            enable: true,
-                            speed: 1,
-                            direction: "none",
-                            random: true,
-                            straight: false
-                        }
-                    },
-                    interactivity: {
-                        events: {
-                            onhover: { 
-                                enable: true, 
-                                mode: "grab" 
-                            }
-                        }
-                    }
-                });
-            }
-        },
-
-        // DATA MANAGEMENT METHODS dengan pengecekan isPublicMode
-        saveToLocalStorage() {
-            if (this.isPublicMode && !this.userId) return;
-            
-            try {
-                localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
-                localStorage.setItem('portfolioProjects', JSON.stringify(this.projects));
-                localStorage.setItem('portfolioProfile', JSON.stringify(this.profile));
-                
-                const linksToSave = this.socialLinks.map(link => ({
-                    platform: link.platform,
-                    url: link.url,
-                    icon: link.icon
-                }));
-                localStorage.setItem('portfolioSocialLinks', JSON.stringify(linksToSave));
-                
-                localStorage.setItem('portfolioCacheTime', new Date().toISOString());
-                
-                console.log('✅ Data saved locally');
-                this.calculateStorageUsage();
-                
-            } catch (error) {
-                console.error('❌ Save error:', error);
-            }
-        },
-
-        calculateStorageUsage() {
-            try {
-                let totalBytes = 0;
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith('portfolio')) {
-                        const value = localStorage.getItem(key);
-                        totalBytes += new Blob([value]).size;
-                    }
-                }
-                
-                this.storageUsage = this.formatBytes(totalBytes);
-            } catch (error) {
-                console.error('Error calculating storage usage:', error);
-                this.storageUsage = 'Unknown';
-            }
-        },
-
-        formatBytes(bytes, decimals = 2) {
-            if (bytes === 0) return '0 Bytes';
-            
-            const k = 1024;
-            const dm = decimals < 0 ? 0 : decimals;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        },
-
-        addToSyncHistory(action, status) {
-            this.syncHistory.unshift({
-                action,
-                status,
-                timestamp: new Date().toISOString()
-            });
-            
-            if (this.syncHistory.length > 10) {
-                this.syncHistory.pop();
-            }
-            
-            localStorage.setItem('portfolioSyncHistory', JSON.stringify(this.syncHistory));
-        },
-
-        // PROJECT SLIDER METHODS
-        updateProjectSlides() {
-            this.projectSlides = [];
-            
-            if (this.projects.length <= 6) {
-                this.projectView = 'grid';
-                return;
-            }
-            
-            for (let i = 0; i < this.projects.length; i += this.projectsPerSlide) {
-                this.projectSlides.push(this.projects.slice(i, i + this.projectsPerSlide));
-            }
-            
-            if (this.currentSlide >= this.projectSlides.length) {
-                this.currentSlide = 0;
-            }
-        },
-
-        setProjectView(view) {
-            this.projectView = view;
-            if (view === 'slider') {
-                this.currentSlide = 0;
-            }
-        },
-
-        nextSlide() {
-            if (this.currentSlide < this.projectSlides.length - 1) {
-                this.currentSlide++;
-            }
-        },
-
-        prevSlide() {
-            if (this.currentSlide > 0) {
-                this.currentSlide--;
-            }
-        },
-
-        goToSlide(index) {
-            if (index >= 0 && index < this.projectSlides.length) {
-                this.currentSlide = index;
-            }
-        },
-
-        toggleAutoSlide() {
-            this.autoSlideEnabled = !this.autoSlideEnabled;
-            
-            if (this.autoSlideEnabled) {
-                this.autoSlideInterval = setInterval(() => {
-                    if (this.currentSlide < this.projectSlides.length - 1) {
-                        this.currentSlide++;
-                    } else {
-                        this.currentSlide = 0;
-                    }
-                }, 5000);
-            } else if (this.autoSlideInterval) {
-                clearInterval(this.autoSlideInterval);
-                this.autoSlideInterval = null;
-            }
-        },
-
-        // CATEGORY & ICON HELPER METHODS
-        getCategoryName(category) {
-            const names = {
-                'frontend': 'Frontend',
-                'backend': 'Backend',
-                'database': 'Database',
-                'mobile': 'Mobile',
-                'devops': 'DevOps',
-                'cloud': 'Cloud',
-                'tools': 'Tools',
-                'design': 'Design',
-                'ai': 'AI/ML'
-            };
-            return names[category] || category;
-        },
-
-        getCategoryIcon(category) {
-            const icons = {
-                'frontend': 'fas fa-code',
-                'backend': 'fas fa-server',
-                'database': 'fas fa-database',
-                'mobile': 'fas fa-mobile-alt',
-                'devops': 'fas fa-cogs',
-                'cloud': 'fas fa-cloud',
-                'tools': 'fas fa-tools',
-                'design': 'fas fa-palette',
-                'ai': 'fas fa-brain'
-            };
-            return icons[category] || 'fas fa-code';
-        },
-
-        getSkillCategoryColor(category) {
-            const colors = {
-                'frontend': 'bg-blue-500',
-                'backend': 'bg-green-500',
-                'database': 'bg-yellow-500',
-                'mobile': 'bg-purple-500',
-                'devops': 'bg-red-500',
-                'cloud': 'bg-indigo-500',
-                'tools': 'bg-pink-500',
-                'design': 'bg-teal-500',
-                'ai': 'bg-orange-500'
-            };
-            return colors[category] || 'bg-slate-500';
-        },
-
-        getSkillIcon(category) {
-            return this.getCategoryIcon(category);
-        },
-
-        getProficiencyLevel(level) {
-            if (level >= 90) return 'Expert';
-            if (level >= 70) return 'Advanced';
-            if (level >= 50) return 'Intermediate';
-            if (level >= 30) return 'Beginner';
-            return 'Novice';
-        },
-
-        getProficiencyClass(level) {
-            if (level >= 90) return 'status-success';
-            if (level >= 70) return 'status-success';
-            if (level >= 50) return 'status-warning';
-            return 'status-error';
-        },
-
-        getProficiencyIcon(level) {
-            if (level >= 90) return 'fas fa-fire';
-            if (level >= 70) return 'fas fa-chart-line';
-            if (level >= 50) return 'fas fa-seedling';
-            return 'fas fa-leaf';
-        },
-
-        getProjectTypeName(type) {
-            const names = {
-                'web': 'Web App',
-                'mobile': 'Mobile App',
-                'api': 'API',
-                'desktop': 'Desktop',
-                'ai': 'AI/ML',
-                'saas': 'SaaS'
-            };
-            return names[type] || type;
-        },
-
-        getTechIcon(tech) {
-            const iconMap = {
-                'React': 'fab fa-react',
-                'Vue.js': 'fab fa-vuejs',
-                'Angular': 'fab fa-angular',
-                'Node.js': 'fab fa-node-js',
-                'Python': 'fab fa-python',
-                'Django': 'fab fa-python',
-                'Flask': 'fab fa-python',
-                'Java': 'fab fa-java',
-                'PHP': 'fab fa-php',
-                'Laravel': 'fab fa-laravel',
-                'Ruby': 'fab fa-ruby',
-                'Rails': 'fab fa-ruby',
-                'Go': 'fab fa-golang',
-                'Rust': 'fab fa-rust',
-                'Swift': 'fab fa-swift',
-                'Kotlin': 'fab fa-android',
-                'C#': 'fab fa-microsoft',
-                '.NET': 'fab fa-microsoft',
-                'Docker': 'fab fa-docker',
-                'Kubernetes': 'fab fa-docker',
-                'AWS': 'fab fa-aws',
-                'Azure': 'fab fa-microsoft',
-                'Google Cloud': 'fab fa-google',
-                'Firebase': 'fab fa-firebase',
-                'MongoDB': 'fas fa-database',
-                'MySQL': 'fas fa-database',
-                'PostgreSQL': 'fas fa-database',
-                'Redis': 'fas fa-database',
-                'SQLite': 'fas fa-database',
-                'Git': 'fab fa-git-alt',
-                'GitHub': 'fab fa-github',
-                'GitLab': 'fab fa-gitlab',
-                'Bitbucket': 'fab fa-bitbucket',
-                'HTML5': 'fab fa-html5',
-                'CSS3': 'fab fa-css3-alt',
-                'JavaScript': 'fab fa-js',
-                'TypeScript': 'fab fa-js',
-                'SASS': 'fab fa-sass',
-                'Bootstrap': 'fab fa-bootstrap',
-                'Tailwind CSS': 'fas fa-paint-brush',
-                'Material-UI': 'fas fa-palette',
-                'Figma': 'fab fa-figma',
-                'Adobe XD': 'fas fa-palette',
-                'Sketch': 'fas fa-palette',
-                'Jest': 'fas fa-vial',
-                'Cypress': 'fas fa-vial',
-                'Webpack': 'fas fa-cube',
-                'Babel': 'fas fa-cog',
-                'ESLint': 'fas fa-code',
-                'Prettier': 'fas fa-code',
-                'Nginx': 'fas fa-server',
-                'Apache': 'fas fa-server',
-                'Linux': 'fab fa-linux',
-                'Windows': 'fab fa-windows',
-                'macOS': 'fab fa-apple'
-            };
-            
-            return iconMap[tech] || 'fas fa-code';
-        },
-
-        // SOCIAL MEDIA HELPER METHODS
-        getSocialIcon(platform) {
-            const iconMap = {
-                'github': 'fab fa-github',
-                'gitlab': 'fab fa-gitlab',
-                'bitbucket': 'fab fa-bitbucket',
-                'linkedin': 'fab fa-linkedin-in',
-                'twitter': 'fab fa-twitter',
-                'instagram': 'fab fa-instagram',
-                'facebook': 'fab fa-facebook-f',
-                'whatsapp': 'fab fa-whatsapp',
-                'telegram': 'fab fa-telegram',
-                'discord': 'fab fa-discord',
-                'youtube': 'fab fa-youtube',
-                'tiktok': 'fab fa-tiktok',
-                'twitch': 'fab fa-twitch',
-                'medium': 'fab fa-medium',
-                'devto': 'fab fa-dev',
-                'hashnode': 'fab fa-hashnode',
-                'dribbble': 'fab fa-dribbble',
-                'behance': 'fab fa-behance',
-                'figma': 'fab fa-figma',
-                'stackoverflow': 'fab fa-stack-overflow',
-                'codepen': 'fab fa-codepen',
-                'upwork': 'fab fa-upwork',
-                'fiverr': 'fas fa-dollar-sign',
-                'freelancer': 'fas fa-briefcase',
-                'udemy': 'fas fa-graduation-cap',
-                'coursera': 'fas fa-graduation-cap',
-                'pluralsight': 'fas fa-graduation-cap',
-                'notion': 'fas fa-sticky-note',
-                'email': 'fas fa-envelope',
-                'personal': 'fas fa-globe',
-                'other': 'fas fa-external-link-alt'
-            };
-            
-            return iconMap[platform] || 'fas fa-external-link-alt';
-        },
-
-        getSocialPlaceholder(platform) {
-            const placeholders = {
-                'github': 'https://github.com/username',
-                'linkedin': 'https://linkedin.com/in/username',
-                'twitter': 'https://twitter.com/username',
-                'instagram': 'https://instagram.com/username',
-                'facebook': 'https://facebook.com/username',
-                'whatsapp': 'https://wa.me/phone-number',
-                'telegram': 'https://t.me/username',
-                'discord': 'https://discord.gg/invite',
-                'youtube': 'https://youtube.com/c/username',
-                'tiktok': 'https://tiktok.com/@username',
-                'twitch': 'https://twitch.tv/username',
-                'medium': 'https://medium.com/@username',
-                'devto': 'https://dev.to/username',
-                'hashnode': 'https://username.hashnode.dev',
-                'dribbble': 'https://dribbble.com/username',
-                'behance': 'https://behance.net/username',
-                'figma': 'https://figma.com/@username',
-                'stackoverflow': 'https://stackoverflow.com/users/username',
-                'codepen': 'https://codepen.io/username',
-                'upwork': 'https://upwork.com/freelancers/~username',
-                'fiverr': 'https://fiverr.com/username',
-                'freelancer': 'https://freelancer.com/u/username',
-                'udemy': 'https://udemy.com/user/username',
-                'coursera': 'https://coursera.org/user/username',
-                'pluralsight': 'https://pluralsight.com/profile/username',
-                'notion': 'https://notion.so/username',
-                'email': 'mailto:email@example.com',
-                'personal': 'https://yourwebsite.com',
-                'other': 'https://example.com'
-            };
-            return placeholders[platform] || 'https://example.com';
-        },
-
-        getSocialPlatformName(platform) {
-            const names = {
-                'github': 'GitHub',
-                'gitlab': 'GitLab',
-                'bitbucket': 'Bitbucket',
-                'linkedin': 'LinkedIn',
-                'twitter': 'Twitter',
-                'instagram': 'Instagram',
-                'facebook': 'Facebook',
-                'whatsapp': 'WhatsApp',
-                'telegram': 'Telegram',
-                'discord': 'Discord',
-                'youtube': 'YouTube',
-                'tiktok': 'TikTok',
-                'twitch': 'Twitch',
-                'medium': 'Medium',
-                'devto': 'Dev.to',
-                'hashnode': 'Hashnode',
-                'dribbble': 'Dribbble',
-                'behance': 'Behance',
-                'figma': 'Figma',
-                'stackoverflow': 'Stack Overflow',
-                'codepen': 'CodePen',
-                'upwork': 'Upwork',
-                'fiverr': 'Fiverr',
-                'freelancer': 'Freelancer',
-                'udemy': 'Udemy',
-                'coursera': 'Coursera',
-                'pluralsight': 'Pluralsight',
-                'notion': 'Notion',
-                'email': 'Email',
-                'personal': 'Personal Website',
-                'other': 'Other'
-            };
-            return names[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
-        },
-
-        getSocialPlatformColorClass(platform) {
-            const colorMap = {
-                'github': 'bg-gray-800 hover:bg-gray-900',
-                'gitlab': 'bg-orange-600 hover:bg-orange-700',
-                'bitbucket': 'bg-blue-600 hover:bg-blue-700',
-                'linkedin': 'bg-blue-700 hover:bg-blue-800',
-                'twitter': 'bg-blue-400 hover:bg-blue-500',
-                'instagram': 'bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600',
-                'facebook': 'bg-blue-600 hover:bg-blue-700',
-                'whatsapp': 'bg-green-500 hover:bg-green-600',
-                'telegram': 'bg-blue-500 hover:bg-blue-600',
-                'discord': 'bg-indigo-600 hover:bg-indigo-700',
-                'youtube': 'bg-red-600 hover:bg-red-700',
-                'tiktok': 'bg-black hover:bg-gray-900',
-                'twitch': 'bg-purple-600 hover:bg-purple-700',
-                'medium': 'bg-gray-800 hover:bg-gray-900',
-                'devto': 'bg-gray-900 hover:bg-black',
-                'hashnode': 'bg-blue-600 hover:bg-blue-700',
-                'dribbble': 'bg-pink-500 hover:bg-pink-600',
-                'behance': 'bg-blue-800 hover:bg-blue-900',
-                'figma': 'bg-orange-500 hover:bg-orange-600',
-                'stackoverflow': 'bg-orange-500 hover:bg-orange-600',
-                'codepen': 'bg-gray-800 hover:bg-gray-900',
-                'upwork': 'bg-green-600 hover:bg-green-700',
-                'fiverr': 'bg-green-500 hover:bg-green-600',
-                'freelancer': 'bg-blue-500 hover:bg-blue-600',
-                'udemy': 'bg-purple-700 hover:bg-purple-800',
-                'coursera': 'bg-blue-800 hover:bg-blue-900',
-                'pluralsight': 'bg-orange-500 hover:bg-orange-600',
-                'notion': 'bg-gray-800 hover:bg-gray-900',
-                'email': 'bg-gray-600 hover:bg-gray-700',
-                'personal': 'bg-indigo-600 hover:bg-indigo-700',
-                'other': 'bg-slate-600 hover:bg-slate-700'
-            };
-            return colorMap[platform] || 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700';
-        },
-
-        isValidUrl(url) {
-            try {
-                new URL(url);
-                return true;
-            } catch (_) {
-                return false;
-            }
-        },
-
-        getSocialUsername(url) {
-            if (!url) return '';
-            try {
-                const urlObj = new URL(url);
-                const pathname = urlObj.pathname;
-                if (url.includes('github.com')) return pathname.split('/')[1] || '';
-                if (url.includes('linkedin.com/in/')) return pathname.split('/in/')[1] || '';
-                if (url.includes('twitter.com/')) return pathname.split('/')[1] || '';
-                if (url.includes('instagram.com/')) return pathname.split('/')[1] || '';
-                return urlObj.hostname;
-            } catch (_) {
-                return '';
-            }
-        },
-
-        // RESET METHODS
-        resetSkillForm() {
-            this.newSkill = {
+            // STATE YANG DIUPDATE: Load status
+            isLoading: true,
+            loadingMessage: 'Loading portfolio...',
+            loadingProgress: 0,
+            portfolioDataLoaded: false,
+
+            // State lainnya tetap sama
+            isDark: true,
+            mobileMenu: false,
+            activeSection: 'home',
+            scrollProgress: 0,
+            isAtTop: true,
+            showToast: false,
+            toastMessage: '',
+            toastType: 'success',
+            showDataPanel: false,
+            techInput: '',
+            certificationInput: '',
+            tagInput: '',
+            activeSkillCategory: 'all',
+            activeSkillTab: 'basic',
+            activeProjectTab: 'basic',
+            selectedProject: null,
+            editingSkill: null,
+            editingProject: null,
+            uploadingImage: false,
+            uploadingProfileImage: false,
+            isSubmitting: false,
+            deleteItem: { type: '', id: null, name: '' },
+
+            // Firebase State
+            firebaseApp: null,
+            firestore: null,
+            auth: null,
+            userId: null,
+            userEmail: null,
+            isOnline: false,
+            isSyncing: false,
+            syncHistory: [],
+            lastSyncTime: 'Never',
+
+            // Data Status
+            dataStatus: 'synced',
+            storageAvailable: true,
+            dataIntegrity: false,
+            storageUsage: '0 KB',
+
+            // Project Slider State
+            projectView: 'grid',
+            currentSlide: 0,
+            projectSlides: [],
+            autoSlideEnabled: false,
+            autoSlideInterval: null,
+            projectsPerSlide: 3,
+
+            // Storage Configuration
+            storageConfig: {
+                maxImageSize: 1 * 1024 * 1024,
+                compressionQuality: 0.7,
+                enableCompression: true,
+                maxTotalSize: 5 * 1024 * 1024,
+                backupCount: 3
+            },
+
+            // Profile Data (akan di-override oleh data dari Firebase)
+            profile: { ...predefinedPublicData.profile },
+            skills: [...predefinedPublicData.skills],
+            projects: [...predefinedPublicData.projects],
+            socialLinks: [...predefinedPublicData.socialLinks],
+            portfolioYear: new Date().getFullYear(),
+
+            // Navigation
+            navItems: [
+                { name: 'Home', href: '#home' },
+                { name: 'Skills', href: '#skills' },
+                { name: 'Projects', href: '#projects' },
+                { name: 'Contact', href: '#contact' }
+            ],
+
+            // Skill Categories
+            skillCategories: [
+                'frontend', 'backend', 'database', 'mobile', 
+                'devops', 'cloud', 'tools', 'design', 'ai'
+            ],
+
+            // Popular Technologies
+            popularTechnologies: [
+                'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 
+                'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'Bootstrap', 'SASS/SCSS',
+                'Node.js', 'Express.js', 'Python', 'Django', 'Flask', 'PHP', 'Laravel', 
+                'Java', 'Spring Boot', 'Go', 'Ruby', 'Ruby on Rails', 'C#', '.NET',
+                'MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'Redis', 'SQLite', 'Supabase',
+                'React Native', 'Flutter', 'Electron', 'Swift', 'Kotlin',
+                'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Vercel', 'Netlify',
+                'Git', 'GitHub Actions', 'Jenkins', 'Nginx',
+                'GraphQL', 'REST API', 'Jest', 'Cypress', 'Webpack', 'Figma', 'Adobe XD'
+            ],
+
+            // New Skill Data
+            newSkill: {
                 name: '',
                 category: 'frontend',
                 level: 50,
@@ -5138,14 +3829,10 @@
                 certifications: [],
                 tags: [],
                 customId: ''
-            };
-            this.certificationInput = '';
-            this.tagInput = '';
-            this.editingSkill = null;
-        },
+            },
 
-        resetProjectForm() {
-            this.newProject = {
+            // New Project Data
+            newProject: {
                 name: '',
                 description: '',
                 type: 'web',
@@ -5162,429 +3849,1877 @@
                 client: '',
                 challenges: '',
                 features: []
-            };
-            this.techInput = '';
-            this.editingProject = null;
-        },
+            },
 
-        // EDIT SKILL/PROJECT METHODS - FIXED
-        editSkill(skill) {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to edit skills', 'info');
-                return;
-            }
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
+            // Contact Form
+            contactForm: {
+                name: '',
+                email: '',
+                message: ''
+            },
+
+            // Modals
+            modals: {
+                projectDetail: false,
+                addProject: false,
+                addSkill: false,
+                editProfile: false,
+                deleteConfirm: false
+            },
+
+            // COMPUTED PROPERTIES
+            get filteredSkills() {
+                if (this.activeSkillCategory === 'all') {
+                    return this.skills;
+                }
+                return this.skills.filter(skill => skill.category === this.activeSkillCategory);
+            },
+
+            get averageSkillLevel() {
+                if (this.skills.length === 0) return 0;
+                const total = this.skills.reduce((sum, skill) => sum + skill.level, 0);
+                return Math.round(total / this.skills.length);
+            },
+
+            get totalProjectCount() {
+                return this.skills.reduce((total, skill) => total + skill.projects, 0);
+            },
+
+            get totalExperienceYears() {
+                const startYear = 2023;
+                const currentYear = new Date().getFullYear();
+                return Math.max(1, currentYear - startYear);
+            },
+
+            get totalItems() {
+                return this.skills.length + this.projects.length;
+            },
+
+            get connectionStatusText() {
+                if (!this.isOnline) return 'Offline';
+                if (this.isSyncing) return 'Syncing...';
+                if (this.userId) return 'Cloud Sync Active';
+                return 'Cloud Data Loaded';
+            },
+
+            get dataStatusText() {
+                if (this.dataStatus === 'synced') return 'Data Synced';
+                if (this.dataStatus === 'unsynced') return 'Data Not Synced';
+                return 'Data Error';
+            },
+
+            get profileImageSrc() {
+                if (!this.profile.image || this.profile.image.trim() === '') {
+                    return this.generateDefaultAvatar();
+                }
+                return this.profile.image;
+            },
+
+            // INITIALIZATION
+            init() {
+                console.log('🚀 Portfolio initialization started');
+                
+                this.setupEventListeners();
+                
+                const savedTheme = localStorage.getItem('theme');
+                this.isDark = savedTheme ? savedTheme === 'dark' : true;
+
+                this.initParticles();
+
+                this.isOnline = navigator.onLine;
+                console.log('🌐 Online status:', this.isOnline);
+                
+                window.addEventListener('online', () => {
+                    this.isOnline = true;
+                    console.log('🌐 Went online');
+                    this.showToastMessage('You are back online', 'success');
+                    if (this.isOnline) {
+                        setTimeout(() => this.initFirebasePublic(), 1000);
+                    }
+                });
+                
+                window.addEventListener('offline', () => {
+                    this.isOnline = false;
+                    console.log('🌐 Went offline');
+                    this.showToastMessage('You are offline', 'warning');
+                });
+
+                console.log('⏳ Initializing Firebase for public access...');
                 setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            this.editingSkill = { ...skill };
-            this.newSkill = { ...skill };
-            this.openModal('addSkill');
-        },
-
-        editProject(project) {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to edit projects', 'info');
-                return;
-            }
-            
-            if (!this.userId) {
-                this.showToastMessage('Please login first', 'warning');
+                    this.initFirebasePublic();
+                }, 1000);
+                
+                this.updateProjectSlides();
+                
                 setTimeout(() => {
-                    this.initFirebaseAuth();
-                }, 500);
-                return;
-            }
-            
-            this.editingProject = { ...project };
-            this.newProject = { ...project };
-            this.openModal('addProject');
-        },
+                    this.isLoading = false;
+                    console.log('✅ Portfolio loaded successfully');
+                }, 1500);
+            },
 
-        viewProject(projectId) {
-            this.selectedProject = this.projects.find(p => p.id === projectId);
-            this.openModal('projectDetail');
-        },
+            // FIREBASE INITIALIZATION UNTUK PUBLIC ACCESS
+            initFirebasePublic() {
+                console.log('🚀 Attempting to initialize Firebase for public access...');
+                
+                try {
+                    if (typeof firebase === 'undefined') {
+                        console.error('❌ Firebase SDK not loaded!');
+                        this.showToastMessage('Firebase SDK not loaded. Using predefined data.', 'warning');
+                        this.usePredefinedData();
+                        return;
+                    }
+                    
+                    console.log('✅ Firebase SDK is loaded');
+                    
+                    try {
+                        if (!firebase.apps || firebase.apps.length === 0) {
+                            console.log('🔄 Initializing new Firebase app...');
+                            this.firebaseApp = firebase.initializeApp(firebaseConfig);
+                            console.log('✅ Firebase app initialized');
+                        } else {
+                            console.log('✅ Using existing Firebase app');
+                            this.firebaseApp = firebase.app();
+                        }
+                    } catch (initError) {
+                        console.error('❌ Firebase app initialization error:', initError);
+                        this.showToastMessage('Using predefined portfolio data', 'info');
+                        this.usePredefinedData();
+                        return;
+                    }
+                    
+                    try {
+                        this.firestore = firebase.firestore(this.firebaseApp);
+                        console.log('✅ Firestore initialized');
+                    } catch (firestoreError) {
+                        console.error('❌ Firestore initialization error:', firestoreError);
+                        this.showToastMessage('Using predefined portfolio data', 'info');
+                        this.usePredefinedData();
+                        return;
+                    }
+                    
+                    try {
+                        this.auth = firebase.auth(this.firebaseApp);
+                        console.log('✅ Auth initialized');
+                    } catch (authError) {
+                        console.warn('⚠️ Auth initialization warning:', authError);
+                    }
+                    
+                    this.loadPublicData();
+                    
+                } catch (error) {
+                    console.error('❌ General Firebase init error:', error);
+                    this.showToastMessage('Using predefined portfolio data', 'info');
+                    this.usePredefinedData();
+                }
+            },
 
-        // SKILL FORM HELPERS
-        addCertification() {
-            if (this.certificationInput.trim()) {
-                this.newSkill.certifications.push(this.certificationInput.trim());
-                this.certificationInput = '';
-            }
-        },
-
-        removeCertification(index) {
-            this.newSkill.certifications.splice(index, 1);
-        },
-
-        addTag() {
-            if (this.tagInput.trim()) {
-                this.newSkill.tags.push(this.tagInput.trim());
-                this.tagInput = '';
-            }
-        },
-
-        removeTag(index) {
-            this.newSkill.tags.splice(index, 1);
-        },
-
-        nextSkillTab() {
-            if (this.activeSkillTab === 'basic') {
-                this.activeSkillTab = 'details';
-            } else if (this.activeSkillTab === 'details') {
-                this.activeSkillTab = 'advanced';
-            }
-        },
-
-        prevSkillTab() {
-            if (this.activeSkillTab === 'advanced') {
-                this.activeSkillTab = 'details';
-            } else if (this.activeSkillTab === 'details') {
-                this.activeSkillTab = 'basic';
-            }
-        },
-
-        // PROJECT FORM HELPERS
-        addTechnology() {
-            if (this.techInput.trim() && !this.newProject.technologies.includes(this.techInput.trim())) {
-                this.newProject.technologies.push(this.techInput.trim());
-                this.techInput = '';
-            }
-        },
-
-        addTechFromSuggestion(tech) {
-            if (!this.newProject.technologies.includes(tech)) {
-                this.newProject.technologies.push(tech);
-            }
-        },
-
-        removeTech(tech) {
-            this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
-        },
-
-        nextProjectTab() {
-            if (this.activeProjectTab === 'basic') {
-                this.activeProjectTab = 'tech';
-            } else if (this.activeProjectTab === 'tech') {
-                this.activeProjectTab = 'media';
-            } else if (this.activeProjectTab === 'media') {
-                this.activeProjectTab = 'details';
-            }
-        },
-
-        prevProjectTab() {
-            if (this.activeProjectTab === 'details') {
-                this.activeProjectTab = 'media';
-            } else if (this.activeProjectTab === 'media') {
-                this.activeProjectTab = 'tech';
-            } else if (this.activeProjectTab === 'tech') {
-                this.activeSkillTab = 'basic';
-            }
-        },
-
-        // IMAGE UPLOAD METHODS
-        triggerFileInput() {
-            document.getElementById('projectImageInput').click();
-        },
-
-        uploadImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                if (file.size > this.storageConfig.maxImageSize) {
-                    this.showToastMessage('Image size too large. Max 1MB.', 'error');
+            // LOAD PUBLIC DATA DARI FIREBASE
+            loadPublicData() {
+                if (!this.firestore || !this.isOnline) {
+                    console.log('⚠️ Cannot load from Firebase: Firestore or internet not available');
+                    this.usePredefinedData();
                     return;
                 }
                 
-                this.uploadingImage = true;
+                console.log('📥 Loading public data from Firebase...');
                 
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.newProject.image = e.target.result;
-                    this.uploadingImage = false;
-                    this.showToastMessage('Image uploaded successfully', 'success');
-                };
-                reader.readAsDataURL(file);
-            }
-        },
+                this.isLoading = true;
+                this.loadingMessage = 'Loading portfolio data...';
+                
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => {
+                        reject(new Error('Timeout loading data from Firebase'));
+                    }, 10000);
+                });
+                
+                const loadPromise = this.firestore.collection('publicPortfolios').doc('main').get();
+                
+                Promise.race([loadPromise, timeoutPromise])
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            console.log('✅ Public data loaded successfully from Firebase');
+                            
+                            this.updateDataFromFirebase(data);
+                            
+                            if (data.lastUpdated) {
+                                this.lastSyncTime = new Date(data.lastUpdated.toDate()).toLocaleString();
+                            } else {
+                                this.lastSyncTime = 'Recently';
+                            }
+                            
+                            this.dataStatus = 'synced';
+                            this.showToastMessage('Portfolio data loaded from cloud', 'success');
+                            
+                        } else {
+                            console.log('⚠️ No public data found in Firebase, using predefined data');
+                            this.usePredefinedData();
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('❌ Load public data error:', error);
+                        this.showToastMessage('Using predefined portfolio data', 'info');
+                        this.usePredefinedData();
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                        this.portfolioDataLoaded = true;
+                    });
+            },
 
-        uploadProfileImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                if (file.size > this.storageConfig.maxImageSize) {
-                    this.showToastMessage('Image size too large. Max 1MB.', 'error');
-                    return;
+            // UPDATE DATA DARI FIREBASE
+            updateDataFromFirebase(data) {
+                try {
+                    console.log('🔄 Updating data from Firebase...');
+                    
+                    if (data.skills && Array.isArray(data.skills)) {
+                        this.skills = data.skills;
+                        console.log(`✅ Loaded ${this.skills.length} skills`);
+                    }
+                    
+                    if (data.projects && Array.isArray(data.projects)) {
+                        this.projects = data.projects;
+                        this.updateProjectSlides();
+                        console.log(`✅ Loaded ${this.projects.length} projects`);
+                    }
+                    
+                    if (data.profile) {
+                        Object.assign(this.profile, data.profile);
+                        console.log('✅ Profile data loaded');
+                    }
+                    
+                    if (data.socialLinks) {
+                        this.socialLinks = data.socialLinks.map(link => ({
+                            platform: link.platform,
+                            url: link.url || '',
+                            icon: link.icon || this.getSocialIcon(link.platform)
+                        }));
+                        console.log(`✅ Loaded ${this.socialLinks.length} social links`);
+                    }
+                    
+                    this.saveToLocalStorage();
+                    
+                } catch (error) {
+                    console.error('Error updating data from Firebase:', error);
+                    this.showToastMessage('Error loading cloud data', 'warning');
                 }
+            },
+
+            // USE PREDEFINED DATA (fallback)
+            usePredefinedData() {
+                console.log('📊 Using predefined portfolio data');
                 
-                this.uploadingProfileImage = true;
-                
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.profile.image = e.target.result;
-                    this.uploadingProfileImage = false;
-                    this.showToastMessage('Profile image updated successfully', 'success');
-                };
-                reader.readAsDataURL(file);
-            }
-        },
-
-        handleDrop(event) {
-            event.preventDefault();
-            const file = event.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                this.uploadImage({ target: { files: [file] } });
-            }
-        },
-
-        handleProjectImageError(event, projectId) {
-            console.error('Error loading project image:', event);
-            event.target.src = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-            
-            const projectIndex = this.projects.findIndex(p => p.id === projectId);
-            if (projectIndex !== -1) {
-                this.projects[projectIndex].image = event.target.src;
-            }
-        },
-
-        // SOCIAL LINKS METHODS
-        addSocialLink() {
-            if (this.isPublicMode) return;
-            
-            this.socialLinks.push({
-                platform: 'github',
-                url: '',
-                icon: 'fab fa-github'
-            });
-        },
-
-        addQuickSocialLink(platform) {
-            if (this.isPublicMode) return;
-            
-            const placeholder = this.getSocialPlaceholder(platform);
-            this.socialLinks.push({
-                platform: platform,
-                url: placeholder.includes('username') ? '' : placeholder,
-                icon: this.getSocialIcon(platform)
-            });
-        },
-
-        removeSocialLink(index) {
-            if (this.isPublicMode) return;
-            
-            this.socialLinks.splice(index, 1);
-        },
-
-        moveSocialLink(index, direction) {
-            if (this.isPublicMode) return;
-            
-            if (direction === 'up' && index > 0) {
-                const temp = this.socialLinks[index];
-                this.socialLinks[index] = this.socialLinks[index - 1];
-                this.socialLinks[index - 1] = temp;
-            } else if (direction === 'down' && index < this.socialLinks.length - 1) {
-                const temp = this.socialLinks[index];
-                this.socialLinks[index] = this.socialLinks[index + 1];
-                this.socialLinks[index + 1] = temp;
-            }
-        },
-
-        handlePlatformChange(link, index) {
-            if (this.isPublicMode) return;
-            
-            link.icon = this.getSocialIcon(link.platform);
-            if (!link.url || link.url.includes('username') || link.url === this.getSocialPlaceholder(this.socialLinks[index].platform)) {
-                link.url = this.getSocialPlaceholder(link.platform);
-            }
-        },
-
-        // DATA IMPORT/EXPORT METHODS dengan pengecekan isPublicMode
-        importSampleData() {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to import data', 'info');
-                return;
-            }
-            
-            if (confirm('This will replace your current data with sample data. Continue?')) {
                 this.skills = [...predefinedPublicData.skills];
                 this.projects = [...predefinedPublicData.projects];
+                this.profile = { ...predefinedPublicData.profile };
                 this.socialLinks = [...predefinedPublicData.socialLinks];
                 
                 this.updateProjectSlides();
                 this.saveToLocalStorage();
                 
-                this.showToastMessage('Sample data loaded successfully', 'success');
-                this.showDataPanel = false;
-            }
-        },
+                this.isLoading = false;
+                this.portfolioDataLoaded = true;
+            },
 
-        importFromFile() {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to import data', 'info');
-                return;
-            }
-            
-            document.getElementById('jsonFileInput').click();
-        },
-
-        handleFileImport(event) {
-            if (this.isPublicMode) return;
-            
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        
-                        if (data.skills) this.skills = data.skills;
-                        if (data.projects) {
-                            this.projects = data.projects;
-                            this.updateProjectSlides();
-                        }
-                        if (data.profile) Object.assign(this.profile, data.profile);
-                        if (data.socialLinks) this.socialLinks = data.socialLinks;
-                        
-                        this.saveToLocalStorage();
-                        this.showToastMessage('Data imported successfully', 'success');
-                        event.target.value = '';
-                    } catch (error) {
-                        this.showToastMessage('Invalid JSON file', 'error');
-                        console.error('Import error:', error);
+            // TOGGLE MODE (Public/Edit)
+            toggleMode() {
+                if (this.isPublicMode) {
+                    if (!this.userId) {
+                        this.showAuthModal = true;
+                        this.showToastMessage('Please login to enable edit mode', 'info');
+                        return;
                     }
-                };
-                reader.readAsText(file);
-            }
-        },
-
-        exportToJSON() {
-            const data = {
-                skills: this.skills,
-                projects: this.projects,
-                profile: this.profile,
-                socialLinks: this.socialLinks,
-                exportedAt: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `portfolio-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            this.showToastMessage('Data exported successfully', 'success');
-        },
-
-        exportBackup() {
-            const data = {
-                skills: this.skills,
-                projects: this.projects,
-                profile: this.profile,
-                socialLinks: this.socialLinks,
-                syncHistory: this.syncHistory,
-                settings: {
-                    isDark: this.isDark,
-                    projectView: this.projectView,
-                    activeSkillCategory: this.activeSkillCategory
-                },
-                backupCreated: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `portfolio-complete-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            this.showToastMessage('Complete backup exported', 'success');
-        },
-
-        clearAllData() {
-            if (this.isPublicMode) {
-                this.showToastMessage('Please switch to edit mode to clear data', 'info');
-                return;
-            }
-            
-            if (confirm('This will delete ALL your data. This action cannot be undone. Continue?')) {
-                localStorage.clear();
-                this.skills = [];
-                this.projects = [];
-                this.socialLinks = [];
-                this.profile = { ...predefinedPublicData.profile };
-                this.syncHistory = [];
-                
-                this.updateProjectSlides();
-                this.showToastMessage('All data cleared', 'success');
-                this.showDataPanel = false;
-            }
-        },
-
-        runDataHealthCheck() {
-            try {
-                const issues = [];
-                
-                if (this.skills.length === 0) issues.push('No skills found');
-                
-                this.skills.forEach((skill, index) => {
-                    if (!skill.name) issues.push(`Skill ${index + 1}: Missing name`);
-                    if (skill.level < 0 || skill.level > 100) issues.push(`Skill ${skill.name}: Invalid level`);
-                });
-                
-                if (this.projects.length === 0) issues.push('No projects found');
-                
-                this.projects.forEach((project, index) => {
-                    if (!project.name) issues.push(`Project ${index + 1}: Missing name`);
-                    if (!project.description) issues.push(`Project ${project.name}: Missing description`);
-                });
-                
-                if (!this.profile.name) issues.push('Profile: Missing name');
-                if (!this.profile.email) issues.push('Profile: Missing email');
-                
-                if (issues.length === 0) {
-                    this.dataIntegrity = true;
-                    this.showToastMessage('Data health check passed!', 'success');
+                    this.isPublicMode = false;
+                    this.showToastMessage('Edit mode enabled', 'success');
                 } else {
-                    this.dataIntegrity = false;
-                    console.warn('Data health issues:', issues);
-                    this.showToastMessage(`Found ${issues.length} data issues`, 'warning');
+                    this.isPublicMode = true;
+                    this.showToastMessage('View mode enabled', 'info');
+                }
+            },
+
+            // FIREBASE AUTH (untuk edit mode)
+            initFirebaseAuth() {
+                console.log('🔑 Starting Google login...');
+                this.isSyncing = true;
+                
+                try {
+                    // Ensure Firebase is initialized
+                    if (!this.firebaseApp) {
+                        console.log('🔄 Initializing Firebase for auth...');
+                        this.firebaseApp = firebase.initializeApp(firebaseConfig);
+                        this.auth = firebase.auth(this.firebaseApp);
+                    }
+                    
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    provider.addScope('profile');
+                    provider.addScope('email');
+                    provider.setCustomParameters({ prompt: 'select_account' });
+                    
+                    console.log('🔑 Signing in with popup...');
+                    
+                    this.auth.signInWithPopup(provider)
+                        .then((result) => {
+                            console.log('🎉 Login SUCCESS! User:', result.user.email);
+                            
+                            this.userId = result.user.uid;
+                            this.userEmail = result.user.email;
+                            this.isSyncing = false;
+                            this.isPublicMode = false;
+                            
+                            // Save auth data
+                            this.saveAuthData(result.user);
+                            
+                            this.showToastMessage(`🎉 Welcome ${result.user.displayName || result.user.email}! Edit mode enabled.`, 'success');
+                            
+                            // Reload page to refresh state
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                            
+                        })
+                        .catch((error) => {
+                            console.error('❌ Login error:', error);
+                            this.isSyncing = false;
+                            
+                            let errorMessage = 'Login failed';
+                            if (error.code === 'auth/popup-blocked') {
+                                errorMessage = 'Login popup was blocked. Please allow pop-ups.';
+                            } else if (error.code === 'auth/popup-closed-by-user') {
+                                errorMessage = 'Login cancelled';
+                            } else if (error.code === 'auth/network-request-failed') {
+                                errorMessage = 'Network error. Check your internet connection.';
+                            }
+                            
+                            this.showToastMessage(`❌ ${errorMessage}`, 'error');
+                        });
+                        
+                } catch (setupError) {
+                    console.error('❌ Login setup error:', setupError);
+                    this.isSyncing = false;
+                    this.showToastMessage('Login setup failed. Please try again.', 'error');
+                }
+            },
+
+            // SAVE AUTH DATA
+            saveAuthData(user) {
+                try {
+                    const authData = {
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                        lastLogin: new Date().toISOString(),
+                    };
+                    
+                    localStorage.setItem('firebase_auth', JSON.stringify(authData));
+                    console.log('✅ Auth data saved');
+                    
+                } catch (error) {
+                    console.error('❌ Error saving auth data:', error);
+                }
+            },
+
+            // LOAD USER DATA (private data untuk edit mode)
+            loadUserData() {
+                if (!this.userId || !this.firestore || !this.isOnline) {
+                    console.log('⚠️ Cannot load user data');
+                    return;
                 }
                 
-                this.calculateStorageUsage();
+                console.log('📥 Loading user data for:', this.userId);
                 
-            } catch (error) {
-                console.error('Health check error:', error);
-                this.showToastMessage('Health check failed', 'error');
-            }
-        },
+                this.firestore.collection('portfolios').doc(this.userId).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            console.log('✅ User data loaded');
+                            
+                            this.mergeUserData(data);
+                            this.showToastMessage('Your data loaded from cloud', 'success');
+                        } else {
+                            console.log('⚠️ No user data found, using current data');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('❌ Load user data error:', error);
+                    });
+            },
 
-        formatTimeAgo(timestamp) {
-            const now = new Date();
-            const past = new Date(timestamp);
-            const diff = now - past;
+            // MERGE USER DATA
+            mergeUserData(userData) {
+                try {
+                    if (userData.skills && Array.isArray(userData.skills)) {
+                        this.skills = userData.skills;
+                    }
+                    
+                    if (userData.projects && Array.isArray(userData.projects)) {
+                        this.projects = userData.projects;
+                        this.updateProjectSlides();
+                    }
+                    
+                    if (userData.profile) {
+                        Object.assign(this.profile, userData.profile);
+                    }
+                    
+                    if (userData.socialLinks) {
+                        this.socialLinks = userData.socialLinks.map(link => ({
+                            platform: link.platform,
+                            url: link.url || '',
+                            icon: link.icon || this.getSocialIcon(link.platform)
+                        }));
+                    }
+                    
+                    this.saveToLocalStorage();
+                    
+                } catch (error) {
+                    console.error('Error merging user data:', error);
+                }
+            },
+
+            // PUBLISH TO PUBLIC (hanya di edit mode)
+            publishToPublic() {
+                if (!this.userId) {
+                    this.showToastMessage('Please login first to publish', 'warning');
+                    setTimeout(() => {
+                        this.initFirebaseAuth();
+                    }, 500);
+                    return;
+                }
+                
+                if (!this.firestore) {
+                    this.showToastMessage('Firebase Firestore not available', 'error');
+                    return;
+                }
+                
+                if (!this.isOnline) {
+                    this.showToastMessage('You are offline. Cannot publish to cloud.', 'warning');
+                    return;
+                }
+                
+                if (!confirm('Publish your changes to make them publicly visible?')) {
+                    return;
+                }
+                
+                this.isSyncing = true;
+                this.showToastMessage('Publishing your portfolio...', 'info');
+                
+                const data = {
+                    skills: this.skills,
+                    projects: this.projects,
+                    profile: this.profile,
+                    socialLinks: this.socialLinks,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: this.userEmail,
+                    version: '2.0',
+                    published: true
+                };
+                
+                console.log('Publishing data to public collection...');
+                
+                this.firestore.collection('publicPortfolios').doc('main')
+                    .set(data, { merge: true })
+                    .then(() => {
+                        console.log('✅ Published to public collection');
+                        
+                        return this.firestore.collection('portfolios').doc(this.userId)
+                            .set({ ...data, userId: this.userId }, { merge: true });
+                    })
+                    .then(() => {
+                        console.log('✅ Saved to user collection');
+                        
+                        this.lastSyncTime = new Date().toLocaleTimeString();
+                        this.dataStatus = 'synced';
+                        this.isSyncing = false;
+                        
+                        this.showToastMessage('✅ Portfolio published successfully!', 'success');
+                        this.addToSyncHistory('Published data', 'success');
+                        
+                    })
+                    .catch((error) => {
+                        console.error('❌ Publish error:', error);
+                        this.isSyncing = false;
+                        
+                        let errorMessage = 'Publish failed';
+                        if (error.code === 'permission-denied') {
+                            errorMessage = 'Permission denied. You may not have write access.';
+                        }
+                        
+                        this.showToastMessage(`❌ ${errorMessage}`, 'error');
+                        this.addToSyncHistory('Publish failed', 'error');
+                    });
+            },
+
+            // SIGN OUT
+            signOut() {
+                if (!this.auth) {
+                    this.showToastMessage('Firebase Auth not initialized', 'warning');
+                    return;
+                }
+                
+                if (confirm('Are you sure you want to sign out?')) {
+                    this.auth.signOut()
+                        .then(() => {
+                            console.log('✅ Sign out successful');
+                            
+                            localStorage.removeItem('firebase_auth');
+                            this.userId = null;
+                            this.userEmail = null;
+                            
+                            this.isPublicMode = true;
+                            
+                            this.loadPublicData();
+                            
+                            this.showToastMessage('Signed out successfully', 'success');
+                            
+                        })
+                        .catch((error) => {
+                            console.error('Sign out error:', error);
+                            this.showToastMessage('Sign out failed', 'error');
+                        });
+                }
+            },
+
+            // METHOD HELPER UNTUK PUBLIC MODE
+            setupEventListeners() {
+                window.addEventListener('scroll', this.handleScroll.bind(this));
+                window.addEventListener('resize', this.handleResize.bind(this));
+                
+                window.addEventListener('beforeunload', () => {
+                    if (!this.isPublicMode) {
+                        this.saveToLocalStorage();
+                    }
+                });
+            },
+
+            handleScroll() {
+                const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                this.scrollProgress = height > 0 ? (winScroll / height) * 100 : 0;
+                
+                this.isAtTop = window.scrollY < 50;
+                
+                const sections = ['home', 'skills', 'projects', 'contact'];
+                for (const section of sections) {
+                    const element = document.getElementById(section);
+                    if (element) {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.top <= 100 && rect.bottom >= 100) {
+                            this.activeSection = section;
+                            break;
+                        }
+                    }
+                }
+            },
+
+            handleResize() {
+                if (window.innerWidth < 768) {
+                    this.projectsPerSlide = 1;
+                } else if (window.innerWidth < 1024) {
+                    this.projectsPerSlide = 2;
+                } else {
+                    this.projectsPerSlide = 3;
+                }
+                
+                this.updateProjectSlides();
+            },
+
+            toggleTheme() {
+                this.isDark = !this.isDark;
+                localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
+                
+                if (window.pJSDom && window.pJSDom.length > 0) {
+                    const particles = window.pJSDom[0].pJS;
+                    if (particles) {
+                        particles.particles.color.value = this.isDark ? "#ffffff" : "#6366f1";
+                        particles.particles.line_linked.color = this.isDark ? "#ffffff" : "#6366f1";
+                        particles.fn.particlesRefresh();
+                    }
+                }
+            },
+
+            scrollTo(sectionId) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const offset = 80;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+                this.mobileMenu = false;
+            },
+
+            // MODAL METHODS dengan pengecekan isPublicMode
+            openModal(modalName) {
+                if (this.isPublicMode && (modalName === 'addSkill' || modalName === 'addProject' || modalName === 'editProfile' || modalName === 'deleteConfirm')) {
+                    this.showToastMessage('Please switch to edit mode to make changes', 'info');
+                    return;
+                }
+                this.modals[modalName] = true;
+                document.body.style.overflow = 'hidden';
+            },
+
+            closeModal(modalName) {
+                this.modals[modalName] = false;
+                document.body.style.overflow = 'auto';
+                
+                if (modalName === 'addSkill') {
+                    this.resetSkillForm();
+                } else if (modalName === 'addProject') {
+                    this.resetProjectForm();
+                }
+            },
+
+            // SKILL METHODS dengan pengecekan isPublicMode
+            addNewSkill() {
+                if (this.isPublicMode) return;
+                
+                try {
+                    this.isSubmitting = true;
+
+                    const newSkill = {
+                        id: this.editingSkill ? this.editingSkill.id : Date.now(),
+                        ...this.newSkill,
+                        icon: this.getSkillIcon(this.newSkill.category)
+                    };
+
+                    if (this.editingSkill) {
+                        const index = this.skills.findIndex(s => s.id === this.editingSkill.id);
+                        if (index !== -1) {
+                            this.skills[index] = newSkill;
+                        }
+                        this.showToastMessage('Skill updated successfully', 'success');
+                    } else {
+                        this.skills.push(newSkill);
+                        this.showToastMessage('Skill added successfully', 'success');
+                    }
+
+                    this.saveToLocalStorage();
+                    this.closeModal('addSkill');
+                    this.resetSkillForm();
+                } catch (error) {
+                    this.showToastMessage('Error saving skill', 'error');
+                    console.error('Error adding skill:', error);
+                } finally {
+                    this.isSubmitting = false;
+                }
+            },
+
+            // PROJECT METHODS dengan pengecekan isPublicMode
+            addNewProject() {
+                if (this.isPublicMode) return;
+                
+                try {
+                    this.isSubmitting = true;
+
+                    const newProject = {
+                        id: this.editingProject ? this.editingProject.id : Date.now(),
+                        ...this.newProject,
+                        date: new Date().getFullYear().toString()
+                    };
+
+                    if (this.editingProject) {
+                        const index = this.projects.findIndex(p => p.id === this.editingProject.id);
+                        if (index !== -1) {
+                            this.projects[index] = newProject;
+                        }
+                        this.showToastMessage('Project updated successfully', 'success');
+                    } else {
+                        this.projects.push(newProject);
+                        this.showToastMessage('Project added successfully', 'success');
+                    }
+
+                    this.updateProjectSlides();
+                    this.saveToLocalStorage();
+                    this.closeModal('addProject');
+                    this.resetProjectForm();
+                } catch (error) {
+                    this.showToastMessage('Error saving project', 'error');
+                    console.error('Error adding project:', error);
+                } finally {
+                    this.isSubmitting = false;
+                }
+            },
+
+            // DELETE METHODS dengan pengecekan isPublicMode
+            confirmDelete(type, id, name) {
+                if (this.isPublicMode) return;
+                
+                this.deleteItem = { type, id, name };
+                this.openModal('deleteConfirm');
+            },
+
+            executeDelete() {
+                if (this.isPublicMode) return;
+                
+                if (this.deleteItem.type === 'skill') {
+                    this.skills = this.skills.filter(skill => skill.id !== this.deleteItem.id);
+                    this.showToastMessage('Skill deleted successfully', 'success');
+                } else if (this.deleteItem.type === 'project') {
+                    this.projects = this.projects.filter(project => project.id !== this.deleteItem.id);
+                    this.updateProjectSlides();
+                    this.showToastMessage('Project deleted successfully', 'success');
+                }
+                
+                this.saveToLocalStorage();
+                this.closeModal('deleteConfirm');
+            },
+
+            // PROFILE METHODS dengan pengecekan isPublicMode
+            updateProfile() {
+                if (this.isPublicMode) return;
+                
+                try {
+                    this.saveToLocalStorage();
+                    this.showToastMessage('Profile updated successfully', 'success');
+                    this.closeModal('editProfile');
+                } catch (error) {
+                    this.showToastMessage('Error updating profile', 'error');
+                    console.error('Error updating profile:', error);
+                }
+            },
+
+            // CONTACT FORM (bisa digunakan di public mode)
+            submitContact() {
+                try {
+                    this.isSubmitting = true;
+                    
+                    if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) {
+                        this.showToastMessage('Please fill in all fields', 'error');
+                        this.isSubmitting = false;
+                        return;
+                    }
+                    
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(this.contactForm.email)) {
+                        this.showToastMessage('Please enter a valid email address', 'error');
+                        this.isSubmitting = false;
+                        return;
+                    }
+                    
+                    console.log('Starting email sending process...');
+                    
+                    const serviceID = 'service_fkkrcdr';
+                    const templateID = 'template_g9cfnn2';
+                    const publicKey = 'GIIXeb6Xt3whWfqvo';
+                    
+                    if (typeof emailjs === 'undefined') {
+                        console.error('EmailJS is not loaded');
+                        this.showToastMessage('Email service not available. Please refresh the page.', 'error');
+                        this.isSubmitting = false;
+                        return;
+                    }
+                    
+                    emailjs.init(publicKey);
+                    
+                    const templateParams = {
+                        from_name: this.contactForm.name,
+                        from_email: this.contactForm.email,
+                        message: this.contactForm.message,
+                        to_name: this.profile.name,
+                        to_email: this.profile.email,
+                        reply_to: this.contactForm.email
+                    };
+                    
+                    emailjs.send(serviceID, templateID, templateParams)
+                        .then((response) => {
+                            console.log('Email response:', response);
+                            
+                            if (response.status === 200) {
+                                this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+                                
+                                this.contactForm = {
+                                    name: '',
+                                    email: '',
+                                    message: ''
+                                };
+                            } else {
+                                throw new Error(`EmailJS responded with status: ${response.status}`);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Email sending error:', error);
+                            
+                            let errorMessage = 'Error sending message. Please try again later.';
+                            
+                            if (error.text) {
+                                console.error('EmailJS error text:', error.text);
+                            }
+                            
+                            this.showToastMessage(errorMessage, 'error');
+                        })
+                        .finally(() => {
+                            this.isSubmitting = false;
+                        });
+                    
+                } catch (error) {
+                    console.error('Email sending error:', error);
+                    this.showToastMessage('Error sending message. Please try again later.', 'error');
+                    this.isSubmitting = false;
+                }
+            },
+
+            // HELPER METHODS
+            generateDefaultAvatar() {
+                const name = this.profile.name || 'John Doe';
+                const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                const bgColor = '6366f1';
+                const textColor = 'ffffff';
+                const size = '400';
+                
+                return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${bgColor}&color=${textColor}&size=${size}&bold=true&font-size=0.5`;
+            },
+
+            showToastMessage(message, type = 'success') {
+                this.toastMessage = message;
+                this.toastType = type;
+                this.showToast = true;
+                
+                setTimeout(() => {
+                    this.showToast = false;
+                }, 3000);
+            },
+
+            initParticles() {
+                if (typeof particlesJS === 'function') {
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { 
+                                value: 80, 
+                                density: { 
+                                    enable: true, 
+                                    value_area: 800 
+                                } 
+                            },
+                            color: { 
+                                value: this.isDark ? "#ffffff" : "#6366f1" 
+                            },
+                            shape: { 
+                                type: "circle" 
+                            },
+                            opacity: { 
+                                value: 0.3, 
+                                random: true
+                            },
+                            size: { 
+                                value: 3, 
+                                random: true
+                            },
+                            line_linked: {
+                                enable: true,
+                                distance: 150,
+                                color: this.isDark ? "#ffffff" : "#6366f1",
+                                opacity: 0.2,
+                                width: 1
+                            },
+                            move: {
+                                enable: true,
+                                speed: 1,
+                                direction: "none",
+                                random: true,
+                                straight: false
+                            }
+                        },
+                        interactivity: {
+                            events: {
+                                onhover: { 
+                                    enable: true, 
+                                    mode: "grab" 
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+
+            // DATA MANAGEMENT METHODS dengan pengecekan isPublicMode
+            saveToLocalStorage() {
+                if (this.isPublicMode) return;
+                
+                try {
+                    localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
+                    localStorage.setItem('portfolioProjects', JSON.stringify(this.projects));
+                    localStorage.setItem('portfolioProfile', JSON.stringify(this.profile));
+                    
+                    const linksToSave = this.socialLinks.map(link => ({
+                        platform: link.platform,
+                        url: link.url,
+                        icon: link.icon
+                    }));
+                    localStorage.setItem('portfolioSocialLinks', JSON.stringify(linksToSave));
+                    
+                    localStorage.setItem('portfolioCacheTime', new Date().toISOString());
+                    
+                    console.log('✅ Data saved locally');
+                    this.calculateStorageUsage();
+                    
+                } catch (error) {
+                    console.error('❌ Save error:', error);
+                }
+            },
+
+            calculateStorageUsage() {
+                try {
+                    let totalBytes = 0;
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('portfolio')) {
+                            const value = localStorage.getItem(key);
+                            totalBytes += new Blob([value]).size;
+                        }
+                    }
+                    
+                    this.storageUsage = this.formatBytes(totalBytes);
+                } catch (error) {
+                    console.error('Error calculating storage usage:', error);
+                    this.storageUsage = 'Unknown';
+                }
+            },
+
+            formatBytes(bytes, decimals = 2) {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            },
+
+            addToSyncHistory(action, status) {
+                this.syncHistory.unshift({
+                    action,
+                    status,
+                    timestamp: new Date().toISOString()
+                });
+                
+                if (this.syncHistory.length > 10) {
+                    this.syncHistory.pop();
+                }
+                
+                localStorage.setItem('portfolioSyncHistory', JSON.stringify(this.syncHistory));
+            },
+
+            // PROJECT SLIDER METHODS
+            updateProjectSlides() {
+                this.projectSlides = [];
+                
+                if (this.projects.length <= 6) {
+                    this.projectView = 'grid';
+                    return;
+                }
+                
+                for (let i = 0; i < this.projects.length; i += this.projectsPerSlide) {
+                    this.projectSlides.push(this.projects.slice(i, i + this.projectsPerSlide));
+                }
+                
+                if (this.currentSlide >= this.projectSlides.length) {
+                    this.currentSlide = 0;
+                }
+            },
+
+            setProjectView(view) {
+                this.projectView = view;
+                if (view === 'slider') {
+                    this.currentSlide = 0;
+                }
+            },
+
+            nextSlide() {
+                if (this.currentSlide < this.projectSlides.length - 1) {
+                    this.currentSlide++;
+                }
+            },
+
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                }
+            },
+
+            goToSlide(index) {
+                if (index >= 0 && index < this.projectSlides.length) {
+                    this.currentSlide = index;
+                }
+            },
+
+            toggleAutoSlide() {
+                this.autoSlideEnabled = !this.autoSlideEnabled;
+                
+                if (this.autoSlideEnabled) {
+                    this.autoSlideInterval = setInterval(() => {
+                        if (this.currentSlide < this.projectSlides.length - 1) {
+                            this.currentSlide++;
+                        } else {
+                            this.currentSlide = 0;
+                        }
+                    }, 5000);
+                } else if (this.autoSlideInterval) {
+                    clearInterval(this.autoSlideInterval);
+                    this.autoSlideInterval = null;
+                }
+            },
+
+            // CATEGORY & ICON HELPER METHODS
+            getCategoryName(category) {
+                const names = {
+                    'frontend': 'Frontend',
+                    'backend': 'Backend',
+                    'database': 'Database',
+                    'mobile': 'Mobile',
+                    'devops': 'DevOps',
+                    'cloud': 'Cloud',
+                    'tools': 'Tools',
+                    'design': 'Design',
+                    'ai': 'AI/ML'
+                };
+                return names[category] || category;
+            },
+
+            getCategoryIcon(category) {
+                const icons = {
+                    'frontend': 'fas fa-code',
+                    'backend': 'fas fa-server',
+                    'database': 'fas fa-database',
+                    'mobile': 'fas fa-mobile-alt',
+                    'devops': 'fas fa-cogs',
+                    'cloud': 'fas fa-cloud',
+                    'tools': 'fas fa-tools',
+                    'design': 'fas fa-palette',
+                    'ai': 'fas fa-brain'
+                };
+                return icons[category] || 'fas fa-code';
+            },
+
+            getSkillCategoryColor(category) {
+                const colors = {
+                    'frontend': 'bg-blue-500',
+                    'backend': 'bg-green-500',
+                    'database': 'bg-yellow-500',
+                    'mobile': 'bg-purple-500',
+                    'devops': 'bg-red-500',
+                    'cloud': 'bg-indigo-500',
+                    'tools': 'bg-pink-500',
+                    'design': 'bg-teal-500',
+                    'ai': 'bg-orange-500'
+                };
+                return colors[category] || 'bg-slate-500';
+            },
+
+            getSkillIcon(category) {
+                return this.getCategoryIcon(category);
+            },
+
+            getProficiencyLevel(level) {
+                if (level >= 90) return 'Expert';
+                if (level >= 70) return 'Advanced';
+                if (level >= 50) return 'Intermediate';
+                if (level >= 30) return 'Beginner';
+                return 'Novice';
+            },
+
+            getProficiencyClass(level) {
+                if (level >= 90) return 'status-success';
+                if (level >= 70) return 'status-success';
+                if (level >= 50) return 'status-warning';
+                return 'status-error';
+            },
+
+            getProficiencyIcon(level) {
+                if (level >= 90) return 'fas fa-fire';
+                if (level >= 70) return 'fas fa-chart-line';
+                if (level >= 50) return 'fas fa-seedling';
+                return 'fas fa-leaf';
+            },
+
+            getProjectTypeName(type) {
+                const names = {
+                    'web': 'Web App',
+                    'mobile': 'Mobile App',
+                    'api': 'API',
+                    'desktop': 'Desktop',
+                    'ai': 'AI/ML',
+                    'saas': 'SaaS'
+                };
+                return names[type] || type;
+            },
+
+            getTechIcon(tech) {
+                const iconMap = {
+                    'React': 'fab fa-react',
+                    'Vue.js': 'fab fa-vuejs',
+                    'Angular': 'fab fa-angular',
+                    'Node.js': 'fab fa-node-js',
+                    'Python': 'fab fa-python',
+                    'Django': 'fab fa-python',
+                    'Flask': 'fab fa-python',
+                    'Java': 'fab fa-java',
+                    'PHP': 'fab fa-php',
+                    'Laravel': 'fab fa-laravel',
+                    'Ruby': 'fab fa-ruby',
+                    'Rails': 'fab fa-ruby',
+                    'Go': 'fab fa-golang',
+                    'Rust': 'fab fa-rust',
+                    'Swift': 'fab fa-swift',
+                    'Kotlin': 'fab fa-android',
+                    'C#': 'fab fa-microsoft',
+                    '.NET': 'fab fa-microsoft',
+                    'Docker': 'fab fa-docker',
+                    'Kubernetes': 'fab fa-docker',
+                    'AWS': 'fab fa-aws',
+                    'Azure': 'fab fa-microsoft',
+                    'Google Cloud': 'fab fa-google',
+                    'Firebase': 'fab fa-firebase',
+                    'MongoDB': 'fas fa-database',
+                    'MySQL': 'fas fa-database',
+                    'PostgreSQL': 'fas fa-database',
+                    'Redis': 'fas fa-database',
+                    'SQLite': 'fas fa-database',
+                    'Git': 'fab fa-git-alt',
+                    'GitHub': 'fab fa-github',
+                    'GitLab': 'fab fa-gitlab',
+                    'Bitbucket': 'fab fa-bitbucket',
+                    'HTML5': 'fab fa-html5',
+                    'CSS3': 'fab fa-css3-alt',
+                    'JavaScript': 'fab fa-js',
+                    'TypeScript': 'fab fa-js',
+                    'SASS': 'fab fa-sass',
+                    'Bootstrap': 'fab fa-bootstrap',
+                    'Tailwind CSS': 'fas fa-paint-brush',
+                    'Material-UI': 'fas fa-palette',
+                    'Figma': 'fab fa-figma',
+                    'Adobe XD': 'fas fa-palette',
+                    'Sketch': 'fas fa-palette',
+                    'Jest': 'fas fa-vial',
+                    'Cypress': 'fas fa-vial',
+                    'Webpack': 'fas fa-cube',
+                    'Babel': 'fas fa-cog',
+                    'ESLint': 'fas fa-code',
+                    'Prettier': 'fas fa-code',
+                    'Nginx': 'fas fa-server',
+                    'Apache': 'fas fa-server',
+                    'Linux': 'fab fa-linux',
+                    'Windows': 'fab fa-windows',
+                    'macOS': 'fab fa-apple'
+                };
+                
+                return iconMap[tech] || 'fas fa-code';
+            },
+
+            // SOCIAL MEDIA HELPER METHODS
+            getSocialIcon(platform) {
+                const iconMap = {
+                    'github': 'fab fa-github',
+                    'gitlab': 'fab fa-gitlab',
+                    'bitbucket': 'fab fa-bitbucket',
+                    'linkedin': 'fab fa-linkedin-in',
+                    'twitter': 'fab fa-twitter',
+                    'instagram': 'fab fa-instagram',
+                    'facebook': 'fab fa-facebook-f',
+                    'whatsapp': 'fab fa-whatsapp',
+                    'telegram': 'fab fa-telegram',
+                    'discord': 'fab fa-discord',
+                    'youtube': 'fab fa-youtube',
+                    'tiktok': 'fab fa-tiktok',
+                    'twitch': 'fab fa-twitch',
+                    'medium': 'fab fa-medium',
+                    'devto': 'fab fa-dev',
+                    'hashnode': 'fab fa-hashnode',
+                    'dribbble': 'fab fa-dribbble',
+                    'behance': 'fab fa-behance',
+                    'figma': 'fab fa-figma',
+                    'stackoverflow': 'fab fa-stack-overflow',
+                    'codepen': 'fab fa-codepen',
+                    'upwork': 'fab fa-upwork',
+                    'fiverr': 'fas fa-dollar-sign',
+                    'freelancer': 'fas fa-briefcase',
+                    'udemy': 'fas fa-graduation-cap',
+                    'coursera': 'fas fa-graduation-cap',
+                    'pluralsight': 'fas fa-graduation-cap',
+                    'notion': 'fas fa-sticky-note',
+                    'email': 'fas fa-envelope',
+                    'personal': 'fas fa-globe',
+                    'other': 'fas fa-external-link-alt'
+                };
+                
+                return iconMap[platform] || 'fas fa-external-link-alt';
+            },
+
+            getSocialPlaceholder(platform) {
+                const placeholders = {
+                    'github': 'https://github.com/username',
+                    'linkedin': 'https://linkedin.com/in/username',
+                    'twitter': 'https://twitter.com/username',
+                    'instagram': 'https://instagram.com/username',
+                    'facebook': 'https://facebook.com/username',
+                    'whatsapp': 'https://wa.me/phone-number',
+                    'telegram': 'https://t.me/username',
+                    'discord': 'https://discord.gg/invite',
+                    'youtube': 'https://youtube.com/c/username',
+                    'tiktok': 'https://tiktok.com/@username',
+                    'twitch': 'https://twitch.tv/username',
+                    'medium': 'https://medium.com/@username',
+                    'devto': 'https://dev.to/username',
+                    'hashnode': 'https://username.hashnode.dev',
+                    'dribbble': 'https://dribbble.com/username',
+                    'behance': 'https://behance.net/username',
+                    'figma': 'https://figma.com/@username',
+                    'stackoverflow': 'https://stackoverflow.com/users/username',
+                    'codepen': 'https://codepen.io/username',
+                    'upwork': 'https://upwork.com/freelancers/~username',
+                    'fiverr': 'https://fiverr.com/username',
+                    'freelancer': 'https://freelancer.com/u/username',
+                    'udemy': 'https://udemy.com/user/username',
+                    'coursera': 'https://coursera.org/user/username',
+                    'pluralsight': 'https://pluralsight.com/profile/username',
+                    'notion': 'https://notion.so/username',
+                    'email': 'mailto:email@example.com',
+                    'personal': 'https://yourwebsite.com',
+                    'other': 'https://example.com'
+                };
+                return placeholders[platform] || 'https://example.com';
+            },
+
+            getSocialPlatformName(platform) {
+                const names = {
+                    'github': 'GitHub',
+                    'gitlab': 'GitLab',
+                    'bitbucket': 'Bitbucket',
+                    'linkedin': 'LinkedIn',
+                    'twitter': 'Twitter',
+                    'instagram': 'Instagram',
+                    'facebook': 'Facebook',
+                    'whatsapp': 'WhatsApp',
+                    'telegram': 'Telegram',
+                    'discord': 'Discord',
+                    'youtube': 'YouTube',
+                    'tiktok': 'TikTok',
+                    'twitch': 'Twitch',
+                    'medium': 'Medium',
+                    'devto': 'Dev.to',
+                    'hashnode': 'Hashnode',
+                    'dribbble': 'Dribbble',
+                    'behance': 'Behance',
+                    'figma': 'Figma',
+                    'stackoverflow': 'Stack Overflow',
+                    'codepen': 'CodePen',
+                    'upwork': 'Upwork',
+                    'fiverr': 'Fiverr',
+                    'freelancer': 'Freelancer',
+                    'udemy': 'Udemy',
+                    'coursera': 'Coursera',
+                    'pluralsight': 'Pluralsight',
+                    'notion': 'Notion',
+                    'email': 'Email',
+                    'personal': 'Personal Website',
+                    'other': 'Other'
+                };
+                return names[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+            },
+
+            getSocialPlatformColorClass(platform) {
+                const colorMap = {
+                    'github': 'bg-gray-800 hover:bg-gray-900',
+                    'gitlab': 'bg-orange-600 hover:bg-orange-700',
+                    'bitbucket': 'bg-blue-600 hover:bg-blue-700',
+                    'linkedin': 'bg-blue-700 hover:bg-blue-800',
+                    'twitter': 'bg-blue-400 hover:bg-blue-500',
+                    'instagram': 'bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600',
+                    'facebook': 'bg-blue-600 hover:bg-blue-700',
+                    'whatsapp': 'bg-green-500 hover:bg-green-600',
+                    'telegram': 'bg-blue-500 hover:bg-blue-600',
+                    'discord': 'bg-indigo-600 hover:bg-indigo-700',
+                    'youtube': 'bg-red-600 hover:bg-red-700',
+                    'tiktok': 'bg-black hover:bg-gray-900',
+                    'twitch': 'bg-purple-600 hover:bg-purple-700',
+                    'medium': 'bg-gray-800 hover:bg-gray-900',
+                    'devto': 'bg-gray-900 hover:bg-black',
+                    'hashnode': 'bg-blue-600 hover:bg-blue-700',
+                    'dribbble': 'bg-pink-500 hover:bg-pink-600',
+                    'behance': 'bg-blue-800 hover:bg-blue-900',
+                    'figma': 'bg-orange-500 hover:bg-orange-600',
+                    'stackoverflow': 'bg-orange-500 hover:bg-orange-600',
+                    'codepen': 'bg-gray-800 hover:bg-gray-900',
+                    'upwork': 'bg-green-600 hover:bg-green-700',
+                    'fiverr': 'bg-green-500 hover:bg-green-600',
+                    'freelancer': 'bg-blue-500 hover:bg-blue-600',
+                    'udemy': 'bg-purple-700 hover:bg-purple-800',
+                    'coursera': 'bg-blue-800 hover:bg-blue-900',
+                    'pluralsight': 'bg-orange-500 hover:bg-orange-600',
+                    'notion': 'bg-gray-800 hover:bg-gray-900',
+                    'email': 'bg-gray-600 hover:bg-gray-700',
+                    'personal': 'bg-indigo-600 hover:bg-indigo-700',
+                    'other': 'bg-slate-600 hover:bg-slate-700'
+                };
+                return colorMap[platform] || 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700';
+            },
+
+            isValidUrl(url) {
+                try {
+                    new URL(url);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
+            },
+
+            getSocialUsername(url) {
+                if (!url) return '';
+                try {
+                    const urlObj = new URL(url);
+                    const pathname = urlObj.pathname;
+                    if (url.includes('github.com')) return pathname.split('/')[1] || '';
+                    if (url.includes('linkedin.com/in/')) return pathname.split('/in/')[1] || '';
+                    if (url.includes('twitter.com/')) return pathname.split('/')[1] || '';
+                    if (url.includes('instagram.com/')) return pathname.split('/')[1] || '';
+                    return urlObj.hostname;
+                } catch (_) {
+                    return '';
+                }
+            },
+
+            // RESET METHODS
+            resetSkillForm() {
+                this.newSkill = {
+                    name: '',
+                    category: 'frontend',
+                    level: 50,
+                    years: 1,
+                    projects: 0,
+                    icon: 'fas fa-code',
+                    description: '',
+                    certifications: [],
+                    tags: [],
+                    customId: ''
+                };
+                this.certificationInput = '';
+                this.tagInput = '';
+                this.editingSkill = null;
+            },
+
+            resetProjectForm() {
+                this.newProject = {
+                    name: '',
+                    description: '',
+                    type: 'web',
+                    technologies: [],
+                    image: '',
+                    demoUrl: '',
+                    sourceUrl: '',
+                    startDate: '',
+                    endDate: '',
+                    isOngoing: false,
+                    role: '',
+                    teamSize: 1,
+                    status: 'completed',
+                    client: '',
+                    challenges: '',
+                    features: []
+                };
+                this.techInput = '';
+                this.editingProject = null;
+            },
+
+            // EDIT SKILL/PROJECT METHODS
+            editSkill(skill) {
+                if (this.isPublicMode) return;
+                
+                this.editingSkill = { ...skill };
+                this.newSkill = { ...skill };
+                this.openModal('addSkill');
+            },
+
+            editProject(project) {
+                if (this.isPublicMode) return;
+                
+                this.editingProject = { ...project };
+                this.newProject = { ...project };
+                this.openModal('addProject');
+            },
+
+            viewProject(projectId) {
+                this.selectedProject = this.projects.find(p => p.id === projectId);
+                this.openModal('projectDetail');
+            },
+
+            // SKILL FORM HELPERS
+            addCertification() {
+                if (this.certificationInput.trim()) {
+                    this.newSkill.certifications.push(this.certificationInput.trim());
+                    this.certificationInput = '';
+                }
+            },
+
+            removeCertification(index) {
+                this.newSkill.certifications.splice(index, 1);
+            },
+
+            addTag() {
+                if (this.tagInput.trim()) {
+                    this.newSkill.tags.push(this.tagInput.trim());
+                    this.tagInput = '';
+                }
+            },
+
+            removeTag(index) {
+                this.newSkill.tags.splice(index, 1);
+            },
+
+            nextSkillTab() {
+                if (this.activeSkillTab === 'basic') {
+                    this.activeSkillTab = 'details';
+                } else if (this.activeSkillTab === 'details') {
+                    this.activeSkillTab = 'advanced';
+                }
+            },
+
+            prevSkillTab() {
+                if (this.activeSkillTab === 'advanced') {
+                    this.activeSkillTab = 'details';
+                } else if (this.activeSkillTab === 'details') {
+                    this.activeSkillTab = 'basic';
+                }
+            },
+
+            // PROJECT FORM HELPERS
+            addTechnology() {
+                if (this.techInput.trim() && !this.newProject.technologies.includes(this.techInput.trim())) {
+                    this.newProject.technologies.push(this.techInput.trim());
+                    this.techInput = '';
+                }
+            },
+
+            addTechFromSuggestion(tech) {
+                if (!this.newProject.technologies.includes(tech)) {
+                    this.newProject.technologies.push(tech);
+                }
+            },
+
+            removeTech(tech) {
+                this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
+            },
+
+            nextProjectTab() {
+                if (this.activeProjectTab === 'basic') {
+                    this.activeProjectTab = 'tech';
+                } else if (this.activeProjectTab === 'tech') {
+                    this.activeProjectTab = 'media';
+                } else if (this.activeProjectTab === 'media') {
+                    this.activeProjectTab = 'details';
+                }
+            },
+
+            prevProjectTab() {
+                if (this.activeProjectTab === 'details') {
+                    this.activeProjectTab = 'media';
+                } else if (this.activeProjectTab === 'media') {
+                    this.activeProjectTab = 'tech';
+                } else if (this.activeProjectTab === 'tech') {
+                    this.activeProjectTab = 'basic';
+                }
+            },
+
+            // IMAGE UPLOAD METHODS
+            triggerFileInput() {
+                document.getElementById('projectImageInput').click();
+            },
+
+            uploadImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    if (file.size > this.storageConfig.maxImageSize) {
+                        this.showToastMessage('Image size too large. Max 1MB.', 'error');
+                        return;
+                    }
+                    
+                    this.uploadingImage = true;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.newProject.image = e.target.result;
+                        this.uploadingImage = false;
+                        this.showToastMessage('Image uploaded successfully', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            },
+
+            uploadProfileImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    if (file.size > this.storageConfig.maxImageSize) {
+                        this.showToastMessage('Image size too large. Max 1MB.', 'error');
+                        return;
+                    }
+                    
+                    this.uploadingProfileImage = true;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.profile.image = e.target.result;
+                        this.uploadingProfileImage = false;
+                        this.showToastMessage('Profile image updated successfully', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            },
+
+            handleDrop(event) {
+                event.preventDefault();
+                const file = event.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    this.uploadImage({ target: { files: [file] } });
+                }
+            },
+
+            handleProjectImageError(event, projectId) {
+                console.error('Error loading project image:', event);
+                event.target.src = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                
+                const projectIndex = this.projects.findIndex(p => p.id === projectId);
+                if (projectIndex !== -1) {
+                    this.projects[projectIndex].image = event.target.src;
+                }
+            },
+
+            // SOCIAL LINKS METHODS
+            addSocialLink() {
+                if (this.isPublicMode) return;
+                
+                this.socialLinks.push({
+                    platform: 'github',
+                    url: '',
+                    icon: 'fab fa-github'
+                });
+            },
+
+            addQuickSocialLink(platform) {
+                if (this.isPublicMode) return;
+                
+                const placeholder = this.getSocialPlaceholder(platform);
+                this.socialLinks.push({
+                    platform: platform,
+                    url: placeholder.includes('username') ? '' : placeholder,
+                    icon: this.getSocialIcon(platform)
+                });
+            },
+
+            removeSocialLink(index) {
+                if (this.isPublicMode) return;
+                
+                this.socialLinks.splice(index, 1);
+            },
+
+            moveSocialLink(index, direction) {
+                if (this.isPublicMode) return;
+                
+                if (direction === 'up' && index > 0) {
+                    const temp = this.socialLinks[index];
+                    this.socialLinks[index] = this.socialLinks[index - 1];
+                    this.socialLinks[index - 1] = temp;
+                } else if (direction === 'down' && index < this.socialLinks.length - 1) {
+                    const temp = this.socialLinks[index];
+                    this.socialLinks[index] = this.socialLinks[index + 1];
+                    this.socialLinks[index + 1] = temp;
+                }
+            },
+
+            handlePlatformChange(link, index) {
+                if (this.isPublicMode) return;
+                
+                link.icon = this.getSocialIcon(link.platform);
+                if (!link.url || link.url.includes('username') || link.url === this.getSocialPlaceholder(this.socialLinks[index].platform)) {
+                    link.url = this.getSocialPlaceholder(link.platform);
+                }
+            },
+
+            // DATA IMPORT/EXPORT METHODS dengan pengecekan isPublicMode
+            importSampleData() {
+                if (this.isPublicMode) {
+                    this.showToastMessage('Please switch to edit mode to import data', 'info');
+                    return;
+                }
+                
+                if (confirm('This will replace your current data with sample data. Continue?')) {
+                    this.skills = [...predefinedPublicData.skills];
+                    this.projects = [...predefinedPublicData.projects];
+                    this.socialLinks = [...predefinedPublicData.socialLinks];
+                    
+                    this.updateProjectSlides();
+                    this.saveToLocalStorage();
+                    
+                    this.showToastMessage('Sample data loaded successfully', 'success');
+                    this.showDataPanel = false;
+                }
+            },
+
+            importFromFile() {
+                if (this.isPublicMode) {
+                    this.showToastMessage('Please switch to edit mode to import data', 'info');
+                    return;
+                }
+                
+                document.getElementById('jsonFileInput').click();
+            },
+
+            handleFileImport(event) {
+                if (this.isPublicMode) return;
+                
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            
+                            if (data.skills) this.skills = data.skills;
+                            if (data.projects) {
+                                this.projects = data.projects;
+                                this.updateProjectSlides();
+                            }
+                            if (data.profile) Object.assign(this.profile, data.profile);
+                            if (data.socialLinks) this.socialLinks = data.socialLinks;
+                            
+                            this.saveToLocalStorage();
+                            this.showToastMessage('Data imported successfully', 'success');
+                            event.target.value = '';
+                        } catch (error) {
+                            this.showToastMessage('Invalid JSON file', 'error');
+                            console.error('Import error:', error);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            },
+
+            exportToJSON() {
+                const data = {
+                    skills: this.skills,
+                    projects: this.projects,
+                    profile: this.profile,
+                    socialLinks: this.socialLinks,
+                    exportedAt: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `portfolio-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.showToastMessage('Data exported successfully', 'success');
+            },
+
+            exportBackup() {
+                const data = {
+                    skills: this.skills,
+                    projects: this.projects,
+                    profile: this.profile,
+                    socialLinks: this.socialLinks,
+                    syncHistory: this.syncHistory,
+                    settings: {
+                        isDark: this.isDark,
+                        projectView: this.projectView,
+                        activeSkillCategory: this.activeSkillCategory
+                    },
+                    backupCreated: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `portfolio-complete-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.showToastMessage('Complete backup exported', 'success');
+            },
+
+            clearAllData() {
+                if (this.isPublicMode) {
+                    this.showToastMessage('Please switch to edit mode to clear data', 'info');
+                    return;
+                }
+                
+                if (confirm('This will delete ALL your data. This action cannot be undone. Continue?')) {
+                    localStorage.clear();
+                    this.skills = [];
+                    this.projects = [];
+                    this.socialLinks = [];
+                    this.profile = { ...predefinedPublicData.profile };
+                    this.syncHistory = [];
+                    
+                    this.updateProjectSlides();
+                    this.showToastMessage('All data cleared', 'success');
+                    this.showDataPanel = false;
+                }
+            },
+
+            runDataHealthCheck() {
+                try {
+                    const issues = [];
+                    
+                    if (this.skills.length === 0) issues.push('No skills found');
+                    
+                    this.skills.forEach((skill, index) => {
+                        if (!skill.name) issues.push(`Skill ${index + 1}: Missing name`);
+                        if (skill.level < 0 || skill.level > 100) issues.push(`Skill ${skill.name}: Invalid level`);
+                    });
+                    
+                    if (this.projects.length === 0) issues.push('No projects found');
+                    
+                    this.projects.forEach((project, index) => {
+                        if (!project.name) issues.push(`Project ${index + 1}: Missing name`);
+                        if (!project.description) issues.push(`Project ${project.name}: Missing description`);
+                    });
+                    
+                    if (!this.profile.name) issues.push('Profile: Missing name');
+                    if (!this.profile.email) issues.push('Profile: Missing email');
+                    
+                    if (issues.length === 0) {
+                        this.dataIntegrity = true;
+                        this.showToastMessage('Data health check passed!', 'success');
+                    } else {
+                        this.dataIntegrity = false;
+                        console.warn('Data health issues:', issues);
+                        this.showToastMessage(`Found ${issues.length} data issues`, 'warning');
+                    }
+                    
+                    this.calculateStorageUsage();
+                    
+                } catch (error) {
+                    console.error('Health check error:', error);
+                    this.showToastMessage('Health check failed', 'error');
+                }
+            },
+
+            formatTimeAgo(timestamp) {
+                const now = new Date();
+                const past = new Date(timestamp);
+                const diff = now - past;
+                
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(diff / 3600000);
+                const days = Math.floor(diff / 86400000);
+                
+                if (minutes < 1) return 'Just now';
+                if (minutes < 60) return `${minutes}m ago`;
+                if (hours < 24) return `${hours}h ago`;
+                return `${days}d ago`;
+            }
+        };
+    }
+</script>
+
+<!-- FIXED LOGIN BUTTON - Solusi permanen -->
+<div id="fixed-login-button" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
+    <button onclick="forceLogin()" 
+            style="padding: 12px 24px; 
+                   background: linear-gradient(135deg, #6366f1, #8b5cf6); 
+                   color: white; 
+                   border-radius: 12px; 
+                   border: none; 
+                   font-weight: bold;
+                   box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5); 
+                   cursor: pointer;
+                   display: flex;
+                   align-items: center;
+                   gap: 8px;">
+        <i class="fas fa-sign-in-alt"></i>
+        LOGIN TO EDIT
+    </button>
+</div>
+
+<script>
+// Force login function
+function forceLogin() {
+    console.log('🔑 Force login initiated...');
+    
+    // Show loading
+    const button = document.querySelector('#fixed-login-button button');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> LOGGING IN...';
+    button.disabled = true;
+    
+    // Initialize Firebase if not already
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    
+    // Google Auth
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
+    provider.setCustomParameters({ prompt: 'select_account' });
+    
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            console.log('🎉 Login SUCCESS!');
+            alert('Login SUCCESS! Page will reload...');
+            localStorage.setItem('firebase_auth', JSON.stringify({
+                uid: result.user.uid,
+                email: result.user.email,
+                displayName: result.user.displayName
+            }));
+            location.reload();
+        })
+        .catch((error) => {
+            console.error('❌ Login error:', error);
             
-            const minutes = Math.floor(diff / 60000);
-            const hours = Math.floor(diff / 3600000);
-            const days = Math.floor(diff / 86400000);
+            let errorMessage = 'Login failed: ';
+            if (error.code === 'auth/popup-blocked') {
+                errorMessage += 'Popup blocked. Please allow pop-ups.';
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                errorMessage += 'Login cancelled.';
+            } else if (error.code === 'auth/network-request-failed') {
+                errorMessage += 'Network error. Check internet.';
+            } else {
+                errorMessage += error.message;
+            }
             
-            if (minutes < 1) return 'Just now';
-            if (minutes < 60) return `${minutes}m ago`;
-            if (hours < 24) return `${hours}h ago`;
-            return `${days}d ago`;
-        }
-    };
+            alert(errorMessage);
+            button.innerHTML = originalText;
+            button.disabled = false;
+        });
 }
+
+// Check if user is logged in on page load
+window.addEventListener('DOMContentLoaded', function() {
+    // Try to restore login from localStorage
+    const savedAuth = localStorage.getItem('firebase_auth');
+    if (savedAuth) {
+        try {
+            const authData = JSON.parse(savedAuth);
+            console.log('🔑 Found saved auth data:', authData.email);
+            
+            // Initialize Alpine.js after auth check
+            setTimeout(() => {
+                const alpineData = document.querySelector('[x-data]').__x.$data;
+                if (alpineData && authData.uid) {
+                    alpineData.userId = authData.uid;
+                    alpineData.userEmail = authData.email;
+                    alpineData.isPublicMode = false;
+                    console.log('✅ Restored login from localStorage');
+                }
+            }, 1000);
+            
+        } catch (e) {
+            console.error('Error parsing saved auth:', e);
+        }
+    }
+});
 </script>
 </body>
 </html>
