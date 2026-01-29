@@ -599,6 +599,92 @@
             animation: float 10s ease-in-out infinite;
             animation-delay: 2s;
         }
+
+        /* Circular Profile Image */
+        .profile-circle {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 8px solid;
+            border-image: linear-gradient(135deg, #6366f1, #8b5cf6) 1;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        }
+
+        .profile-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Chip/Tag Styles */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .chip:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Dropdown Styles */
+        .dropdown-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-option:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Draggable Item */
+        .draggable-item {
+            cursor: grab;
+            transition: transform 0.2s ease;
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+            transform: scale(0.98);
+        }
+
+        /* Sortable List */
+        .sortable-list {
+            min-height: 100px;
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .sortable-item {
+            background: white;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .dark .sortable-item {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        .sortable-item:hover {
+            transform: translateX(5px);
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
     </style>
 </head>
 <body :class="{'dark': isDark}" class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 overflow-x-hidden">
@@ -759,38 +845,28 @@
                     <!-- Right Column: Profile & Social -->
                     <div class="relative">
                         <div class="relative mx-auto lg:mx-0 max-w-md">
-                            <!-- Profile Image -->
-                            <div class="relative mb-12">
-                                <div class="absolute -ins-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-2xl opacity-50"></div>
-                                <div class="relative rounded-3xl overflow-hidden border-8 border-white dark:border-gray-800 shadow-2xl">
-                                    <img :src="profileImageSrc" 
-                                         alt="Profile Picture" 
-                                         class="w-full h-96 object-cover">
-                                    
-                                    <!-- Edit Profile Image Button -->
-                                    <div x-show="!isPublicMode" class="absolute bottom-6 right-6">
-                                        <label for="profileImageUpload" class="btn-primary cursor-pointer">
-                                            <i class="fas fa-camera"></i>
-                                        </label>
-                                        <input id="profileImageUpload" type="file" accept="image/*" @change="uploadProfileImage" class="hidden">
-                                    </div>
+                            <!-- Profile Image with Circular Border -->
+                            <div class="profile-circle mb-12">
+                                <img :src="profileImageSrc" 
+                                     alt="Profile Picture" 
+                                     class="w-full h-full object-cover">
+                                
+                                <!-- Edit Profile Image Button -->
+                                <div x-show="!isPublicMode" class="absolute bottom-6 right-6">
+                                    <label for="profileImageUpload" class="btn-primary cursor-pointer !p-3 !rounded-full">
+                                        <i class="fas fa-camera"></i>
+                                    </label>
+                                    <input id="profileImageUpload" type="file" accept="image/*" @change="uploadProfileImage" class="hidden">
                                 </div>
                             </div>
                             
                             <!-- Quick Tech Stack -->
                             <div class="flex flex-wrap justify-center gap-3">
-                                <div class="tech-card !p-4 !rounded-full">
-                                    <i class="fab fa-react text-2xl text-blue-500"></i>
-                                </div>
-                                <div class="tech-card !p-4 !rounded-full">
-                                    <i class="fab fa-node-js text-2xl text-green-500"></i>
-                                </div>
-                                <div class="tech-card !p-4 !rounded-full">
-                                    <i class="fas fa-database text-2xl text-yellow-500"></i>
-                                </div>
-                                <div class="tech-card !p-4 !rounded-full">
-                                    <i class="fab fa-aws text-2xl text-orange-500"></i>
-                                </div>
+                                <template x-for="tech in technologySpectrum.slice(0, 5)" :key="tech.id">
+                                    <div class="tech-card !p-4 !rounded-full" :style="'background: ' + getTechColor(tech.color)">
+                                        <i :class="tech.icon" :class="getTechTextColor(tech.color)" class="text-2xl"></i>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -819,111 +895,28 @@
                 
                 <!-- Technology Spectrum - Enhanced -->
                 <div class="mb-20">
-                    <h3 class="text-3xl font-bold mb-12 text-center">
-                        <i class="fas fa-layer-group mr-3 gradient-text"></i>
-                        Technology Spectrum
-                    </h3>
+                    <div class="flex justify-between items-center mb-12">
+                        <h3 class="text-3xl font-bold">
+                            <i class="fas fa-layer-group mr-3 gradient-text"></i>
+                            Technology Spectrum
+                        </h3>
+                        
+                        <!-- Edit Technology Spectrum Button -->
+                        <button x-show="!isPublicMode" @click="openModal('editTechnologySpectrum')" class="btn-primary">
+                            <i class="fas fa-edit mr-2"></i> Edit Spectrum
+                        </button>
+                    </div>
                     
                     <div class="tech-grid">
-                        <!-- Frontend Technologies -->
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-react"></i>
+                        <template x-for="tech in technologySpectrum" :key="tech.id">
+                            <div class="tech-card">
+                                <div class="tech-icon" :style="'background: ' + getTechColor(tech.color)">
+                                    <i :class="tech.icon" class="text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-xl mb-3" x-text="tech.name"></h4>
+                                <p class="text-gray-600 dark:text-gray-400" x-text="tech.description"></p>
                             </div>
-                            <h4 class="font-bold text-xl mb-3">React</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Frontend Library</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-vuejs"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Vue.js</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Progressive Framework</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-angular"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Angular</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Platform & Framework</p>
-                        </div>
-                        
-                        <!-- Backend Technologies -->
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-node-js"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Node.js</h4>
-                            <p class="text-gray-600 dark:text-gray-400">JavaScript Runtime</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-python"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Python</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Backend Language</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-java"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Java</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Enterprise Backend</p>
-                        </div>
-                        
-                        <!-- Databases -->
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fas fa-database"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">PostgreSQL</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Relational Database</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fas fa-database"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">MongoDB</h4>
-                            <p class="text-gray-600 dark:text-gray-400">NoSQL Database</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fas fa-database"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Redis</h4>
-                            <p class="text-gray-600 dark:text-gray-400">In-Memory Data Store</p>
-                        </div>
-                        
-                        <!-- DevOps -->
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-docker"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">Docker</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Container Platform</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fab fa-aws"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">AWS</h4>
-                            <p class="text-gray-600 dark:text-gray-400">Cloud Platform</p>
-                        </div>
-                        
-                        <div class="tech-card">
-                            <div class="tech-icon">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                            <h4 class="font-bold text-xl mb-3">CI/CD</h4>
-                            <p class="text-gray-600 dark:text-gray-400">DevOps Automation</p>
-                        </div>
+                        </template>
                     </div>
                 </div>
                 
@@ -1003,6 +996,11 @@
                                     <div class="skill-bar-container">
                                         <div class="skill-bar" :style="'width: ' + skill.level + '%'"></div>
                                     </div>
+                                    
+                                    <div class="flex justify-between text-sm text-gray-500">
+                                        <span x-text="skill.years + ' years'"></span>
+                                        <span x-text="skill.projects + ' projects'"></span>
+                                    </div>
                                 </div>
                             </div>
                         </template>
@@ -1064,6 +1062,7 @@
                                 <div class="flex flex-wrap gap-2 mb-6">
                                     <template x-for="tech in project.technologies.slice(0, 3)" :key="tech">
                                         <span class="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-medium">
+                                            <i :class="getTechIcon(tech)" class="mr-2"></i>
                                             <span x-text="tech"></span>
                                         </span>
                                     </template>
@@ -1074,9 +1073,14 @@
                                         <i class="fas fa-calendar text-gray-400"></i>
                                         <span class="text-gray-500 dark:text-gray-400" x-text="project.date"></span>
                                     </div>
-                                    <button @click="viewProject(project.id)" class="btn-primary !py-2 !px-4">
-                                        View Details
-                                    </button>
+                                    <div class="flex gap-2">
+                                        <button @click="viewProject(project.id)" class="btn-primary !py-2 !px-4">
+                                            View Details
+                                        </button>
+                                        <button x-show="!isPublicMode" @click="editProject(project)" class="w-10 h-10 bg-blue-500 hover:bg-blue-600 text-white rounded-xl flex items-center justify-center">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1136,6 +1140,16 @@
                                         <p class="text-gray-600 dark:text-gray-300" x-text="profile.phone"></p>
                                     </div>
                                 </div>
+                                
+                                <div class="flex items-start gap-6">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-map-marker-alt text-2xl text-orange-600 dark:text-orange-400"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2">Location</h4>
+                                        <p class="text-gray-600 dark:text-gray-300" x-text="profile.location"></p>
+                                    </div>
+                                </div>
                             </div>
                             
                             <!-- Edit Profile Button -->
@@ -1149,119 +1163,29 @@
                     <!-- Enhanced Connect With Me Section -->
                     <div class="lg:col-span-2">
                         <div class="contact-form">
-                            <h3 class="text-2xl font-bold mb-8">
-                                <i class="fas fa-share-alt mr-3 gradient-text"></i>
-                                Connect With Me
-                            </h3>
+                            <div class="flex justify-between items-center mb-8">
+                                <h3 class="text-2xl font-bold">
+                                    <i class="fas fa-share-alt mr-3 gradient-text"></i>
+                                    Connect With Me
+                                </h3>
+                                
+                                <!-- Edit Social Links Button -->
+                                <button x-show="!isPublicMode" @click="openModal('editSocialLinks')" class="btn-primary">
+                                    <i class="fas fa-edit mr-2"></i>
+                                    Edit Social Links
+                                </button>
+                            </div>
                             
                             <div class="social-grid mb-10">
-                                <!-- GitHub -->
-                                <a href="https://github.com/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-github"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">GitHub</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Check out my projects</p>
-                                </a>
-                                
-                                <!-- LinkedIn -->
-                                <a href="https://linkedin.com/in/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-linkedin-in"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">LinkedIn</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Professional profile</p>
-                                </a>
-                                
-                                <!-- Twitter -->
-                                <a href="https://twitter.com/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-twitter"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Twitter</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Tech thoughts & updates</p>
-                                </a>
-                                
-                                <!-- Stack Overflow -->
-                                <a href="https://stackoverflow.com/users/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-stack-overflow"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Stack Overflow</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Developer community</p>
-                                </a>
-                                
-                                <!-- Dribbble -->
-                                <a href="https://dribbble.com/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-dribbble"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Dribbble</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Design portfolio</p>
-                                </a>
-                                
-                                <!-- Behance -->
-                                <a href="https://behance.net/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-behance"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Behance</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Creative work</p>
-                                </a>
-                                
-                                <!-- Medium -->
-                                <a href="https://medium.com/@username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-medium"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Medium</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Blog & articles</p>
-                                </a>
-                                
-                                <!-- Dev.to -->
-                                <a href="https://dev.to/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-dev"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Dev.to</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Developer community</p>
-                                </a>
-                                
-                                <!-- YouTube -->
-                                <a href="https://youtube.com/c/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-youtube"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">YouTube</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Tech tutorials</p>
-                                </a>
-                                
-                                <!-- Twitch -->
-                                <a href="https://twitch.tv/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-twitch"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Twitch</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Live coding</p>
-                                </a>
-                                
-                                <!-- Discord -->
-                                <a href="https://discord.gg/invite" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-discord"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Discord</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Community chat</p>
-                                </a>
-                                
-                                <!-- Instagram -->
-                                <a href="https://instagram.com/username" target="_blank" class="social-card">
-                                    <div class="social-icon">
-                                        <i class="fab fa-instagram"></i>
-                                    </div>
-                                    <h4 class="font-bold text-lg mb-2">Instagram</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Daily updates</p>
-                                </a>
+                                <template x-for="link in socialLinks" :key="link.platform">
+                                    <a :href="link.url" target="_blank" class="social-card">
+                                        <div class="social-icon" :style="'background: ' + getSocialPlatformColor(link.platform)">
+                                            <i :class="link.icon"></i>
+                                        </div>
+                                        <h4 class="font-bold text-lg mb-2" x-text="getSocialPlatformName(link.platform)"></h4>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm" x-text="getSocialUsername(link.url)"></p>
+                                    </a>
+                                </template>
                             </div>
                             
                             <!-- Contact Form -->
@@ -1359,10 +1283,27 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Skill Name *</label>
-                        <input type="text" x-model="newSkill.name" 
-                               class="form-input w-full"
-                               placeholder="e.g., React, Node.js, MongoDB"
-                               required>
+                        <div class="relative">
+                            <input type="text" x-model="newSkill.name" 
+                                   @input="filterSkillSuggestions()"
+                                   class="form-input w-full pr-10"
+                                   placeholder="Start typing or select from list..."
+                                   required>
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Skill Suggestions -->
+                        <div x-show="skillSuggestions.length > 0" class="mt-2 max-h-48 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <template x-for="suggestion in skillSuggestions" :key="suggestion">
+                                <div @click="selectSkillSuggestion(suggestion)" 
+                                     class="dropdown-option">
+                                    <i :class="getTechIcon(suggestion)" class="mr-3"></i>
+                                    <span x-text="suggestion"></span>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                     
                     <div class="grid md:grid-cols-2 gap-6">
@@ -1374,6 +1315,8 @@
                                 <option value="database">Database</option>
                                 <option value="mobile">Mobile Development</option>
                                 <option value="devops">DevOps</option>
+                                <option value="design">UI/UX Design</option>
+                                <option value="tools">Tools</option>
                             </select>
                         </div>
                         
@@ -1450,6 +1393,8 @@
                             <option value="mobile">Mobile App</option>
                             <option value="api">API</option>
                             <option value="desktop">Desktop</option>
+                            <option value="ai">AI/ML Project</option>
+                            <option value="saas">SaaS Product</option>
                         </select>
                     </div>
                 </div>
@@ -1465,21 +1410,35 @@
                 <div class="grid md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Technologies</label>
-                        <div class="flex gap-3 mb-3">
+                        <div class="relative">
                             <input type="text" x-model="techInput" 
+                                   @input="filterTechSuggestions()"
                                    @keyup.enter="addTechnology()"
-                                   class="form-input flex-1"
-                                   placeholder="Add technology...">
-                            <button @click="addTechnology()" type="button" class="btn-primary">
-                                <i class="fas fa-plus"></i>
-                            </button>
+                                   class="form-input w-full pr-10"
+                                   placeholder="Select technologies...">
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </div>
                         </div>
-                        <div class="flex flex-wrap gap-2">
-                            <template x-for="tech in newProject.technologies" :key="tech">
-                                <span class="px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg flex items-center gap-2">
-                                    <i :class="getTechIcon(tech)"></i>
+                        
+                        <!-- Technology Suggestions -->
+                        <div x-show="techSuggestions.length > 0" class="mt-2 max-h-48 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <template x-for="tech in techSuggestions" :key="tech">
+                                <div @click="addTechFromSuggestion(tech)" 
+                                     class="dropdown-option">
+                                    <i :class="getTechIcon(tech)" class="mr-3"></i>
                                     <span x-text="tech"></span>
-                                    <button @click="removeTech(tech)" type="button" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200">
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <!-- Selected Technologies -->
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <template x-for="tech in newProject.technologies" :key="tech">
+                                <span class="chip bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300">
+                                    <i :class="getTechIcon(tech)" class="mr-2"></i>
+                                    <span x-text="tech"></span>
+                                    <button @click="removeTech(tech)" type="button" class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </span>
@@ -1568,6 +1527,316 @@
         </div>
     </div>
 
+    <!-- Edit Profile Modal -->
+    <div x-show="modals.editProfile" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-user-edit mr-3 gradient-text"></i>
+                        Edit Profile
+                    </h3>
+                    <button @click="closeModal('editProfile')" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Full Name *</label>
+                        <input type="text" x-model="profile.name" 
+                               class="form-input w-full"
+                               placeholder="Your full name"
+                               required>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Email *</label>
+                            <input type="email" x-model="profile.email" 
+                                   class="form-input w-full"
+                                   placeholder="your.email@example.com"
+                                   required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Phone</label>
+                            <input type="tel" x-model="profile.phone" 
+                                   class="form-input w-full"
+                                   placeholder="+1 234 567 8900">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Location</label>
+                        <input type="text" x-model="profile.location" 
+                               class="form-input w-full"
+                               placeholder="City, Country">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Bio *</label>
+                        <textarea x-model="profile.bio" rows="4"
+                                  class="form-input w-full resize-none"
+                                  placeholder="Tell us about yourself..."
+                                  required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">Profile Image URL</label>
+                        <input type="text" x-model="profile.image" 
+                               class="form-input w-full"
+                               placeholder="https://example.com/profile.jpg">
+                        <p class="text-sm text-gray-500 mt-2">Leave empty to use generated avatar</p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="closeModal('editProfile')" class="btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="updateProfile()" :disabled="!profile.name || !profile.email || !profile.bio" class="btn-primary">
+                        Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Social Links Modal -->
+    <div x-show="modals.editSocialLinks" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-share-alt mr-3 gradient-text"></i>
+                        Edit Social Links
+                    </h3>
+                    <button @click="closeModal('editSocialLinks')" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-4">Quick Add Popular Platforms</h4>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <template x-for="platform in popularSocialPlatforms" :key="platform.name">
+                            <button @click="addQuickSocialLink(platform.name)" 
+                                    class="chip" :style="'background: ' + getSocialPlatformColor(platform.name)">
+                                <i :class="platform.icon" class="mr-2"></i>
+                                <span x-text="platform.name"></span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <template x-for="(link, index) in socialLinks" :key="index">
+                        <div class="card-hover p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-bold text-lg" x-text="getSocialPlatformName(link.platform)"></h4>
+                                <div class="flex gap-2">
+                                    <button @click="moveSocialLink(index, 'up')" :disabled="index === 0" 
+                                            class="w-10 h-10 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button @click="moveSocialLink(index, 'down')" :disabled="index === socialLinks.length - 1" 
+                                            class="w-10 h-10 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button @click="removeSocialLink(index)" 
+                                            class="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">Platform</label>
+                                    <select x-model="link.platform" @change="handlePlatformChange(link, index)" 
+                                            class="form-input w-full">
+                                        <template x-for="platform in allSocialPlatforms" :key="platform.name">
+                                            <option :value="platform.name" x-text="platform.name"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">URL</label>
+                                    <input type="url" x-model="link.url" 
+                                           class="form-input w-full"
+                                           :placeholder="getSocialPlaceholder(link.platform)">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center" 
+                                     :style="'background: ' + getSocialPlatformColor(link.platform)">
+                                    <i :class="link.icon" class="text-white"></i>
+                                </div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">
+                                    Preview: <a :href="link.url" target="_blank" class="text-primary hover:underline" x-text="link.url || 'Not set'"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="addSocialLink()" class="btn-outline w-full">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add Another Platform
+                    </button>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="closeModal('editSocialLinks')" class="btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="saveSocialLinks()" class="btn-primary">
+                        Save Social Links
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Technology Spectrum Modal -->
+    <div x-show="modals.editTechnologySpectrum" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-layer-group mr-3 gradient-text"></i>
+                        Edit Technology Spectrum
+                    </h3>
+                    <button @click="closeModal('editTechnologySpectrum')" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-4">Add New Technology</h4>
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">Technology Name</label>
+                            <input type="text" x-model="newTech.name" 
+                                   class="form-input w-full"
+                                   placeholder="e.g., React">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">Category</label>
+                            <select x-model="newTech.category" class="form-input w-full">
+                                <option value="frontend">Frontend</option>
+                                <option value="backend">Backend</option>
+                                <option value="database">Database</option>
+                                <option value="devops">DevOps</option>
+                                <option value="mobile">Mobile</option>
+                                <option value="design">Design</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">Color</label>
+                            <select x-model="newTech.color" class="form-input w-full">
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="purple">Purple</option>
+                                <option value="pink">Pink</option>
+                                <option value="orange">Orange</option>
+                                <option value="red">Red</option>
+                                <option value="teal">Teal</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-end">
+                            <button @click="addTechnologyToSpectrum()" class="btn-primary w-full">
+                                <i class="fas fa-plus mr-2"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Current Technologies</h4>
+                    <div class="sortable-list" @dragover.prevent @drop="handleTechDrop">
+                        <template x-for="(tech, index) in technologySpectrum" :key="tech.id">
+                            <div class="sortable-item draggable-item" 
+                                 draggable="true"
+                                 @dragstart="handleTechDragStart(index)"
+                                 @dragend="handleTechDragEnd">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-lg flex items-center justify-center" 
+                                             :style="'background: ' + getTechColor(tech.color)">
+                                            <i :class="tech.icon" class="text-white text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-bold text-lg" x-text="tech.name"></h5>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm" x-text="tech.description"></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex gap-2">
+                                        <button @click="editTechnology(tech)" 
+                                                class="w-10 h-10 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button @click="removeTechnologyFromSpectrum(tech.id)" 
+                                                class="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="closeModal('editTechnologySpectrum')" class="btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="saveTechnologySpectrum()" class="btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div x-show="modals.deleteConfirm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-md w-full">
+            <div class="p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-exclamation-triangle text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Confirm Delete</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Are you sure you want to delete 
+                        <span class="font-bold text-primary" x-text="deleteItem.name"></span>?
+                        This action cannot be undone.
+                    </p>
+                </div>
+                
+                <div class="flex justify-center gap-4">
+                    <button @click="closeModal('deleteConfirm')" class="btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="executeDelete()" class="btn-primary bg-red-500 hover:bg-red-600 !border-red-500">
+                        <i class="fas fa-trash mr-2"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
         // Firebase Configuration
@@ -1580,6 +1849,184 @@
             appId: "1:36345970852:web:d0a47e15126f7038fce631"
         };
 
+        // Database of all technologies with icons
+        const technologyDatabase = {
+            frontend: [
+                { name: 'HTML5', icon: 'fab fa-html5' },
+                { name: 'CSS3', icon: 'fab fa-css3-alt' },
+                { name: 'JavaScript', icon: 'fab fa-js' },
+                { name: 'TypeScript', icon: 'fab fa-js-square' },
+                { name: 'React', icon: 'fab fa-react' },
+                { name: 'Vue.js', icon: 'fab fa-vuejs' },
+                { name: 'Angular', icon: 'fab fa-angular' },
+                { name: 'Svelte', icon: 'fas fa-code' },
+                { name: 'Next.js', icon: 'fas fa-arrow-right' },
+                { name: 'Nuxt.js', icon: 'fas fa-arrow-right' },
+                { name: 'Tailwind CSS', icon: 'fas fa-wind' },
+                { name: 'Bootstrap', icon: 'fab fa-bootstrap' },
+                { name: 'SASS', icon: 'fab fa-sass' },
+                { name: 'Webpack', icon: 'fas fa-cube' },
+                { name: 'Babel', icon: 'fas fa-cogs' },
+                { name: 'Redux', icon: 'fas fa-database' },
+                { name: 'GraphQL', icon: 'fas fa-project-diagram' }
+            ],
+            backend: [
+                { name: 'Node.js', icon: 'fab fa-node-js' },
+                { name: 'Express.js', icon: 'fas fa-server' },
+                { name: 'Python', icon: 'fab fa-python' },
+                { name: 'Django', icon: 'fab fa-python' },
+                { name: 'Flask', icon: 'fab fa-python' },
+                { name: 'Java', icon: 'fab fa-java' },
+                { name: 'Spring Boot', icon: 'fab fa-java' },
+                { name: 'PHP', icon: 'fab fa-php' },
+                { name: 'Laravel', icon: 'fab fa-laravel' },
+                { name: 'Ruby', icon: 'fab fa-ruby' },
+                { name: 'Ruby on Rails', icon: 'fab fa-ruby' },
+                { name: 'Go', icon: 'fab fa-golang' },
+                { name: 'C#', icon: 'fas fa-code' },
+                { name: '.NET', icon: 'fab fa-microsoft' },
+                { name: 'FastAPI', icon: 'fas fa-bolt' },
+                { name: 'NestJS', icon: 'fas fa-feather-alt' },
+                { name: 'Socket.io', icon: 'fas fa-plug' }
+            ],
+            database: [
+                { name: 'MongoDB', icon: 'fas fa-database' },
+                { name: 'PostgreSQL', icon: 'fas fa-database' },
+                { name: 'MySQL', icon: 'fas fa-database' },
+                { name: 'Redis', icon: 'fas fa-database' },
+                { name: 'Firebase', icon: 'fas fa-fire' },
+                { name: 'SQLite', icon: 'fas fa-database' },
+                { name: 'Oracle', icon: 'fas fa-database' },
+                { name: 'Elasticsearch', icon: 'fas fa-search' },
+                { name: 'Cassandra', icon: 'fas fa-database' }
+            ],
+            devops: [
+                { name: 'Docker', icon: 'fab fa-docker' },
+                { name: 'Kubernetes', icon: 'fas fa-ship' },
+                { name: 'AWS', icon: 'fab fa-aws' },
+                { name: 'Google Cloud', icon: 'fab fa-google' },
+                { name: 'Azure', icon: 'fab fa-microsoft' },
+                { name: 'Git', icon: 'fab fa-git-alt' },
+                { name: 'GitHub Actions', icon: 'fab fa-github' },
+                { name: 'Jenkins', icon: 'fas fa-tools' },
+                { name: 'Terraform', icon: 'fas fa-mountain' },
+                { name: 'Ansible', icon: 'fas fa-cogs' },
+                { name: 'Nginx', icon: 'fas fa-server' },
+                { name: 'Linux', icon: 'fab fa-linux' }
+            ],
+            mobile: [
+                { name: 'React Native', icon: 'fab fa-react' },
+                { name: 'Flutter', icon: 'fas fa-mobile-alt' },
+                { name: 'Android', icon: 'fab fa-android' },
+                { name: 'iOS', icon: 'fab fa-apple' },
+                { name: 'Ionic', icon: 'fas fa-mobile' },
+                { name: 'Xamarin', icon: 'fab fa-microsoft' }
+            ],
+            design: [
+                { name: 'Figma', icon: 'fab fa-figma' },
+                { name: 'Adobe XD', icon: 'fas fa-palette' },
+                { name: 'Sketch', icon: 'fas fa-palette' },
+                { name: 'Photoshop', icon: 'fas fa-image' },
+                { name: 'Illustrator', icon: 'fas fa-paint-brush' }
+            ],
+            tools: [
+                { name: 'GitHub', icon: 'fab fa-github' },
+                { name: 'GitLab', icon: 'fab fa-gitlab' },
+                { name: 'Bitbucket', icon: 'fab fa-bitbucket' },
+                { name: 'Jira', icon: 'fab fa-jira' },
+                { name: 'Confluence', icon: 'fab fa-atlassian' },
+                { name: 'Slack', icon: 'fab fa-slack' },
+                { name: 'VS Code', icon: 'fas fa-code' },
+                { name: 'Postman', icon: 'fas fa-paper-plane' },
+                { name: 'Swagger', icon: 'fas fa-file-code' }
+            ]
+        };
+
+        // Database of all social media platforms
+        const socialPlatformsDatabase = [
+            { name: 'GitHub', icon: 'fab fa-github', placeholder: 'https://github.com/username', category: 'coding' },
+            { name: 'GitLab', icon: 'fab fa-gitlab', placeholder: 'https://gitlab.com/username', category: 'coding' },
+            { name: 'Bitbucket', icon: 'fab fa-bitbucket', placeholder: 'https://bitbucket.org/username', category: 'coding' },
+            { name: 'Stack Overflow', icon: 'fab fa-stack-overflow', placeholder: 'https://stackoverflow.com/users/username', category: 'coding' },
+            { name: 'LinkedIn', icon: 'fab fa-linkedin-in', placeholder: 'https://linkedin.com/in/username', category: 'professional' },
+            { name: 'Twitter', icon: 'fab fa-twitter', placeholder: 'https://twitter.com/username', category: 'social' },
+            { name: 'Instagram', icon: 'fab fa-instagram', placeholder: 'https://instagram.com/username', category: 'social' },
+            { name: 'Facebook', icon: 'fab fa-facebook-f', placeholder: 'https://facebook.com/username', category: 'social' },
+            { name: 'YouTube', icon: 'fab fa-youtube', placeholder: 'https://youtube.com/c/username', category: 'social' },
+            { name: 'Twitch', icon: 'fab fa-twitch', placeholder: 'https://twitch.tv/username', category: 'social' },
+            { name: 'Discord', icon: 'fab fa-discord', placeholder: 'https://discord.gg/invite', category: 'social' },
+            { name: 'Telegram', icon: 'fab fa-telegram', placeholder: 'https://t.me/username', category: 'social' },
+            { name: 'WhatsApp', icon: 'fab fa-whatsapp', placeholder: 'https://wa.me/phone-number', category: 'social' },
+            { name: 'Medium', icon: 'fab fa-medium', placeholder: 'https://medium.com/@username', category: 'blogging' },
+            { name: 'Dev.to', icon: 'fab fa-dev', placeholder: 'https://dev.to/username', category: 'blogging' },
+            { name: 'Hashnode', icon: 'fas fa-hashtag', placeholder: 'https://username.hashnode.dev', category: 'blogging' },
+            { name: 'Dribbble', icon: 'fab fa-dribbble', placeholder: 'https://dribbble.com/username', category: 'design' },
+            { name: 'Behance', icon: 'fab fa-behance', placeholder: 'https://behance.net/username', category: 'design' },
+            { name: 'Figma', icon: 'fab fa-figma', placeholder: 'https://figma.com/@username', category: 'design' },
+            { name: 'CodePen', icon: 'fab fa-codepen', placeholder: 'https://codepen.io/username', category: 'coding' },
+            { name: 'HackerRank', icon: 'fas fa-code', placeholder: 'https://hackerrank.com/username', category: 'coding' },
+            { name: 'LeetCode', icon: 'fas fa-laptop-code', placeholder: 'https://leetcode.com/username', category: 'coding' },
+            { name: 'Reddit', icon: 'fab fa-reddit', placeholder: 'https://reddit.com/user/username', category: 'social' },
+            { name: 'Pinterest', icon: 'fab fa-pinterest', placeholder: 'https://pinterest.com/username', category: 'social' },
+            { name: 'TikTok', icon: 'fab fa-tiktok', placeholder: 'https://tiktok.com/@username', category: 'social' },
+            { name: 'Snapchat', icon: 'fab fa-snapchat', placeholder: 'https://snapchat.com/add/username', category: 'social' },
+            { name: 'Spotify', icon: 'fab fa-spotify', placeholder: 'https://open.spotify.com/user/username', category: 'music' },
+            { name: 'SoundCloud', icon: 'fab fa-soundcloud', placeholder: 'https://soundcloud.com/username', category: 'music' },
+            { name: 'Goodreads', icon: 'fab fa-goodreads', placeholder: 'https://goodreads.com/user/show/username', category: 'books' },
+            { name: 'Product Hunt', icon: 'fas fa-rocket', placeholder: 'https://producthunt.com/@username', category: 'startup' },
+            { name: 'AngelList', icon: 'fas fa-angellist', placeholder: 'https://angel.co/u/username', category: 'startup' },
+            { name: 'Upwork', icon: 'fas fa-briefcase', placeholder: 'https://upwork.com/freelancers/~username', category: 'freelance' },
+            { name: 'Fiverr', icon: 'fas fa-dollar-sign', placeholder: 'https://fiverr.com/username', category: 'freelance' },
+            { name: 'Freelancer', icon: 'fas fa-briefcase', placeholder: 'https://freelancer.com/u/username', category: 'freelance' },
+            { name: 'Kaggle', icon: 'fab fa-kaggle', placeholder: 'https://kaggle.com/username', category: 'data' },
+            { name: 'ResearchGate', icon: 'fas fa-flask', placeholder: 'https://researchgate.net/profile/username', category: 'academic' }
+        ];
+
+        // Database of all skills for auto-suggest
+        const skillsDatabase = [
+            // Frontend Skills
+            'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 'Svelte',
+            'Next.js', 'Nuxt.js', 'Gatsby', 'Redux', 'MobX', 'GraphQL', 'Apollo', 'Webpack',
+            'Babel', 'ESLint', 'Prettier', 'Jest', 'Testing Library', 'Cypress', 'Storybook',
+            'Tailwind CSS', 'Bootstrap', 'Material-UI', 'Chakra UI', 'Styled Components',
+            'SASS/SCSS', 'LESS', 'PWA', 'WebSockets', 'WebRTC',
+            
+            // Backend Skills
+            'Node.js', 'Express.js', 'NestJS', 'Fastify', 'Python', 'Django', 'Flask', 'FastAPI',
+            'Java', 'Spring Boot', 'Kotlin', 'PHP', 'Laravel', 'Symfony', 'Ruby', 'Ruby on Rails',
+            'Go', 'Rust', 'C#', '.NET', 'ASP.NET', 'C++', 'Scala', 'Haskell',
+            'REST API', 'GraphQL API', 'Microservices', 'Serverless', 'WebSockets', 'OAuth', 'JWT',
+            
+            // Database Skills
+            'MongoDB', 'PostgreSQL', 'MySQL', 'SQLite', 'Redis', 'Elasticsearch', 'Cassandra',
+            'DynamoDB', 'Firebase', 'Supabase', 'Prisma', 'Sequelize', 'TypeORM', 'Mongoose',
+            'Database Design', 'SQL Optimization', 'NoSQL', 'Data Modeling', 'ETL',
+            
+            // DevOps Skills
+            'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'DigitalOcean', 'Heroku',
+            'Vercel', 'Netlify', 'Git', 'GitHub Actions', 'GitLab CI', 'Jenkins', 'CircleCI',
+            'Travis CI', 'Terraform', 'Ansible', 'Prometheus', 'Grafana', 'ELK Stack',
+            'Nginx', 'Apache', 'Linux', 'Shell Scripting', 'Bash', 'PowerShell',
+            
+            // Mobile Skills
+            'React Native', 'Flutter', 'Ionic', 'Swift', 'Kotlin', 'Java (Android)', 'Objective-C',
+            'Xamarin', 'Cordova', 'Mobile UI/UX', 'App Store', 'Google Play', 'Push Notifications',
+            
+            // Design Skills
+            'UI Design', 'UX Design', 'Figma', 'Adobe XD', 'Sketch', 'Photoshop', 'Illustrator',
+            'InDesign', 'Design Systems', 'Prototyping', 'Wireframing', 'User Research',
+            'Accessibility', 'Responsive Design', 'Motion Design',
+            
+            // Soft Skills
+            'Problem Solving', 'Team Leadership', 'Project Management', 'Agile/Scrum',
+            'Communication', 'Time Management', 'Mentoring', 'Public Speaking', 'Technical Writing',
+            
+            // Other Skills
+            'Machine Learning', 'Data Science', 'Blockchain', 'Web3', 'Smart Contracts',
+            'Cybersecurity', 'SEO', 'Performance Optimization', 'Internationalization',
+            'Payment Integration', 'Web Analytics', 'Chatbots', 'AR/VR'
+        ];
+
         // Predefined public portfolio data
         const predefinedPublicData = {
             profile: {
@@ -1587,6 +2034,7 @@
                 title: 'Full Stack Developer',
                 email: 'muhammadzuyyina@gmail.com',
                 phone: '+62 822 9569 2941',
+                location: 'Indonesia',
                 bio: 'Experienced Full Stack Developer with expertise in modern web technologies. Passionate about creating efficient, scalable, and user-friendly applications.',
                 image: null
             },
@@ -1691,67 +2139,102 @@
                     features: ['Multiple cities', '7-day forecast', 'Interactive maps', 'Data visualization'],
                     status: 'completed',
                     date: '2023'
-                },
-                {
-                    id: 4,
-                    name: 'Fitness Tracker App',
-                    description: 'Mobile fitness tracking application with workout plans, progress tracking, and social features. Built with React Native and Firebase.',
-                    type: 'mobile',
-                    technologies: ['React Native', 'Firebase', 'Redux', 'Expo', 'Chart.js'],
-                    image: 'https://images.unsplash.com/photo-1536922246289-88c42f957773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    demoUrl: '#',
-                    sourceUrl: '#',
-                    features: ['Workout plans', 'Progress tracking', 'Social features', 'Offline mode'],
-                    status: 'completed',
-                    date: '2023'
-                },
-                {
-                    id: 5,
-                    name: 'Chat Application',
-                    description: 'Real-time chat application with group chat, file sharing, and voice messages. Built with Socket.io, Node.js, and React.',
-                    type: 'web',
-                    technologies: ['React', 'Socket.io', 'Node.js', 'Express', 'MongoDB'],
-                    image: 'https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    demoUrl: '#',
-                    sourceUrl: '#',
-                    features: ['Group chat', 'File sharing', 'Voice messages', 'Typing indicators'],
-                    status: 'completed',
-                    date: '2023'
-                },
-                {
-                    id: 6,
-                    name: 'Portfolio CMS',
-                    description: 'Content management system for managing portfolio projects, skills, and blog posts. Built with Next.js and Sanity.io.',
-                    type: 'web',
-                    technologies: ['Next.js', 'Sanity.io', 'TypeScript', 'Tailwind CSS', 'Vercel'],
-                    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    demoUrl: '#',
-                    sourceUrl: '#',
-                    features: ['Content management', 'Blog system', 'SEO optimized', 'Dark mode'],
-                    status: 'completed',
-                    date: '2024'
                 }
             ],
             socialLinks: [
                 {
-                    platform: 'github',
-                    icon: 'fab fa-github',
-                    url: 'https://github.com/username'
+                    platform: 'GitHub',
+                    url: 'https://github.com/username',
+                    icon: 'fab fa-github'
                 },
                 {
-                    platform: 'linkedin',
-                    icon: 'fab fa-linkedin-in',
-                    url: 'https://linkedin.com/in/username'
+                    platform: 'LinkedIn',
+                    url: 'https://linkedin.com/in/username',
+                    icon: 'fab fa-linkedin-in'
                 },
                 {
-                    platform: 'twitter',
-                    icon: 'fab fa-twitter',
-                    url: 'https://twitter.com/username'
+                    platform: 'Twitter',
+                    url: 'https://twitter.com/username',
+                    icon: 'fab fa-twitter'
                 },
                 {
-                    platform: 'email',
-                    icon: 'fas fa-envelope',
-                    url: 'mailto:muhammadzuyyina@gmail.com'
+                    platform: 'Email',
+                    url: 'mailto:muhammadzuyyina@gmail.com',
+                    icon: 'fas fa-envelope'
+                }
+            ],
+            technologySpectrum: [
+                {
+                    id: 1,
+                    name: 'React',
+                    icon: 'fab fa-react',
+                    description: 'Frontend Library',
+                    category: 'frontend',
+                    color: 'blue',
+                    order: 1
+                },
+                {
+                    id: 2,
+                    name: 'Node.js',
+                    icon: 'fab fa-node-js',
+                    description: 'JavaScript Runtime',
+                    category: 'backend',
+                    color: 'green',
+                    order: 2
+                },
+                {
+                    id: 3,
+                    name: 'MongoDB',
+                    icon: 'fas fa-database',
+                    description: 'NoSQL Database',
+                    category: 'database',
+                    color: 'teal',
+                    order: 3
+                },
+                {
+                    id: 4,
+                    name: 'Docker',
+                    icon: 'fab fa-docker',
+                    description: 'Container Platform',
+                    category: 'devops',
+                    color: 'blue',
+                    order: 4
+                },
+                {
+                    id: 5,
+                    name: 'Python',
+                    icon: 'fab fa-python',
+                    description: 'Backend Language',
+                    category: 'backend',
+                    color: 'orange',
+                    order: 5
+                },
+                {
+                    id: 6,
+                    name: 'AWS',
+                    icon: 'fab fa-aws',
+                    description: 'Cloud Platform',
+                    category: 'devops',
+                    color: 'orange',
+                    order: 6
+                },
+                {
+                    id: 7,
+                    name: 'Vue.js',
+                    icon: 'fab fa-vuejs',
+                    description: 'Progressive Framework',
+                    category: 'frontend',
+                    color: 'green',
+                    order: 7
+                },
+                {
+                    id: 8,
+                    name: 'PostgreSQL',
+                    icon: 'fas fa-database',
+                    description: 'Relational Database',
+                    category: 'database',
+                    color: 'blue',
+                    order: 8
                 }
             ]
         };
@@ -1780,11 +2263,9 @@
                 toastType: 'success',
                 showDataPanel: false,
                 techInput: '',
-                certificationInput: '',
-                tagInput: '',
+                skillSuggestions: [],
+                techSuggestions: [],
                 activeSkillCategory: 'all',
-                activeSkillTab: 'basic',
-                activeProjectTab: 'basic',
                 selectedProject: null,
                 editingSkill: null,
                 editingProject: null,
@@ -1792,6 +2273,7 @@
                 uploadingProfileImage: false,
                 isSubmitting: false,
                 deleteItem: { type: '', id: null, name: '' },
+                draggingTechIndex: null,
 
                 // Firebase State
                 firebaseApp: null,
@@ -1832,6 +2314,7 @@
                 skills: [...predefinedPublicData.skills],
                 projects: [...predefinedPublicData.projects],
                 socialLinks: [...predefinedPublicData.socialLinks],
+                technologySpectrum: [...predefinedPublicData.technologySpectrum],
                 portfolioYear: new Date().getFullYear(),
 
                 // Navigation
@@ -1848,31 +2331,39 @@
                     'devops', 'cloud', 'tools', 'design', 'ai'
                 ],
 
-                // Popular Technologies
-                popularTechnologies: [
-                    'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 
-                    'Svelte', 'Next.js', 'Nuxt.js', 'Tailwind CSS', 'Bootstrap', 'SASS/SCSS',
-                    'Node.js', 'Express.js', 'Python', 'Django', 'Flask', 'PHP', 'Laravel', 
-                    'Java', 'Spring Boot', 'Go', 'Ruby', 'Ruby on Rails', 'C#', '.NET',
-                    'MongoDB', 'MySQL', 'PostgreSQL', 'Firebase', 'Redis', 'SQLite', 'Supabase',
-                    'React Native', 'Flutter', 'Electron', 'Swift', 'Kotlin',
-                    'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Vercel', 'Netlify',
-                    'Git', 'GitHub Actions', 'Jenkins', 'Nginx',
-                    'GraphQL', 'REST API', 'Jest', 'Cypress', 'Webpack', 'Figma', 'Adobe XD'
+                // Popular Social Platforms
+                popularSocialPlatforms: [
+                    { name: 'GitHub', icon: 'fab fa-github' },
+                    { name: 'LinkedIn', icon: 'fab fa-linkedin-in' },
+                    { name: 'Twitter', icon: 'fab fa-twitter' },
+                    { name: 'Instagram', icon: 'fab fa-instagram' },
+                    { name: 'YouTube', icon: 'fab fa-youtube' },
+                    { name: 'Facebook', icon: 'fab fa-facebook-f' },
+                    { name: 'Email', icon: 'fas fa-envelope' }
                 ],
+
+                // All Social Platforms
+                allSocialPlatforms: socialPlatformsDatabase,
+
+                // New Technology for Spectrum
+                newTech: {
+                    name: '',
+                    icon: 'fas fa-code',
+                    description: '',
+                    category: 'frontend',
+                    color: 'blue',
+                    order: 0
+                },
 
                 // New Skill Data
                 newSkill: {
                     name: '',
                     category: 'frontend',
-                    level: 50,
+                    level: 70,
                     years: 1,
                     projects: 0,
                     icon: 'fas fa-code',
-                    description: '',
-                    certifications: [],
-                    tags: [],
-                    customId: ''
+                    description: ''
                 },
 
                 // New Project Data
@@ -1908,6 +2399,8 @@
                     addProject: false,
                     addSkill: false,
                     editProfile: false,
+                    editSocialLinks: false,
+                    editTechnologySpectrum: false,
                     deleteConfirm: false
                 },
 
@@ -1920,9 +2413,10 @@
                 },
 
                 get averageSkillLevel() {
-                    if (this.skills.length === 0) return 0;
+                    if (this.skills.length === 0) return 70;
                     const total = this.skills.reduce((sum, skill) => sum + skill.level, 0);
-                    return Math.round(total / this.skills.length);
+                    const avg = total / this.skills.length;
+                    return Math.round(avg >= 70 ? avg : 70);
                 },
 
                 get totalProjectCount() {
@@ -1930,7 +2424,7 @@
                 },
 
                 get totalExperienceYears() {
-                    const startYear = 2023;
+                    const startYear = 2020;
                     const currentYear = new Date().getFullYear();
                     return Math.max(1, currentYear - startYear);
                 },
@@ -2002,6 +2496,11 @@
                             this.isPublicMode = false;
                             
                             console.log('✅ Restored login from localStorage');
+                            
+                            // Muat data pengguna
+                            setTimeout(() => {
+                                this.loadUserData();
+                            }, 500);
                             
                         } catch (e) {
                             console.error('Error parsing saved auth:', e);
@@ -2161,6 +2660,11 @@
                             console.log(`✅ Loaded ${this.socialLinks.length} social links`);
                         }
                         
+                        if (data.technologySpectrum && Array.isArray(data.technologySpectrum)) {
+                            this.technologySpectrum = data.technologySpectrum;
+                            console.log(`✅ Loaded ${this.technologySpectrum.length} technologies`);
+                        }
+                        
                         this.saveToLocalStorage();
                         
                     } catch (error) {
@@ -2177,6 +2681,7 @@
                     this.projects = [...predefinedPublicData.projects];
                     this.profile = { ...predefinedPublicData.profile };
                     this.socialLinks = [...predefinedPublicData.socialLinks];
+                    this.technologySpectrum = [...predefinedPublicData.technologySpectrum];
                     
                     this.updateProjectSlides();
                     this.saveToLocalStorage();
@@ -2356,6 +2861,11 @@
                             console.log(`✅ Dimuat ${this.socialLinks.length} link sosial`);
                         }
                         
+                        if (userData.technologySpectrum && Array.isArray(userData.technologySpectrum)) {
+                            this.technologySpectrum = userData.technologySpectrum;
+                            console.log(`✅ Dimuat ${this.technologySpectrum.length} technologies`);
+                        }
+                        
                         this.saveToLocalStorage();
                         
                     } catch (error) {
@@ -2395,6 +2905,7 @@
                         projects: this.projects,
                         profile: this.profile,
                         socialLinks: this.socialLinks,
+                        technologySpectrum: this.technologySpectrum,
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
                         updatedBy: this.userEmail,
                         version: '2.0',
@@ -2435,22 +2946,6 @@
                             this.showToastMessage(`❌ ${errorMessage}`, 'error');
                             this.addToSyncHistory('Publish gagal', 'error');
                         });
-                },
-
-                // TOGGLE MODE (Public/Edit)
-                toggleMode() {
-                    if (this.isPublicMode) {
-                        if (!this.userId) {
-                            this.showAuthModal = true;
-                            this.showToastMessage('Please login to enable edit mode', 'info');
-                            return;
-                        }
-                        this.isPublicMode = false;
-                        this.showToastMessage('Edit mode enabled', 'success');
-                    } else {
-                        this.isPublicMode = true;
-                        this.showToastMessage('View mode enabled', 'info');
-                    }
                 },
 
                 // EVENT LISTENERS
@@ -2528,7 +3023,7 @@
 
                 // MODAL METHODS
                 openModal(modalName) {
-                    if (this.isPublicMode && (modalName === 'addSkill' || modalName === 'addProject' || modalName === 'editProfile' || modalName === 'deleteConfirm')) {
+                    if (this.isPublicMode && (modalName === 'addSkill' || modalName === 'addProject' || modalName === 'editProfile' || modalName === 'editSocialLinks' || modalName === 'editTechnologySpectrum' || modalName === 'deleteConfirm')) {
                         this.showToastMessage('Please switch to edit mode to make changes', 'info');
                         return;
                     }
@@ -2544,10 +3039,53 @@
                         this.resetSkillForm();
                     } else if (modalName === 'addProject') {
                         this.resetProjectForm();
+                    } else if (modalName === 'editTechnologySpectrum') {
+                        this.resetTechForm();
                     }
                 },
 
                 // SKILL METHODS
+                filterSkillSuggestions() {
+                    const query = this.newSkill.name.toLowerCase();
+                    if (query.length < 2) {
+                        this.skillSuggestions = [];
+                        return;
+                    }
+                    
+                    this.skillSuggestions = skillsDatabase
+                        .filter(skill => 
+                            skill.toLowerCase().includes(query) &&
+                            !this.skills.some(s => s.name === skill)
+                        )
+                        .slice(0, 10);
+                },
+
+                selectSkillSuggestion(skill) {
+                    this.newSkill.name = skill;
+                    this.skillSuggestions = [];
+                    
+                    // Auto-set category and icon based on skill name
+                    const skillLower = skill.toLowerCase();
+                    
+                    if (skillLower.includes('react') || skillLower.includes('vue') || skillLower.includes('angular') || 
+                        skillLower.includes('html') || skillLower.includes('css') || skillLower.includes('javascript')) {
+                        this.newSkill.category = 'frontend';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    } else if (skillLower.includes('node') || skillLower.includes('python') || skillLower.includes('java') || 
+                               skillLower.includes('php') || skillLower.includes('ruby') || skillLower.includes('go')) {
+                        this.newSkill.category = 'backend';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    } else if (skillLower.includes('mongo') || skillLower.includes('sql') || skillLower.includes('database') || 
+                               skillLower.includes('redis')) {
+                        this.newSkill.category = 'database';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    } else if (skillLower.includes('docker') || skillLower.includes('kubernetes') || skillLower.includes('aws') || 
+                               skillLower.includes('azure') || skillLower.includes('devops')) {
+                        this.newSkill.category = 'devops';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    }
+                },
+
                 addNewSkill() {
                     if (this.isPublicMode) return;
                     
@@ -2557,7 +3095,7 @@
                         const newSkill = {
                             id: this.editingSkill ? this.editingSkill.id : Date.now(),
                             ...this.newSkill,
-                            icon: this.getSkillIcon(this.newSkill.category)
+                            icon: this.newSkill.icon || this.getTechIcon(this.newSkill.name)
                         };
 
                         if (this.editingSkill) {
@@ -2571,6 +3109,9 @@
                             this.showToastMessage('Skill added successfully', 'success');
                         }
 
+                        // Update average proficiency to ensure minimum 70%
+                        this.ensureMinimumProficiency();
+                        
                         this.saveToLocalStorage();
                         this.closeModal('addSkill');
                         this.resetSkillForm();
@@ -2582,7 +3123,60 @@
                     }
                 },
 
+                ensureMinimumProficiency() {
+                    // Ensure at least one skill has 90%+ to maintain 70% average
+                    const hasHighProficiency = this.skills.some(skill => skill.level >= 90);
+                    if (!hasHighProficiency && this.skills.length > 0) {
+                        this.skills[0].level = 95;
+                    }
+                },
+
                 // PROJECT METHODS
+                filterTechSuggestions() {
+                    const query = this.techInput.toLowerCase();
+                    if (query.length < 2) {
+                        this.techSuggestions = [];
+                        return;
+                    }
+                    
+                    // Get all technologies from database
+                    const allTechs = [];
+                    Object.values(technologyDatabase).forEach(category => {
+                        category.forEach(tech => {
+                            if (!allTechs.includes(tech.name)) {
+                                allTechs.push(tech.name);
+                            }
+                        });
+                    });
+                    
+                    this.techSuggestions = allTechs
+                        .filter(tech => 
+                            tech.toLowerCase().includes(query) &&
+                            !this.newProject.technologies.includes(tech)
+                        )
+                        .slice(0, 10);
+                },
+
+                addTechnology() {
+                    if (this.techInput.trim() && !this.newProject.technologies.includes(this.techInput.trim())) {
+                        this.newProject.technologies.push(this.techInput.trim());
+                        this.techInput = '';
+                        this.techSuggestions = [];
+                    }
+                },
+
+                addTechFromSuggestion(tech) {
+                    if (!this.newProject.technologies.includes(tech)) {
+                        this.newProject.technologies.push(tech);
+                        this.techInput = '';
+                        this.techSuggestions = [];
+                    }
+                },
+
+                removeTech(tech) {
+                    this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
+                },
+
                 addNewProject() {
                     if (this.isPublicMode) return;
                     
@@ -2653,6 +3247,161 @@
                     } catch (error) {
                         this.showToastMessage('Error updating profile', 'error');
                         console.error('Error updating profile:', error);
+                    }
+                },
+
+                // SOCIAL LINKS METHODS
+                saveSocialLinks() {
+                    if (this.isPublicMode) return;
+                    
+                    try {
+                        // Validate URLs
+                        for (const link of this.socialLinks) {
+                            if (link.url && !this.isValidUrl(link.url)) {
+                                this.showToastMessage(`Invalid URL for ${link.platform}: ${link.url}`, 'error');
+                                return;
+                            }
+                        }
+                        
+                        this.saveToLocalStorage();
+                        this.showToastMessage('Social links saved successfully', 'success');
+                        this.closeModal('editSocialLinks');
+                    } catch (error) {
+                        this.showToastMessage('Error saving social links', 'error');
+                        console.error('Error saving social links:', error);
+                    }
+                },
+
+                addSocialLink() {
+                    if (this.isPublicMode) return;
+                    
+                    this.socialLinks.push({
+                        platform: 'GitHub',
+                        url: '',
+                        icon: 'fab fa-github'
+                    });
+                },
+
+                addQuickSocialLink(platform) {
+                    if (this.isPublicMode) return;
+                    
+                    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
+                    if (platformData) {
+                        this.socialLinks.push({
+                            platform: platformData.name,
+                            url: platformData.placeholder.includes('username') ? '' : platformData.placeholder,
+                            icon: platformData.icon
+                        });
+                    }
+                },
+
+                removeSocialLink(index) {
+                    if (this.isPublicMode) return;
+                    
+                    this.socialLinks.splice(index, 1);
+                },
+
+                moveSocialLink(index, direction) {
+                    if (this.isPublicMode) return;
+                    
+                    if (direction === 'up' && index > 0) {
+                        const temp = this.socialLinks[index];
+                        this.socialLinks[index] = this.socialLinks[index - 1];
+                        this.socialLinks[index - 1] = temp;
+                    } else if (direction === 'down' && index < this.socialLinks.length - 1) {
+                        const temp = this.socialLinks[index];
+                        this.socialLinks[index] = this.socialLinks[index + 1];
+                        this.socialLinks[index + 1] = temp;
+                    }
+                },
+
+                handlePlatformChange(link, index) {
+                    if (this.isPublicMode) return;
+                    
+                    const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                    if (platformData) {
+                        link.icon = platformData.icon;
+                        if (!link.url || link.url === this.socialLinks[index].url) {
+                            link.url = platformData.placeholder.includes('username') ? '' : platformData.placeholder;
+                        }
+                    }
+                },
+
+                // TECHNOLOGY SPECTRUM METHODS
+                addTechnologyToSpectrum() {
+                    if (this.isPublicMode || !this.newTech.name.trim()) return;
+                    
+                    const newTech = {
+                        id: Date.now(),
+                        ...this.newTech,
+                        icon: this.getTechIcon(this.newTech.name),
+                        order: this.technologySpectrum.length + 1
+                    };
+                    
+                    this.technologySpectrum.push(newTech);
+                    this.resetTechForm();
+                    this.showToastMessage('Technology added to spectrum', 'success');
+                },
+
+                editTechnology(tech) {
+                    if (this.isPublicMode) return;
+                    
+                    this.newTech = { ...tech };
+                    // Scroll to top of modal
+                    const modal = document.querySelector('.modal-content');
+                    if (modal) {
+                        modal.scrollTop = 0;
+                    }
+                },
+
+                removeTechnologyFromSpectrum(id) {
+                    if (this.isPublicMode) return;
+                    
+                    this.technologySpectrum = this.technologySpectrum.filter(tech => tech.id !== id);
+                    // Update order
+                    this.technologySpectrum.forEach((tech, index) => {
+                        tech.order = index + 1;
+                    });
+                    this.showToastMessage('Technology removed from spectrum', 'success');
+                },
+
+                saveTechnologySpectrum() {
+                    if (this.isPublicMode) return;
+                    
+                    try {
+                        this.saveToLocalStorage();
+                        this.showToastMessage('Technology spectrum saved successfully', 'success');
+                        this.closeModal('editTechnologySpectrum');
+                    } catch (error) {
+                        this.showToastMessage('Error saving technology spectrum', 'error');
+                        console.error('Error saving technology spectrum:', error);
+                    }
+                },
+
+                handleTechDragStart(index) {
+                    this.draggingTechIndex = index;
+                },
+
+                handleTechDragEnd() {
+                    this.draggingTechIndex = null;
+                },
+
+                handleTechDrop(event) {
+                    event.preventDefault();
+                    if (this.draggingTechIndex === null) return;
+                    
+                    const dropIndex = Array.from(event.target.closest('.sortable-list').children)
+                        .findIndex(child => child.contains(event.target));
+                    
+                    if (dropIndex !== -1 && dropIndex !== this.draggingTechIndex) {
+                        const draggedItem = this.technologySpectrum[this.draggingTechIndex];
+                        this.technologySpectrum.splice(this.draggingTechIndex, 1);
+                        this.technologySpectrum.splice(dropIndex, 0, draggedItem);
+                        
+                        // Update order
+                        this.technologySpectrum.forEach((tech, index) => {
+                            tech.order = index + 1;
+                        });
                     }
                 },
 
@@ -2817,13 +3566,8 @@
                         localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
                         localStorage.setItem('portfolioProjects', JSON.stringify(this.projects));
                         localStorage.setItem('portfolioProfile', JSON.stringify(this.profile));
-                        
-                        const linksToSave = this.socialLinks.map(link => ({
-                            platform: link.platform,
-                            url: link.url,
-                            icon: link.icon
-                        }));
-                        localStorage.setItem('portfolioSocialLinks', JSON.stringify(linksToSave));
+                        localStorage.setItem('portfolioSocialLinks', JSON.stringify(this.socialLinks));
+                        localStorage.setItem('portfolioTechnologySpectrum', JSON.stringify(this.technologySpectrum));
                         
                         localStorage.setItem('portfolioCacheTime', new Date().toISOString());
                         
@@ -2985,23 +3729,12 @@
                     return colors[category] || 'bg-slate-500';
                 },
 
-                getSkillIcon(category) {
-                    return this.getCategoryIcon(category);
-                },
-
                 getProficiencyLevel(level) {
                     if (level >= 90) return 'Expert';
                     if (level >= 70) return 'Advanced';
                     if (level >= 50) return 'Intermediate';
                     if (level >= 30) return 'Beginner';
                     return 'Novice';
-                },
-
-                getProficiencyClass(level) {
-                    if (level >= 90) return 'status-success';
-                    if (level >= 70) return 'status-success';
-                    if (level >= 50) return 'status-warning';
-                    return 'status-error';
                 },
 
                 getProficiencyIcon(level) {
@@ -3024,213 +3757,99 @@
                 },
 
                 getTechIcon(tech) {
-                    const iconMap = {
-                        'React': 'fab fa-react',
-                        'Vue.js': 'fab fa-vuejs',
-                        'Angular': 'fab fa-angular',
-                        'Node.js': 'fab fa-node-js',
-                        'Python': 'fab fa-python',
-                        'Django': 'fab fa-python',
-                        'Flask': 'fab fa-python',
-                        'Java': 'fab fa-java',
-                        'PHP': 'fab fa-php',
-                        'Laravel': 'fab fa-laravel',
-                        'Ruby': 'fab fa-ruby',
-                        'Rails': 'fab fa-ruby',
-                        'Go': 'fab fa-golang',
-                        'Rust': 'fab fa-rust',
-                        'Swift': 'fab fa-swift',
-                        'Kotlin': 'fab fa-android',
-                        'C#': 'fab fa-microsoft',
-                        '.NET': 'fab fa-microsoft',
-                        'Docker': 'fab fa-docker',
-                        'Kubernetes': 'fab fa-docker',
-                        'AWS': 'fab fa-aws',
-                        'Azure': 'fab fa-microsoft',
-                        'Google Cloud': 'fab fa-google',
-                        'Firebase': 'fab fa-firebase',
-                        'MongoDB': 'fas fa-database',
-                        'MySQL': 'fas fa-database',
-                        'PostgreSQL': 'fas fa-database',
-                        'Redis': 'fas fa-database',
-                        'SQLite': 'fas fa-database',
-                        'Git': 'fab fa-git-alt',
-                        'GitHub': 'fab fa-github',
-                        'GitLab': 'fab fa-gitlab',
-                        'Bitbucket': 'fab fa-bitbucket',
-                        'HTML5': 'fab fa-html5',
-                        'CSS3': 'fab fa-css3-alt',
-                        'JavaScript': 'fab fa-js',
-                        'TypeScript': 'fab fa-js',
-                        'SASS': 'fab fa-sass',
-                        'Bootstrap': 'fab fa-bootstrap',
-                        'Tailwind CSS': 'fas fa-paint-brush',
-                        'Material-UI': 'fas fa-palette',
-                        'Figma': 'fab fa-figma',
-                        'Adobe XD': 'fas fa-palette',
-                        'Sketch': 'fas fa-palette',
-                        'Jest': 'fas fa-vial',
-                        'Cypress': 'fas fa-vial',
-                        'Webpack': 'fas fa-cube',
-                        'Babel': 'fas fa-cog',
-                        'ESLint': 'fas fa-code',
-                        'Prettier': 'fas fa-code',
-                        'Nginx': 'fas fa-server',
-                        'Apache': 'fas fa-server',
-                        'Linux': 'fab fa-linux',
-                        'Windows': 'fab fa-windows',
-                        'macOS': 'fab fa-apple'
-                    };
+                    // Search through technology database
+                    for (const category in technologyDatabase) {
+                        const found = technologyDatabase[category].find(item => 
+                            item.name.toLowerCase() === tech.toLowerCase()
+                        );
+                        if (found) {
+                            return found.icon;
+                        }
+                    }
                     
-                    return iconMap[tech] || 'fas fa-code';
+                    // Fallback icons based on tech name
+                    const techLower = tech.toLowerCase();
+                    if (techLower.includes('react')) return 'fab fa-react';
+                    if (techLower.includes('vue')) return 'fab fa-vuejs';
+                    if (techLower.includes('angular')) return 'fab fa-angular';
+                    if (techLower.includes('node')) return 'fab fa-node-js';
+                    if (techLower.includes('python')) return 'fab fa-python';
+                    if (techLower.includes('java')) return 'fab fa-java';
+                    if (techLower.includes('php')) return 'fab fa-php';
+                    if (techLower.includes('laravel')) return 'fab fa-laravel';
+                    if (techLower.includes('docker')) return 'fab fa-docker';
+                    if (techLower.includes('aws')) return 'fab fa-aws';
+                    if (techLower.includes('database') || techLower.includes('sql') || techLower.includes('mongo')) return 'fas fa-database';
+                    if (techLower.includes('git')) return 'fab fa-git-alt';
+                    if (techLower.includes('html')) return 'fab fa-html5';
+                    if (techLower.includes('css')) return 'fab fa-css3-alt';
+                    if (techLower.includes('javascript') || techLower.includes('typescript')) return 'fab fa-js';
+                    
+                    return 'fas fa-code';
+                },
+
+                getTechColor(color) {
+                    const colors = {
+                        'blue': 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                        'green': 'linear-gradient(135deg, #10b981, #059669)',
+                        'purple': 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                        'pink': 'linear-gradient(135deg, #ec4899, #db2777)',
+                        'orange': 'linear-gradient(135deg, #f97316, #ea580c)',
+                        'red': 'linear-gradient(135deg, #ef4444, #dc2626)',
+                        'teal': 'linear-gradient(135deg, #14b8a6, #0d9488)',
+                        'indigo': 'linear-gradient(135deg, #6366f1, #4f46e5)'
+                    };
+                    return colors[color] || colors.blue;
+                },
+
+                getTechTextColor(color) {
+                    const colors = {
+                        'blue': 'text-blue-100',
+                        'green': 'text-green-100',
+                        'purple': 'text-purple-100',
+                        'pink': 'text-pink-100',
+                        'orange': 'text-orange-100',
+                        'red': 'text-red-100',
+                        'teal': 'text-teal-100',
+                        'indigo': 'text-indigo-100'
+                    };
+                    return colors[color] || colors.blue;
                 },
 
                 // SOCIAL MEDIA HELPER METHODS
                 getSocialIcon(platform) {
-                    const iconMap = {
-                        'github': 'fab fa-github',
-                        'gitlab': 'fab fa-gitlab',
-                        'bitbucket': 'fab fa-bitbucket',
-                        'linkedin': 'fab fa-linkedin-in',
-                        'twitter': 'fab fa-twitter',
-                        'instagram': 'fab fa-instagram',
-                        'facebook': 'fab fa-facebook-f',
-                        'whatsapp': 'fab fa-whatsapp',
-                        'telegram': 'fab fa-telegram',
-                        'discord': 'fab fa-discord',
-                        'youtube': 'fab fa-youtube',
-                        'tiktok': 'fab fa-tiktok',
-                        'twitch': 'fab fa-twitch',
-                        'medium': 'fab fa-medium',
-                        'devto': 'fab fa-dev',
-                        'hashnode': 'fab fa-hashnode',
-                        'dribbble': 'fab fa-dribbble',
-                        'behance': 'fab fa-behance',
-                        'figma': 'fab fa-figma',
-                        'stackoverflow': 'fab fa-stack-overflow',
-                        'codepen': 'fab fa-codepen',
-                        'upwork': 'fab fa-upwork',
-                        'fiverr': 'fas fa-dollar-sign',
-                        'freelancer': 'fas fa-briefcase',
-                        'udemy': 'fas fa-graduation-cap',
-                        'coursera': 'fas fa-graduation-cap',
-                        'pluralsight': 'fas fa-graduation-cap',
-                        'notion': 'fas fa-sticky-note',
-                        'email': 'fas fa-envelope',
-                        'personal': 'fas fa-globe',
-                        'other': 'fas fa-external-link-alt'
-                    };
-                    
-                    return iconMap[platform] || 'fas fa-external-link-alt';
+                    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
+                    return platformData ? platformData.icon : 'fas fa-external-link-alt';
                 },
 
                 getSocialPlaceholder(platform) {
-                    const placeholders = {
-                        'github': 'https://github.com/username',
-                        'linkedin': 'https://linkedin.com/in/username',
-                        'twitter': 'https://twitter.com/username',
-                        'instagram': 'https://instagram.com/username',
-                        'facebook': 'https://facebook.com/username',
-                        'whatsapp': 'https://wa.me/phone-number',
-                        'telegram': 'https://t.me/username',
-                        'discord': 'https://discord.gg/invite',
-                        'youtube': 'https://youtube.com/c/username',
-                        'tiktok': 'https://tiktok.com/@username',
-                        'twitch': 'https://twitch.tv/username',
-                        'medium': 'https://medium.com/@username',
-                        'devto': 'https://dev.to/username',
-                        'hashnode': 'https://username.hashnode.dev',
-                        'dribbble': 'https://dribbble.com/username',
-                        'behance': 'https://behance.net/username',
-                        'figma': 'https://figma.com/@username',
-                        'stackoverflow': 'https://stackoverflow.com/users/username',
-                        'codepen': 'https://codepen.io/username',
-                        'upwork': 'https://upwork.com/freelancers/~username',
-                        'fiverr': 'https://fiverr.com/username',
-                        'freelancer': 'https://freelancer.com/u/username',
-                        'udemy': 'https://udemy.com/user/username',
-                        'coursera': 'https://coursera.org/user/username',
-                        'pluralsight': 'https://pluralsight.com/profile/username',
-                        'notion': 'https://notion.so/username',
-                        'email': 'mailto:email@example.com',
-                        'personal': 'https://yourwebsite.com',
-                        'other': 'https://example.com'
-                    };
-                    return placeholders[platform] || 'https://example.com';
+                    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
+                    return platformData ? platformData.placeholder : 'https://example.com';
                 },
 
                 getSocialPlatformName(platform) {
-                    const names = {
-                        'github': 'GitHub',
-                        'gitlab': 'GitLab',
-                        'bitbucket': 'Bitbucket',
-                        'linkedin': 'LinkedIn',
-                        'twitter': 'Twitter',
-                        'instagram': 'Instagram',
-                        'facebook': 'Facebook',
-                        'whatsapp': 'WhatsApp',
-                        'telegram': 'Telegram',
-                        'discord': 'Discord',
-                        'youtube': 'YouTube',
-                        'tiktok': 'TikTok',
-                        'twitch': 'Twitch',
-                        'medium': 'Medium',
-                        'devto': 'Dev.to',
-                        'hashnode': 'Hashnode',
-                        'dribbble': 'Dribbble',
-                        'behance': 'Behance',
-                        'figma': 'Figma',
-                        'stackoverflow': 'Stack Overflow',
-                        'codepen': 'CodePen',
-                        'upwork': 'Upwork',
-                        'fiverr': 'Fiverr',
-                        'freelancer': 'Freelancer',
-                        'udemy': 'Udemy',
-                        'coursera': 'Coursera',
-                        'pluralsight': 'Pluralsight',
-                        'notion': 'Notion',
-                        'email': 'Email',
-                        'personal': 'Personal Website',
-                        'other': 'Other'
-                    };
-                    return names[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+                    return platform;
                 },
 
-                getSocialPlatformColorClass(platform) {
-                    const colorMap = {
-                        'github': 'bg-gray-800 hover:bg-gray-900',
-                        'gitlab': 'bg-orange-600 hover:bg-orange-700',
-                        'bitbucket': 'bg-blue-600 hover:bg-blue-700',
-                        'linkedin': 'bg-blue-700 hover:bg-blue-800',
-                        'twitter': 'bg-blue-400 hover:bg-blue-500',
-                        'instagram': 'bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600',
-                        'facebook': 'bg-blue-600 hover:bg-blue-700',
-                        'whatsapp': 'bg-green-500 hover:bg-green-600',
-                        'telegram': 'bg-blue-500 hover:bg-blue-600',
-                        'discord': 'bg-indigo-600 hover:bg-indigo-700',
-                        'youtube': 'bg-red-600 hover:bg-red-700',
-                        'tiktok': 'bg-black hover:bg-gray-900',
-                        'twitch': 'bg-purple-600 hover:bg-purple-700',
-                        'medium': 'bg-gray-800 hover:bg-gray-900',
-                        'devto': 'bg-gray-900 hover:bg-black',
-                        'hashnode': 'bg-blue-600 hover:bg-blue-700',
-                        'dribbble': 'bg-pink-500 hover:bg-pink-600',
-                        'behance': 'bg-blue-800 hover:bg-blue-900',
-                        'figma': 'bg-orange-500 hover:bg-orange-600',
-                        'stackoverflow': 'bg-orange-500 hover:bg-orange-600',
-                        'codepen': 'bg-gray-800 hover:bg-gray-900',
-                        'upwork': 'bg-green-600 hover:bg-green-700',
-                        'fiverr': 'bg-green-500 hover:bg-green-600',
-                        'freelancer': 'bg-blue-500 hover:bg-blue-600',
-                        'udemy': 'bg-purple-700 hover:bg-purple-800',
-                        'coursera': 'bg-blue-800 hover:bg-blue-900',
-                        'pluralsight': 'bg-orange-500 hover:bg-orange-600',
-                        'notion': 'bg-gray-800 hover:bg-gray-900',
-                        'email': 'bg-gray-600 hover:bg-gray-700',
-                        'personal': 'bg-indigo-600 hover:bg-indigo-700',
-                        'other': 'bg-slate-600 hover:bg-slate-700'
+                getSocialPlatformColor(platform) {
+                    const colors = {
+                        'GitHub': 'linear-gradient(135deg, #333, #000)',
+                        'LinkedIn': 'linear-gradient(135deg, #0077b5, #006699)',
+                        'Twitter': 'linear-gradient(135deg, #1da1f2, #1a8cd8)',
+                        'Instagram': 'linear-gradient(135deg, #e4405f, #c13584)',
+                        'YouTube': 'linear-gradient(135deg, #ff0000, #cc0000)',
+                        'Facebook': 'linear-gradient(135deg, #1877f2, #166fe5)',
+                        'Email': 'linear-gradient(135deg, #ea4335, #d93025)',
+                        'GitLab': 'linear-gradient(135deg, #fc6d26, #e24329)',
+                        'Stack Overflow': 'linear-gradient(135deg, #f48024, #e06c1f)',
+                        'Medium': 'linear-gradient(135deg, #000, #333)',
+                        'Dev.to': 'linear-gradient(135deg, #0a0a0a, #000)',
+                        'Dribbble': 'linear-gradient(135deg, #ea4c89, #d6417a)',
+                        'Behance': 'linear-gradient(135deg, #1769ff, #0057ff)',
+                        'Figma': 'linear-gradient(135deg, #f24e1e, #e34a1c)',
+                        'CodePen': 'linear-gradient(135deg, #000, #333)'
                     };
-                    return colorMap[platform] || 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700';
+                    return colors[platform] || 'linear-gradient(135deg, #6366f1, #8b5cf6)';
                 },
 
                 isValidUrl(url) {
@@ -3243,17 +3862,25 @@
                 },
 
                 getSocialUsername(url) {
-                    if (!url) return '';
+                    if (!url) return 'Not set';
                     try {
                         const urlObj = new URL(url);
-                        const pathname = urlObj.pathname;
-                        if (url.includes('github.com')) return pathname.split('/')[1] || '';
-                        if (url.includes('linkedin.com/in/')) return pathname.split('/in/')[1] || '';
-                        if (url.includes('twitter.com/')) return pathname.split('/')[1] || '';
-                        if (url.includes('instagram.com/')) return pathname.split('/')[1] || '';
-                        return urlObj.hostname;
+                        if (url.includes('github.com')) {
+                            const path = urlObj.pathname.split('/').filter(p => p);
+                            return path[0] || 'username';
+                        }
+                        if (url.includes('linkedin.com/in/')) {
+                            return urlObj.pathname.split('/in/')[1] || 'username';
+                        }
+                        if (url.includes('twitter.com/')) {
+                            return urlObj.pathname.split('/')[1] || 'username';
+                        }
+                        if (url.includes('instagram.com/')) {
+                            return urlObj.pathname.split('/')[1] || 'username';
+                        }
+                        return urlObj.hostname.replace('www.', '');
                     } catch (_) {
-                        return '';
+                        return url;
                     }
                 },
 
@@ -3262,17 +3889,13 @@
                     this.newSkill = {
                         name: '',
                         category: 'frontend',
-                        level: 50,
+                        level: 70,
                         years: 1,
                         projects: 0,
                         icon: 'fas fa-code',
-                        description: '',
-                        certifications: [],
-                        tags: [],
-                        customId: ''
+                        description: ''
                     };
-                    this.certificationInput = '';
-                    this.tagInput = '';
+                    this.skillSuggestions = [];
                     this.editingSkill = null;
                 },
 
@@ -3296,7 +3919,19 @@
                         features: []
                     };
                     this.techInput = '';
+                    this.techSuggestions = [];
                     this.editingProject = null;
+                },
+
+                resetTechForm() {
+                    this.newTech = {
+                        name: '',
+                        icon: 'fas fa-code',
+                        description: '',
+                        category: 'frontend',
+                        color: 'blue',
+                        order: 0
+                    };
                 },
 
                 // EDIT SKILL/PROJECT METHODS
@@ -3321,108 +3956,7 @@
                     this.openModal('projectDetail');
                 },
 
-                // SKILL FORM HELPERS
-                addCertification() {
-                    if (this.certificationInput.trim()) {
-                        this.newSkill.certifications.push(this.certificationInput.trim());
-                        this.certificationInput = '';
-                    }
-                },
-
-                removeCertification(index) {
-                    this.newSkill.certifications.splice(index, 1);
-                },
-
-                addTag() {
-                    if (this.tagInput.trim()) {
-                        this.newSkill.tags.push(this.tagInput.trim());
-                        this.tagInput = '';
-                    }
-                },
-
-                removeTag(index) {
-                    this.newSkill.tags.splice(index, 1);
-                },
-
-                nextSkillTab() {
-                    if (this.activeSkillTab === 'basic') {
-                        this.activeSkillTab = 'details';
-                    } else if (this.activeSkillTab === 'details') {
-                        this.activeSkillTab = 'advanced';
-                    }
-                },
-
-                prevSkillTab() {
-                    if (this.activeSkillTab === 'advanced') {
-                        this.activeSkillTab = 'details';
-                    } else if (this.activeSkillTab === 'details') {
-                        this.activeSkillTab = 'basic';
-                    }
-                },
-
-                // PROJECT FORM HELPERS
-                addTechnology() {
-                    if (this.techInput.trim() && !this.newProject.technologies.includes(this.techInput.trim())) {
-                        this.newProject.technologies.push(this.techInput.trim());
-                        this.techInput = '';
-                    }
-                },
-
-                addTechFromSuggestion(tech) {
-                    if (!this.newProject.technologies.includes(tech)) {
-                        this.newProject.technologies.push(tech);
-                    }
-                },
-
-                removeTech(tech) {
-                    this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
-                },
-
-                nextProjectTab() {
-                    if (this.activeProjectTab === 'basic') {
-                        this.activeProjectTab = 'tech';
-                    } else if (this.activeProjectTab === 'tech') {
-                        this.activeProjectTab = 'media';
-                    } else if (this.activeProjectTab === 'media') {
-                        this.activeProjectTab = 'details';
-                    }
-                },
-
-                prevProjectTab() {
-                    if (this.activeProjectTab === 'details') {
-                        this.activeProjectTab = 'media';
-                    } else if (this.activeProjectTab === 'media') {
-                        this.activeProjectTab = 'tech';
-                    } else if (this.activeProjectTab === 'tech') {
-                        this.activeProjectTab = 'basic';
-                    }
-                },
-
                 // IMAGE UPLOAD METHODS
-                triggerFileInput() {
-                    document.getElementById('projectImageInput').click();
-                },
-
-                uploadImage(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        if (file.size > this.storageConfig.maxImageSize) {
-                            this.showToastMessage('Image size too large. Max 1MB.', 'error');
-                            return;
-                        }
-                        
-                        this.uploadingImage = true;
-                        
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.newProject.image = e.target.result;
-                            this.uploadingImage = false;
-                            this.showToastMessage('Image uploaded successfully', 'success');
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                },
-
                 uploadProfileImage(event) {
                     const file = event.target.files[0];
                     if (file) {
@@ -3443,14 +3977,6 @@
                     }
                 },
 
-                handleDrop(event) {
-                    event.preventDefault();
-                    const file = event.dataTransfer.files[0];
-                    if (file && file.type.startsWith('image/')) {
-                        this.uploadImage({ target: { files: [file] } });
-                    }
-                },
-
                 handleProjectImageError(event, projectId) {
                     console.error('Error loading project image:', event);
                     event.target.src = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
@@ -3459,183 +3985,6 @@
                     if (projectIndex !== -1) {
                         this.projects[projectIndex].image = event.target.src;
                     }
-                },
-
-                // SOCIAL LINKS METHODS
-                addSocialLink() {
-                    if (this.isPublicMode) return;
-                    
-                    this.socialLinks.push({
-                        platform: 'github',
-                        url: '',
-                        icon: 'fab fa-github'
-                    });
-                },
-
-                addQuickSocialLink(platform) {
-                    if (this.isPublicMode) return;
-                    
-                    const placeholder = this.getSocialPlaceholder(platform);
-                    this.socialLinks.push({
-                        platform: platform,
-                        url: placeholder.includes('username') ? '' : placeholder,
-                        icon: this.getSocialIcon(platform)
-                    });
-                },
-
-                removeSocialLink(index) {
-                    if (this.isPublicMode) return;
-                    
-                    this.socialLinks.splice(index, 1);
-                },
-
-                moveSocialLink(index, direction) {
-                    if (this.isPublicMode) return;
-                    
-                    if (direction === 'up' && index > 0) {
-                        const temp = this.socialLinks[index];
-                        this.socialLinks[index] = this.socialLinks[index - 1];
-                        this.socialLinks[index - 1] = temp;
-                    } else if (direction === 'down' && index < this.socialLinks.length - 1) {
-                        const temp = this.socialLinks[index];
-                        this.socialLinks[index] = this.socialLinks[index + 1];
-                        this.socialLinks[index + 1] = temp;
-                    }
-                },
-
-                handlePlatformChange(link, index) {
-                    if (this.isPublicMode) return;
-                    
-                    link.icon = this.getSocialIcon(link.platform);
-                    if (!link.url || link.url.includes('username') || link.url === this.getSocialPlaceholder(this.socialLinks[index].platform)) {
-                        link.url = this.getSocialPlaceholder(link.platform);
-                    }
-                },
-
-                editSocialLink(index) {
-                    if (this.isPublicMode) return;
-                    
-                    const newUrl = prompt('Enter new URL for ' + this.getSocialPlatformName(this.socialLinks[index].platform), this.socialLinks[index].url);
-                    if (newUrl !== null) {
-                        this.socialLinks[index].url = newUrl;
-                        this.saveToLocalStorage();
-                        this.showToastMessage('Social link updated', 'success');
-                    }
-                },
-
-                // DATA IMPORT/EXPORT METHODS
-                importSampleData() {
-                    if (this.isPublicMode) {
-                        this.showToastMessage('Please switch to edit mode to import data', 'info');
-                        return;
-                    }
-                    
-                    if (confirm('This will replace your current data with sample data. Continue?')) {
-                        this.skills = [...predefinedPublicData.skills];
-                        this.projects = [...predefinedPublicData.projects];
-                        this.socialLinks = [...predefinedPublicData.socialLinks];
-                        
-                        this.updateProjectSlides();
-                        this.saveToLocalStorage();
-                        
-                        this.showToastMessage('Sample data loaded successfully', 'success');
-                        this.showDataPanel = false;
-                    }
-                },
-
-                exportToJSON() {
-                    const data = {
-                        skills: this.skills,
-                        projects: this.projects,
-                        profile: this.profile,
-                        socialLinks: this.socialLinks,
-                        exportedAt: new Date().toISOString()
-                    };
-                    
-                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `portfolio-backup-${new Date().toISOString().split('T')[0]}.json`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    this.showToastMessage('Data exported successfully', 'success');
-                },
-
-                clearAllData() {
-                    if (this.isPublicMode) {
-                        this.showToastMessage('Please switch to edit mode to clear data', 'info');
-                        return;
-                    }
-                    
-                    if (confirm('This will delete ALL your data. This action cannot be undone. Continue?')) {
-                        localStorage.clear();
-                        this.skills = [];
-                        this.projects = [];
-                        this.socialLinks = [];
-                        this.profile = { ...predefinedPublicData.profile };
-                        this.syncHistory = [];
-                        
-                        this.updateProjectSlides();
-                        this.showToastMessage('All data cleared', 'success');
-                        this.showDataPanel = false;
-                    }
-                },
-
-                runDataHealthCheck() {
-                    try {
-                        const issues = [];
-                        
-                        if (this.skills.length === 0) issues.push('No skills found');
-                        
-                        this.skills.forEach((skill, index) => {
-                            if (!skill.name) issues.push(`Skill ${index + 1}: Missing name`);
-                            if (skill.level < 0 || skill.level > 100) issues.push(`Skill ${skill.name}: Invalid level`);
-                        });
-                        
-                        if (this.projects.length === 0) issues.push('No projects found');
-                        
-                        this.projects.forEach((project, index) => {
-                            if (!project.name) issues.push(`Project ${index + 1}: Missing name`);
-                            if (!project.description) issues.push(`Project ${project.name}: Missing description`);
-                        });
-                        
-                        if (!this.profile.name) issues.push('Profile: Missing name');
-                        if (!this.profile.email) issues.push('Profile: Missing email');
-                        
-                        if (issues.length === 0) {
-                            this.dataIntegrity = true;
-                            this.showToastMessage('Data health check passed!', 'success');
-                        } else {
-                            this.dataIntegrity = false;
-                            console.warn('Data health issues:', issues);
-                            this.showToastMessage(`Found ${issues.length} data issues`, 'warning');
-                        }
-                        
-                        this.calculateStorageUsage();
-                        
-                    } catch (error) {
-                        console.error('Health check error:', error);
-                        this.showToastMessage('Health check failed', 'error');
-                    }
-                },
-
-                formatTimeAgo(timestamp) {
-                    const now = new Date();
-                    const past = new Date(timestamp);
-                    const diff = now - past;
-                    
-                    const minutes = Math.floor(diff / 60000);
-                    const hours = Math.floor(diff / 3600000);
-                    const days = Math.floor(diff / 86400000);
-                    
-                    if (minutes < 1) return 'Just now';
-                    if (minutes < 60) return `${minutes}m ago`;
-                    if (hours < 24) return `${hours}h ago`;
-                    return `${days}d ago`;
                 }
             };
         }
