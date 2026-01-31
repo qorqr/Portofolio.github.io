@@ -1569,33 +1569,49 @@
                             </button>
                         </div>
                         
-                        <!-- Social Links -->
-                        <div class="contact-form-container">
-                            <div class="flex justify-between items-center mb-8">
-                                <h3 class="text-2xl font-bold">
-                                    <i class="fas fa-share-alt mr-3 gradient-text"></i>
-                                    Connect
-                                </h3>
-                                <button x-show="!isPublicMode" @click="openModal('editSocialLinks')" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-edit mr-2"></i>
-                                    Edit
-                                </button>
-                            </div>
-                            
-                            <div class="social-grid">
-                                <template x-for="link in socialLinks" :key="link.platform">
-                                    <a :href="link.url" target="_blank" class="social-link-item card-hover p-4 text-center">
-                                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" :style="'background: ' + getSocialPlatformColor(link.platform)">
-                                            <i :class="link.icon" class="text-white text-lg"></i>
-                                        </div>
-                                        <h4 class="font-bold text-sm" x-text="link.platform"></h4>
-                                        <p class="text-gray-600 dark-mode:text-gray-400 text-xs mt-1" x-text="getSocialUsername(link.url)"></p>
-                                    </a>
-                                </template>
-                            </div>
-                        </div>
+<!-- Social Links -->
+<div class="contact-form-container">
+    <div class="flex justify-between items-center mb-8">
+        <h3 class="text-2xl font-bold">
+            <i class="fas fa-share-alt mr-3 gradient-text"></i>
+            Connect
+        </h3>
+        <button x-show="!isPublicMode" @click="openModal('editSocialLinks')" class="btn btn-primary btn-sm">
+            <i class="fas fa-edit mr-2"></i>
+            Edit
+        </button>
+    </div>
+    
+    <div class="social-grid">
+        <template x-if="socialLinks && socialLinks.length > 0">
+            <template x-for="link in socialLinks" :key="link.platform + link.url">
+                <a :href="link.url" target="_blank" 
+                   class="social-link-item card-hover p-4 text-center"
+                   x-show="link.url && link.url.trim() !== ''">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" 
+                         :style="'background: ' + getSocialPlatformColor(link.platform)">
+                        <i :class="link.icon" class="text-white text-lg"></i>
                     </div>
-                    
+                    <h4 class="font-bold text-sm" x-text="link.platform"></h4>
+                    <p class="text-gray-600 dark-mode:text-gray-400 text-xs mt-1" 
+                       x-text="getSocialUsername(link.url)"></p>
+                </a>
+            </template>
+        </template>
+        
+        <template x-if="!socialLinks || socialLinks.length === 0">
+            <div class="col-span-full text-center py-8">
+                <i class="fas fa-share-alt text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-500 dark-mode:text-gray-400">No social links added yet</p>
+                <button x-show="!isPublicMode" @click="openModal('editSocialLinks')" 
+                        class="btn btn-outline btn-sm mt-4">
+                    <i class="fas fa-plus mr-2"></i>
+                    Add Social Links
+                </button>
+            </div>
+        </template>
+    </div>
+</div>
                     <!-- Contact Form -->
                     <div>
                         <div class="contact-form-container">
@@ -3150,28 +3166,28 @@
                     endDate: '2024-03-01'
                 }
             ],
-            socialLinks: [
-                {
-                    platform: 'GitHub',
-                    url: 'https://github.com/username',
-                    icon: 'fab fa-github'
-                },
-                {
-                    platform: 'LinkedIn',
-                    url: 'https://linkedin.com/in/username',
-                    icon: 'fab fa-linkedin-in'
-                },
-                {
-                    platform: 'Twitter',
-                    url: 'https://twitter.com/username',
-                    icon: 'fab fa-twitter'
-                },
-                {
-                    platform: 'Email',
-                    url: 'mailto:muhammadzuyyina@gmail.com',
-                    icon: 'fas fa-envelope'
-                }
-            ],
+         socialLinks: JSON.parse(JSON.stringify([
+    {
+        platform: 'GitHub',
+        url: 'https://github.com/username',
+        icon: 'fab fa-github'
+    },
+    {
+        platform: 'LinkedIn',
+        url: 'https://linkedin.com/in/username',
+        icon: 'fab fa-linkedin-in'
+    },
+    {
+        platform: 'Twitter',
+        url: 'https://twitter.com/username',
+        icon: 'fab fa-twitter'
+    },
+    {
+        platform: 'Email',
+        url: 'mailto:muhammadzuyyina@gmail.com',
+        icon: 'fas fa-envelope'
+    }
+])),
             technologySpectrum: [
                 {
                     id: 1,
@@ -3716,53 +3732,53 @@
                 },
 
                 // FIXED: UPDATE DATA DARI FIREBASE
-                updateDataFromFirebase(data) {
-                    try {
-                        console.log('🔄 Updating data from Firebase...');
-                        
-                        if (data.skills && Array.isArray(data.skills)) {
-                            this.skills = data.skills;
-                            console.log(`✅ Loaded ${this.skills.length} skills`);
-                        }
-                        
-                        if (data.projects && Array.isArray(data.projects)) {
-                            this.projects = data.projects;
-                            this.updateProjectSlides();
-                            console.log(`✅ Loaded ${this.projects.length} projects`);
-                        }
-                        
-                        if (data.profile) {
-                            Object.assign(this.profile, data.profile);
-                            console.log('✅ Profile data loaded');
-                        }
-                        
-                        // FIX: Handle social links properly
-                        if (data.socialLinks) {
-                            this.socialLinks = data.socialLinks.map(link => {
-                                // Ensure link has all required properties
-                                const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
-                                return {
-                                    platform: link.platform || 'Custom',
-                                    url: link.url || '',
-                                    icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
-                                };
-                            }).filter(link => link.url && link.url.trim() !== '');
-                            console.log(`✅ Loaded ${this.socialLinks.length} social links`);
-                        }
-                        
-                        if (data.technologySpectrum && Array.isArray(data.technologySpectrum)) {
-                            this.technologySpectrum = data.technologySpectrum;
-                            console.log(`✅ Loaded ${this.technologySpectrum.length} technologies`);
-                        }
-                        
-                        this.saveToLocalStorage();
-                        
-                    } catch (error) {
-                        console.error('Error updating data from Firebase:', error);
-                        this.showToastMessage('Error loading cloud data', 'warning');
-                    }
-                },
-
+             updateDataFromFirebase(data) {
+    try {
+        console.log('🔄 Updating data from Firebase...');
+        
+        if (data.skills && Array.isArray(data.skills)) {
+            this.skills = data.skills;
+            console.log(`✅ Loaded ${this.skills.length} skills`);
+        }
+        
+        if (data.projects && Array.isArray(data.projects)) {
+            this.projects = data.projects;
+            this.updateProjectSlides();
+            console.log(`✅ Loaded ${this.projects.length} projects`);
+        }
+        
+        if (data.profile) {
+            Object.assign(this.profile, data.profile);
+            console.log('✅ Profile data loaded');
+        }
+        
+        // FIX: Handle social links properly
+        if (data.socialLinks && Array.isArray(data.socialLinks)) {
+            this.socialLinks = data.socialLinks
+                .filter(link => link && link.url && link.url.trim() !== '')
+                .map(link => {
+                    const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                    return {
+                        platform: link.platform || 'Custom',
+                        url: link.url.trim(),
+                        icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
+                    };
+                });
+            console.log(`✅ Loaded ${this.socialLinks.length} social links`);
+        }
+        
+        if (data.technologySpectrum && Array.isArray(data.technologySpectrum)) {
+            this.technologySpectrum = data.technologySpectrum;
+            console.log(`✅ Loaded ${this.technologySpectrum.length} technologies`);
+        }
+        
+        this.saveToLocalStorage();
+        
+    } catch (error) {
+        console.error('Error updating data from Firebase:', error);
+        this.showToastMessage('Error loading cloud data', 'warning');
+    }
+},
                 // FIXED: USE PREDEFINED DATA (fallback)
                 usePredefinedData() {
                     console.log('📊 Using predefined portfolio data');
@@ -3956,52 +3972,53 @@
                         });
                 },
 
-                mergeUserData(userData) {
-                    try {
-                        console.log('🔄 Menggabungkan data pengguna...');
-                        
-                        if (userData.skills && Array.isArray(userData.skills)) {
-                            this.skills = userData.skills;
-                            console.log(`✅ Dimuat ${this.skills.length} skill`);
-                        }
-                        
-                        if (userData.projects && Array.isArray(userData.projects)) {
-                            this.projects = userData.projects;
-                            this.updateProjectSlides();
-                            console.log(`✅ Dimuat ${this.projects.length} proyek`);
-                        }
-                        
-                        if (userData.profile) {
-                            Object.assign(this.profile, userData.profile);
-                            console.log('✅ Data profil dimuat');
-                        }
-                        
-                        // FIX: Properly handle social links merge
-                        if (userData.socialLinks) {
-                            this.socialLinks = userData.socialLinks.map(link => {
-                                const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
-                                return {
-                                    platform: link.platform || 'Custom',
-                                    url: link.url || '',
-                                    icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
-                                };
-                            }).filter(link => link.url && link.url.trim() !== '');
-                            console.log(`✅ Dimuat ${this.socialLinks.length} link sosial`);
-                        }
-                        
-                        if (userData.technologySpectrum && Array.isArray(userData.technologySpectrum)) {
-                            this.technologySpectrum = userData.technologySpectrum;
-                            console.log(`✅ Dimuat ${this.technologySpectrum.length} technologies`);
-                        }
-                        
-                        this.saveToLocalStorage();
-                        
-                    } catch (error) {
-                        console.error('Error menggabungkan data pengguna:', error);
-                        this.showToastMessage('Error menggabungkan data', 'warning');
-                    }
-                },
-
+mergeUserData(userData) {
+    try {
+        console.log('🔄 Menggabungkan data pengguna...');
+        
+        if (userData.skills && Array.isArray(userData.skills)) {
+            this.skills = userData.skills;
+            console.log(`✅ Dimuat ${this.skills.length} skill`);
+        }
+        
+        if (userData.projects && Array.isArray(userData.projects)) {
+            this.projects = userData.projects;
+            this.updateProjectSlides();
+            console.log(`✅ Dimuat ${this.projects.length} proyek`);
+        }
+        
+        if (userData.profile) {
+            Object.assign(this.profile, userData.profile);
+            console.log('✅ Data profil dimuat');
+        }
+        
+        // FIX: Properly handle social links merge
+        if (userData.socialLinks && Array.isArray(userData.socialLinks)) {
+            this.socialLinks = userData.socialLinks
+                .filter(link => link && link.url && link.url.trim() !== '')
+                .map(link => {
+                    const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                    return {
+                        platform: link.platform || 'Custom',
+                        url: link.url.trim(),
+                        icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
+                    };
+                });
+            console.log(`✅ Dimuat ${this.socialLinks.length} link sosial`);
+        }
+        
+        if (userData.technologySpectrum && Array.isArray(userData.technologySpectrum)) {
+            this.technologySpectrum = userData.technologySpectrum;
+            console.log(`✅ Dimuat ${this.technologySpectrum.length} technologies`);
+        }
+        
+        this.saveToLocalStorage();
+        
+    } catch (error) {
+        console.error('Error menggabungkan data pengguna:', error);
+        this.showToastMessage('Error menggabungkan data', 'warning');
+    }
+},
                 publishToPublic() {
                     if (!this.userId) {
                         this.showToastMessage('Silakan login terlebih dahulu untuk publish', 'warning');
@@ -4477,35 +4494,42 @@
                     return errors;
                 },
 
-                saveSocialLinks() {
-                    if (this.isPublicMode) return;
-                    
-                    const errors = this.validateSocialLinks();
-                    if (errors.length > 0) {
-                        this.showToastMessage(errors[0], 'error');
-                        return;
-                    }
-                    
-                    try {
-                        // Remove empty URLs and ensure proper formatting
-                        this.socialLinks = this.socialLinks
-                            .filter(link => link.url && link.url.trim())
-                            .map(link => ({
-                                platform: link.platform || 'Custom',
-                                url: link.url.trim(),
-                                icon: link.icon || this.getSocialIcon(link.platform)
-                            }));
-                        
-                        console.log('Saving social links:', this.socialLinks);
-                        
-                        this.saveToLocalStorage();
-                        this.showToastMessage('Social links saved successfully', 'success');
-                        this.closeModal('editSocialLinks');
-                    } catch (error) {
-                        console.error('Error saving social links:', error);
-                        this.showToastMessage('Error saving social links', 'error');
-                    }
-                },
+saveSocialLinks() {
+    if (this.isPublicMode) return;
+    
+    const errors = this.validateSocialLinks();
+    if (errors.length > 0) {
+        this.showToastMessage(errors[0], 'error');
+        return;
+    }
+    
+    try {
+        // Remove empty URLs and ensure proper formatting
+        const filteredLinks = this.socialLinks
+            .filter(link => link.url && link.url.trim() && link.platform)
+            .map(link => {
+                // Ensure icon is set based on platform
+                const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                return {
+                    platform: link.platform || 'Custom',
+                    url: link.url.trim(),
+                    icon: platformData ? platformData.icon : link.icon || 'fas fa-external-link-alt'
+                };
+            });
+        
+        console.log('Saving filtered social links:', filteredLinks);
+        
+        // Update the reactive array
+        this.socialLinks = filteredLinks;
+        
+        this.saveToLocalStorage();
+        this.showToastMessage('Social links saved successfully', 'success');
+        this.closeModal('editSocialLinks');
+    } catch (error) {
+        console.error('Error saving social links:', error);
+        this.showToastMessage('Error saving social links', 'error');
+    }
+},
 
                 addSocialLink() {
                     if (this.isPublicMode) return;
@@ -4517,18 +4541,18 @@
                     });
                 },
 
-                addQuickSocialLink(platform) {
-                    if (this.isPublicMode) return;
-                    
-                    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
-                    if (platformData) {
-                        this.socialLinks.push({
-                            platform: platformData.name,
-                            url: platformData.placeholder.includes('username') ? '' : platformData.placeholder,
-                            icon: platformData.icon
-                        });
-                    }
-                },
+     addQuickSocialLink(platform) {
+    if (this.isPublicMode) return;
+    
+    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
+    if (platformData) {
+        this.socialLinks.push({
+            platform: platformData.name,
+            url: platformData.placeholder.includes('username') ? '' : platformData.placeholder,
+            icon: platformData.icon
+        });
+    }
+},
 
                 removeSocialLink(index) {
                     if (this.isPublicMode) return;
@@ -4550,18 +4574,20 @@
                     }
                 },
 
-                handlePlatformChange(link, index) {
-                    if (this.isPublicMode) return;
-                    
-                    const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
-                    if (platformData) {
-                        link.icon = platformData.icon;
-                        if (!link.url || link.url === this.socialLinks[index].url) {
-                            link.url = platformData.placeholder.includes('username') ? '' : platformData.placeholder;
-                        }
-                    }
-                },
-
+   handlePlatformChange(link, index) {
+    if (this.isPublicMode) return;
+    
+    const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+    if (platformData) {
+        // Update icon immediately
+        link.icon = platformData.icon;
+        
+        // Only update URL if it's empty or matches the old placeholder
+        if (!link.url || link.url === '') {
+            link.url = platformData.placeholder.includes('username') ? '' : platformData.placeholder;
+        }
+    }
+},
                 // TECHNOLOGY SPECTRUM METHODS
                 addTechnologyToSpectrum() {
                     if (this.isPublicMode || !this.newTech.name.trim()) return;
@@ -5050,11 +5076,12 @@
                     return colors[color] || colors.blue;
                 },
 
-                // SOCIAL MEDIA HELPER METHODS
-                getSocialIcon(platform) {
-                    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
-                    return platformData ? platformData.icon : 'fas fa-external-link-alt';
-                },
+         getSocialIcon(platform) {
+    if (!platform) return 'fas fa-external-link-alt';
+    
+    const platformData = socialPlatformsDatabase.find(p => p.name === platform);
+    return platformData ? platformData.icon : 'fas fa-external-link-alt';
+},
 
                 getSocialPlaceholder(platform) {
                     const platformData = socialPlatformsDatabase.find(p => p.name === platform);
