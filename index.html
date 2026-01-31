@@ -76,7 +76,10 @@
                         'gradient-shift': 'gradientShift 8s ease infinite',
                         'blur-in': 'blurIn 0.8s ease-out',
                         'slide-in-right': 'slideInRight 0.5s ease-out',
-                        'slide-in-left': 'slideInLeft 0.5s ease-out'
+                        'slide-in-left': 'slideInLeft 0.5s ease-out',
+                        'bounce': 'bounce 2s infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite'
                     },
                     keyframes: {
                         fadeIn: {
@@ -118,6 +121,15 @@
                         slideInLeft: {
                             '0%': { transform: 'translateX(-20px)', opacity: '0' },
                             '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        bounce: {
+                            '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                            '40%': { transform: 'translateY(-10px)' },
+                            '60%': { transform: 'translateY(-5px)' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
                         }
                     }
                 }
@@ -132,12 +144,16 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     
     <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <!-- Particles.js -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -149,6 +165,10 @@
             --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
             --gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-info: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
         }
 
         body {
@@ -157,12 +177,14 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
         }
 
         /* Professional Loading */
         .loading-container {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             backdrop-filter: blur(10px);
+            z-index: 9999;
         }
 
         /* Enhanced Card Design */
@@ -269,7 +291,7 @@
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: var(--gradient-danger);
             color: white;
             box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
         }
@@ -280,7 +302,7 @@
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: var(--gradient-success);
             color: white;
             box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
         }
@@ -290,10 +312,38 @@
             box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
         }
 
+        .btn-warning {
+            background: var(--gradient-warning);
+            color: white;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-info {
+            background: var(--gradient-info);
+            color: white;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-info:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.3);
+        }
+
         .btn-sm {
             padding: 10px 20px;
             font-size: 14px;
             border-radius: 10px;
+        }
+
+        .btn-lg {
+            padding: 16px 40px;
+            font-size: 18px;
+            border-radius: 14px;
         }
 
         .btn-icon {
@@ -306,10 +356,21 @@
             justify-content: center;
         }
 
+        .btn-icon-sm {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* Enhanced Modal */
         .modal-overlay {
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
+            z-index: 9998;
         }
 
         .modal-content {
@@ -317,6 +378,9 @@
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             animation: scaleIn 0.3s ease-out;
+            z-index: 9999;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         /* Enhanced Form Elements */
@@ -328,6 +392,7 @@
             font-size: 16px;
             transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
+            width: 100%;
         }
 
         .form-input:focus {
@@ -335,6 +400,20 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
             background: white;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 3rem;
         }
 
         /* Enhanced Navigation */
@@ -357,6 +436,18 @@
             color: var(--primary);
         }
 
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
         /* Enhanced Skill Bars */
         .skill-bar-container {
             background: rgba(226, 232, 240, 0.3);
@@ -373,6 +464,25 @@
             position: relative;
         }
 
+        .skill-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
         /* Project Card Enhancement */
         .project-card {
             background: var(--gradient-card);
@@ -381,6 +491,9 @@
             border-radius: 20px;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .project-card:hover {
@@ -391,6 +504,7 @@
 
         .project-image {
             height: 240px;
+            width: 100%;
             object-fit: cover;
             transition: transform 0.6s ease;
         }
@@ -411,11 +525,13 @@
             background: rgba(59, 130, 246, 0.1);
             color: var(--primary);
             transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .tag:hover {
             transform: translateY(-2px);
             background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         /* Glass Effect */
@@ -441,10 +557,12 @@
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
             background: rgba(226, 232, 240, 0.1);
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
@@ -468,6 +586,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            background-size: 200% auto;
+            animation: gradientShift 8s ease infinite;
         }
 
         /* Section Enhancement */
@@ -566,6 +686,25 @@
             .action-buttons .btn {
                 width: 100%;
             }
+            
+            .project-meta-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            
+            h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            h2 {
+                font-size: 2rem !important;
+            }
         }
 
         /* Animation Classes */
@@ -583,6 +722,22 @@
 
         .animate-blur-in {
             animation: blurIn 0.8s ease-out forwards;
+        }
+
+        .animate-pulse-subtle {
+            animation: pulseSubtle 3s ease-in-out infinite;
+        }
+
+        .animate-float-subtle {
+            animation: floatSubtle 6s ease-in-out infinite;
+        }
+
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+
+        .animate-spin-slow {
+            animation: spin 3s linear infinite;
         }
 
         /* Premium Statistics */
@@ -620,6 +775,11 @@
             animation-delay: 1s;
         }
 
+        .floating-element-3 {
+            animation: floatSubtle 7s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
         /* Status Badges */
         .status-badge {
             padding: 6px 16px;
@@ -647,6 +807,12 @@
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
             border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .status-on-hold {
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.2);
         }
 
         /* Premium Tooltip */
@@ -692,6 +858,28 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             background-size: 200% 100%;
             animation: gradientShift 2s ease infinite;
+        }
+
+        /* Line Clamp */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         /* Enhanced Professional Theme - Light Mode */
@@ -902,6 +1090,7 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid;
             transition: all 0.3s ease;
+            z-index: 1000;
         }
 
         body.light-mode nav.glass {
@@ -923,7 +1112,7 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        /* Enhanced Dark Mode Specific */
+        /* Dark Mode Form Input Fix */
         .dark-mode .form-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
@@ -975,18 +1164,6 @@
             transform: translateX(-50%) scale(1.1);
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
-
         /* Fix untuk skill bar max 100% */
         .skill-percentage {
             font-weight: 600;
@@ -1013,6 +1190,193 @@
         .social-link-item:hover {
             transform: translateY(-3px);
         }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Image Upload Preview */
+        .image-upload-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            padding: 4px;
+        }
+
+        /* Badge Colors */
+        .badge-frontend {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .badge-backend {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-database {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-mobile {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .badge-devops {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .badge-cloud {
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .badge-design {
+            background: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+
+        .badge-ai {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        /* Progress Steps */
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.05);
+            margin-bottom: 8px;
+        }
+
+        .progress-step.completed {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .progress-step.active {
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox.checked {
+            background: var(--gradient-primary);
+            border-color: transparent;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            width: 56px;
+            height: 28px;
+            border-radius: 14px;
+            background: #e2e8f0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--gradient-primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(28px);
+        }
+
+        /* Slider Controls */
+        .slider-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .slider-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: var(--gradient-primary);
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body :class="{'dark-mode': isDark, 'light-mode': !isDark}" class="bg-gray-50 text-gray-800 transition-colors duration-300 overflow-x-hidden">
@@ -1021,6 +1385,7 @@
     <div class="fixed inset-0 bg-grid-pattern z-0"></div>
     <div class="fixed top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary-500/10 to-secondary-500/10 rounded-full blur-3xl floating-element"></div>
     <div class="fixed bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl floating-element-2"></div>
+    <div class="fixed top-1/2 left-1/4 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl floating-element-3"></div>
     
     <!-- Scroll Progress Bar -->
     <div class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-600 z-50" 
@@ -1029,8 +1394,8 @@
     <!-- Auth Container with Profile Dropdown -->
     <div class="fixed top-6 right-6 z-50">
         <!-- Public Mode Login Button -->
-        <div x-show="isPublicMode" class="flex items-center gap-4">
-            <button @click="loginWithGoogle()" class="btn btn-primary animate-fade-in">
+        <div x-show="isPublicMode" class="flex items-center gap-4 animate-fade-in">
+            <button @click="loginWithGoogle()" class="btn btn-primary shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
                 <i class="fas fa-sign-in-alt"></i>
                 <span class="hidden sm:inline">Login to Edit</span>
                 <span class="sm:hidden">Edit</span>
@@ -1040,8 +1405,11 @@
         <!-- Edit Mode Profile Dropdown -->
         <div x-show="!isPublicMode" x-data="{ profileMenuOpen: false }" class="relative animate-fade-in">
             <button @click="profileMenuOpen = !profileMenuOpen" 
-                    class="glass px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors">
-                <i class="fas fa-user-circle text-primary text-xl"></i>
+                    class="glass px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl">
+                <div class="relative">
+                    <i class="fas fa-user-circle text-primary text-2xl"></i>
+                    <span x-show="hasUnsavedChanges" class="notification-badge">!</span>
+                </div>
                 <span x-text="userEmail?.split('@')[0] || 'User'" class="font-medium hidden md:inline"></span>
                 <i class="fas fa-chevron-down text-sm transition-transform duration-300" 
                    :class="{'rotate-180': profileMenuOpen}"></i>
@@ -1050,14 +1418,14 @@
             <!-- Profile Dropdown Menu -->
             <div x-show="profileMenuOpen" 
                  @click.away="profileMenuOpen = false"
-                 class="absolute right-0 mt-2 w-64 glass rounded-xl shadow-xl border border-gray-200 dark-mode:border-gray-700 overflow-hidden animate-slide-up">
+                 class="absolute right-0 mt-2 w-64 glass rounded-xl shadow-xl border border-gray-200 dark-mode:border-gray-700 overflow-hidden animate-slide-up z-50">
                 <div class="p-4 border-b border-gray-200 dark-mode:border-gray-700">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
                             <i class="fas fa-user text-white"></i>
                         </div>
                         <div>
-                            <p class="font-semibold" x-text="userEmail?.split('@')[0] || 'User'"></p>
+                            <p class="font-semibold truncate" x-text="userEmail?.split('@')[0] || 'User'"></p>
                             <p class="text-sm text-gray-600 dark-mode:text-gray-400 truncate" x-text="userEmail"></p>
                         </div>
                     </div>
@@ -1066,8 +1434,9 @@
                 <div class="py-2">
                     <button @click="syncData()" 
                             class="w-full text-left px-4 py-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors flex items-center gap-3">
-                        <i class="fas fa-sync-alt text-primary"></i>
+                        <i class="fas fa-sync-alt text-primary animate-spin-slow" :class="{'animate-spin': isSyncing}"></i>
                         <span>Sync Data</span>
+                        <span x-show="hasUnsavedChanges" class="ml-auto text-xs bg-warning text-white px-2 py-1 rounded-full">Unsaved</span>
                     </button>
                     
                     <button @click="profileMenuOpen = false; openModal('editProfile')" 
@@ -1096,7 +1465,7 @@
     
     <!-- Publish Button -->
     <div x-show="!isPublicMode" class="fixed bottom-6 right-6 z-50 animate-slide-up">
-        <button @click="publishToPublic()" class="btn btn-success shadow-lg hover:shadow-xl">
+        <button @click="publishToPublic()" class="btn btn-success shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
             <i class="fas fa-cloud-upload-alt"></i>
             <span class="hidden sm:inline">Publish Changes</span>
             <span class="sm:hidden">Publish</span>
@@ -1113,7 +1482,7 @@
                         <i class="fas fa-code text-white"></i>
                     </div>
                     <div>
-                        <div class="text-xl font-bold text-gray-900 dark-mode:text-white">Portfolio</div>
+                        <div class="text-xl font-bold text-gray-900 dark-mode:text-white">Portfolio<span class="gradient-text">Pro</span></div>
                         <div class="text-xs text-gray-500 dark-mode:text-gray-400">Full Stack Developer</div>
                     </div>
                 </div>
@@ -1135,15 +1504,9 @@
                 <div class="flex items-center gap-6">
                     <!-- Theme Toggle -->
                     <button @click="toggleTheme()" 
-                            class="w-14 h-7 rounded-full bg-gray-200 dark-mode:bg-gray-700 relative transition-all duration-300 hover:scale-105">
-                        <div class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white dark-mode:bg-gray-900 transition-transform duration-300 shadow-lg" 
-                             :class="{'translate-x-7': isDark}"></div>
-                        <div class="absolute top-1 left-2">
-                            <i class="fas fa-sun text-yellow-500 text-xs"></i>
-                        </div>
-                        <div class="absolute top-1 right-2">
-                            <i class="fas fa-moon text-blue-400 text-xs"></i>
-                        </div>
+                            class="toggle-switch" 
+                            :class="{'active': isDark}"
+                            title="Toggle Theme">
                     </button>
                     
                     <!-- Mobile Menu Button -->
@@ -1182,7 +1545,7 @@
                     <div class="text-center lg:text-left animate-slide-in-left">
                         <div class="mb-12">
                             <div class="inline-flex items-center gap-3 bg-primary-50 dark-mode:bg-primary-900/30 text-primary-800 dark-mode:text-primary-300 px-6 py-3 rounded-full mb-8 animate-fade-in">
-                                <i class="fas fa-terminal"></i>
+                                <i class="fas fa-terminal animate-pulse-subtle"></i>
                                 <span class="text-lg font-semibold">Full Stack Developer</span>
                             </div>
                             
@@ -1199,11 +1562,11 @@
                         
                         <!-- CTA Buttons -->
                         <div class="flex flex-col sm:flex-row gap-6 mb-12">
-                            <button @click="scrollTo('contact')" class="btn btn-primary">
+                            <button @click="scrollTo('contact')" class="btn btn-primary btn-lg">
                                 <i class="fas fa-envelope mr-3"></i>Get In Touch
                             </button>
                             
-                            <button @click="scrollTo('projects')" class="btn btn-outline">
+                            <button @click="scrollTo('projects')" class="btn btn-outline btn-lg">
                                 <i class="fas fa-briefcase mr-3"></i>View Work
                             </button>
                         </div>
@@ -1233,10 +1596,11 @@
                                 <div class="w-72 h-72 mx-auto rounded-full border-8 border-white/10 dark-mode:border-gray-800/50 shadow-2xl overflow-hidden">
                                     <img :src="profileImageSrc" 
                                          alt="Profile Picture" 
-                                         class="w-full h-full object-cover">
+                                         class="w-full h-full object-cover"
+                                         @error="handleProfileImageError">
                                     
                                     <div x-show="!isPublicMode" class="absolute bottom-4 right-4">
-                                        <label for="profileImageUpload" class="btn btn-primary btn-icon cursor-pointer">
+                                        <label for="profileImageUpload" class="btn btn-primary btn-icon cursor-pointer shadow-lg hover:shadow-xl">
                                             <i class="fas fa-camera"></i>
                                         </label>
                                         <input id="profileImageUpload" type="file" accept="image/*" @change="uploadProfileImage" class="hidden">
@@ -1247,7 +1611,7 @@
                             <!-- Tech Stack -->
                             <div class="flex flex-wrap justify-center gap-3">
                                 <template x-for="tech in technologySpectrum.slice(0, 6)" :key="tech.id">
-                                    <div class="tag">
+                                    <div class="tag cursor-pointer hover:scale-105 transition-transform">
                                         <i :class="tech.icon"></i>
                                         <span x-text="tech.name"></span>
                                     </div>
@@ -1296,12 +1660,12 @@
                     
                     <div class="tech-grid">
                         <template x-for="tech in technologySpectrum" :key="tech.id">
-                            <div class="card-hover p-6">
+                            <div class="card-hover p-6 cursor-pointer" @click="viewTechDetails(tech)">
                                 <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" :style="'background: ' + getTechColor(tech.color)">
                                     <i :class="tech.icon" class="text-white text-2xl"></i>
                                 </div>
                                 <h4 class="font-bold text-lg text-center mb-2" x-text="tech.name"></h4>
-                                <p class="text-gray-600 dark-mode:text-gray-400 text-center text-sm" x-text="tech.description"></p>
+                                <p class="text-gray-600 dark-mode:text-gray-400 text-center text-sm line-clamp-2" x-text="tech.description"></p>
                             </div>
                         </template>
                     </div>
@@ -1315,9 +1679,15 @@
                             Skills Analysis
                         </h3>
                         
-                        <button x-show="!isPublicMode" @click="openModal('addSkill')" class="btn btn-primary">
-                            <i class="fas fa-plus mr-2"></i> Add Skill
-                        </button>
+                        <div class="flex gap-3">
+                            <button x-show="!isPublicMode" @click="openModal('addSkill')" class="btn btn-primary">
+                                <i class="fas fa-plus mr-2"></i> Add Skill
+                            </button>
+                            <button @click="toggleChartView()" class="btn btn-outline">
+                                <i class="fas" :class="chartView === 'grid' ? 'fa-chart-bar' : 'fa-th-large'"></i>
+                                <span x-text="chartView === 'grid' ? 'Chart View' : 'Grid View'"></span>
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Skill Filters -->
@@ -1340,8 +1710,17 @@
                         </template>
                     </div>
                     
+                    <!-- Chart View -->
+                    <div x-show="chartView === 'chart'" class="mb-12 animate-fade-in">
+                        <div class="card-hover p-6">
+                            <div class="chart-container">
+                                <canvas id="skillsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Skills Grid -->
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div x-show="chartView === 'grid'" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <template x-for="skill in filteredSkills" :key="skill.id">
                             <div class="card-hover p-6 animate-scale-in">
                                 <div class="flex justify-between items-start mb-6">
@@ -1372,7 +1751,7 @@
                                     </div>
                                 </div>
                                 
-                                <p class="text-gray-600 dark-mode:text-gray-300 mb-6" x-text="skill.description"></p>
+                                <p class="text-gray-600 dark-mode:text-gray-300 mb-6 line-clamp-2" x-text="skill.description"></p>
                                 
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
@@ -1444,9 +1823,10 @@
                     <template x-for="project in projects" :key="project.id">
                         <div class="project-card animate-scale-in">
                             <div class="relative overflow-hidden">
-                                <img :src="project.image" 
+                                <img :src="project.image || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" 
                                      :alt="project.name"
-                                     class="project-image">
+                                     class="project-image"
+                                     @error="handleProjectImageError($event, project.id)">
                                 <div class="absolute top-4 right-4">
                                     <span :class="'status-' + (project.status || 'completed').replace(' ', '-')" 
                                           class="status-badge">
@@ -1456,7 +1836,7 @@
                                 </div>
                             </div>
                             
-                            <div class="p-6">
+                            <div class="p-6 flex-grow">
                                 <h3 class="text-xl font-bold mb-3" x-text="project.name"></h3>
                                 <p class="text-gray-600 dark-mode:text-gray-300 mb-4 line-clamp-2" x-text="project.description"></p>
                                 
@@ -1467,11 +1847,15 @@
                                             <span x-text="tech"></span>
                                         </span>
                                     </template>
+                                    <span x-show="project.technologies.length > 4" class="tag text-sm">
+                                        <i class="fas fa-plus"></i>
+                                        <span x-text="'+' + (project.technologies.length - 4)"></span>
+                                    </span>
                                 </div>
                                 
                                 <div class="divider"></div>
                                 
-                                <div class="flex justify-between items-center">
+                                <div class="flex justify-between items-center mt-auto">
                                     <span class="text-gray-500 dark-mode:text-gray-400" x-text="project.date || '2024'"></span>
                                     <div class="action-buttons">
                                         <button @click="viewProject(project.id)" class="btn btn-primary btn-sm">
@@ -1486,6 +1870,83 @@
                             </div>
                         </div>
                     </template>
+                </div>
+                
+                <!-- Projects Slider -->
+                <div x-show="projectView === 'slider'" class="animate-fade-in">
+                    <div class="relative">
+                        <div class="overflow-hidden rounded-2xl">
+                            <div class="flex transition-transform duration-500 ease-in-out" 
+                                 :style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
+                                <template x-for="(slide, slideIndex) in projectSlides" :key="slideIndex">
+                                    <div class="w-full flex-shrink-0">
+                                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+                                            <template x-for="project in slide" :key="project.id">
+                                                <div class="project-card">
+                                                    <div class="relative overflow-hidden">
+                                                        <img :src="project.image || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" 
+                                                             :alt="project.name"
+                                                             class="project-image"
+                                                             @error="handleProjectImageError($event, project.id)">
+                                                        <div class="absolute top-4 right-4">
+                                                            <span :class="'status-' + (project.status || 'completed').replace(' ', '-')" 
+                                                                  class="status-badge">
+                                                                <i class="fas fa-circle text-xs"></i>
+                                                                <span x-text="project.status || 'Completed'"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="p-6">
+                                                        <h3 class="text-xl font-bold mb-3" x-text="project.name"></h3>
+                                                        <p class="text-gray-600 dark-mode:text-gray-300 mb-4 line-clamp-2" x-text="project.description"></p>
+                                                        
+                                                        <div class="tech-stack-container mb-6">
+                                                            <template x-for="tech in project.technologies.slice(0, 3)" :key="tech">
+                                                                <span class="tag text-sm">
+                                                                    <i :class="getTechIcon(tech)" class="text-xs"></i>
+                                                                    <span x-text="tech"></span>
+                                                                </span>
+                                                            </template>
+                                                        </div>
+                                                        
+                                                        <div class="divider"></div>
+                                                        
+                                                        <div class="flex justify-between items-center">
+                                                            <span class="text-gray-500 dark-mode:text-gray-400" x-text="project.date || '2024'"></span>
+                                                            <button @click="viewProject(project.id)" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-eye mr-2"></i>
+                                                                View
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        
+                        <!-- Slider Controls -->
+                        <div class="slider-controls">
+                            <button @click="prevSlide()" class="btn btn-outline btn-icon">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            
+                            <div class="slider-dots">
+                                <template x-for="(slide, index) in projectSlides" :key="index">
+                                    <div @click="goToSlide(index)" 
+                                         class="slider-dot" 
+                                         :class="{'active': currentSlide === index}"></div>
+                                </template>
+                            </div>
+                            
+                            <button @click="nextSlide()" class="btn btn-outline btn-icon">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1586,7 +2047,7 @@
                                 <template x-for="(link, index) in socialLinks" :key="index">
                                     <a :href="link.url" target="_blank" 
                                        x-show="link.url && link.url.trim() !== ''"
-                                       class="social-link-item card-hover p-4 text-center block">
+                                       class="social-link-item card-hover p-4 text-center block hover:scale-105 transition-transform">
                                         <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" 
                                              :style="'background: ' + getSocialPlatformColor(link.platform)">
                                             <i :class="link.icon" class="text-white text-lg"></i>
@@ -1627,7 +2088,7 @@
                                             Your Name
                                         </label>
                                         <input type="text" x-model="contactForm.name" 
-                                               class="form-input w-full"
+                                               class="form-input"
                                                placeholder="Enter your name"
                                                required>
                                     </div>
@@ -1637,7 +2098,7 @@
                                             Your Email
                                         </label>
                                         <input type="email" x-model="contactForm.email" 
-                                               class="form-input w-full"
+                                               class="form-input"
                                                placeholder="Enter your email"
                                                required>
                                     </div>
@@ -1648,7 +2109,7 @@
                                         Subject
                                     </label>
                                     <input type="text" x-model="contactForm.subject" 
-                                           class="form-input w-full"
+                                           class="form-input"
                                            placeholder="Project inquiry or general message"
                                            required>
                                 </div>
@@ -1658,14 +2119,14 @@
                                         Your Message
                                     </label>
                                     <textarea x-model="contactForm.message" rows="6"
-                                              class="form-input w-full resize-none"
+                                              class="form-input form-textarea"
                                               placeholder="Tell me about your project or inquiry..."
                                               required></textarea>
                                 </div>
                                 
                                 <button type="submit" 
                                         :disabled="isSubmitting"
-                                        class="btn btn-primary w-full">
+                                        class="btn btn-primary w-full transform hover:scale-105 transition-transform">
                                     <i class="fas" :class="isSubmitting ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>
                                     <span x-text="isSubmitting ? 'Sending...' : 'Send Message'"></span>
                                 </button>
@@ -1682,7 +2143,7 @@
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-3 gap-12 items-center">
                 <div>
-                    <div class="text-2xl font-bold text-white mb-3">Portfolio</div>
+                    <div class="text-2xl font-bold text-white mb-3">Portfolio<span class="gradient-text">Pro</span></div>
                     <p class="text-gray-400" x-text="profile.name"></p>
                     <p class="text-gray-500 text-sm mt-2" x-text="profile.title || 'Full Stack Developer'"></p>
                 </div>
@@ -1692,7 +2153,8 @@
                         <template x-for="link in socialLinks" :key="link.platform">
                             <a :href="link.url" target="_blank" 
                                x-show="link.url && link.url.trim() !== ''"
-                               class="w-10 h-10 rounded-full glass flex items-center justify-center hover:scale-110 transition-all duration-300 hover:bg-primary-500/20">
+                               class="w-10 h-10 rounded-full glass flex items-center justify-center hover:scale-110 transition-all duration-300 hover:bg-primary-500/20 tooltip"
+                               :title="link.platform">
                                 <i :class="link.icon" class="text-lg"></i>
                             </a>
                         </template>
@@ -1701,7 +2163,7 @@
                 
                 <div class="text-center md:text-right">
                     <p class="text-sm text-gray-400">&copy; <span x-text="portfolioYear"></span> All rights reserved.</p>
-                    <p class="text-sm text-gray-500 mt-2">Built with <i class="fas fa-heart text-red-500 mx-1"></i> by Developer</p>
+                    <p class="text-sm text-gray-500 mt-2">Built with <i class="fas fa-heart text-red-500 mx-1 animate-pulse-subtle"></i> by Developer</p>
                 </div>
             </div>
         </div>
@@ -1739,9 +2201,10 @@
                     
                     <!-- Project Image -->
                     <div class="rounded-2xl overflow-hidden mb-8">
-                        <img :src="selectedProject?.image" 
+                        <img :src="selectedProject?.image || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" 
                              :alt="selectedProject?.name"
-                             class="w-full h-64 md:h-80 object-cover">
+                             class="w-full h-64 md:h-80 object-cover"
+                             @error="handleProjectImageError($event, selectedProject?.id)">
                     </div>
                     
                     <!-- Project Content -->
@@ -1857,7 +2320,7 @@
 
     <!-- Add/Edit Skill Modal -->
     <div x-show="modals.addSkill" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
-        <div class="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('addSkill')">
+        <div class="modal-content max-w-2xl w-full" @click.away="closeModal('addSkill')">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <h3 class="text-3xl font-bold">
@@ -1878,7 +2341,7 @@
                         <div class="relative">
                             <input type="text" x-model="newSkill.name" 
                                    @input="filterSkillSuggestions()"
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="e.g., React, Node.js, Python">
                             
                             <!-- Skill Suggestions -->
@@ -1902,7 +2365,7 @@
                             <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Category
                             </label>
-                            <select x-model="newSkill.category" class="form-input w-full">
+                            <select x-model="newSkill.category" class="form-input form-select">
                                 <option value="frontend">Frontend</option>
                                 <option value="backend">Backend</option>
                                 <option value="database">Database</option>
@@ -1942,7 +2405,7 @@
                                     <i class="fas fa-minus"></i>
                                 </button>
                                 <input type="number" x-model="newSkill.years" min="0" max="20"
-                                       class="form-input w-full text-center">
+                                       class="form-input text-center">
                                 <button @click="newSkill.years = Math.min(20, newSkill.years + 1)"
                                         class="btn btn-icon btn-outline">
                                     <i class="fas fa-plus"></i>
@@ -1960,7 +2423,7 @@
                                     <i class="fas fa-minus"></i>
                                 </button>
                                 <input type="number" x-model="newSkill.projects" min="0" max="50"
-                                       class="form-input w-full text-center">
+                                       class="form-input text-center">
                                 <button @click="newSkill.projects = Math.min(50, newSkill.projects + 1)"
                                         class="btn btn-icon btn-outline">
                                     <i class="fas fa-plus"></i>
@@ -1993,7 +2456,7 @@
                             Description
                         </label>
                         <textarea x-model="newSkill.description" rows="3"
-                                  class="form-input w-full"
+                                  class="form-input form-textarea"
                                   placeholder="Brief description of your expertise with this skill..."></textarea>
                     </div>
                 </div>
@@ -2013,7 +2476,7 @@
 
     <!-- Add/Edit Project Modal -->
     <div x-show="modals.addProject" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
-        <div class="modal-content max-w-4xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('addProject')">
+        <div class="modal-content max-w-4xl w-full" @click.away="closeModal('addProject')">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <h3 class="text-3xl font-bold">
@@ -2033,7 +2496,7 @@
                                 Project Name *
                             </label>
                             <input type="text" x-model="newProject.name" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="E-Commerce Platform">
                         </div>
                         
@@ -2041,7 +2504,7 @@
                             <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Project Type
                             </label>
-                            <select x-model="newProject.type" class="form-input w-full">
+                            <select x-model="newProject.type" class="form-input form-select">
                                 <option value="web">Web Application</option>
                                 <option value="mobile">Mobile Application</option>
                                 <option value="api">API/Backend</option>
@@ -2058,7 +2521,7 @@
                             Project Description *
                         </label>
                         <textarea x-model="newProject.description" rows="4"
-                                  class="form-input w-full"
+                                  class="form-input form-textarea"
                                   placeholder="Describe your project..."></textarea>
                     </div>
                     
@@ -2071,7 +2534,7 @@
                             <input type="text" x-model="techInput" 
                                    @input="filterTechSuggestions()"
                                    @keydown.enter.prevent="addTechnology()"
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="Add technologies (press Enter to add)">
                             
                             <!-- Tech Suggestions -->
@@ -2108,7 +2571,7 @@
                             <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Status
                             </label>
-                            <select x-model="newProject.status" class="form-input w-full">
+                            <select x-model="newProject.status" class="form-input form-select">
                                 <option value="completed">Completed</option>
                                 <option value="in-progress">In Progress</option>
                                 <option value="planned">Planned</option>
@@ -2121,7 +2584,7 @@
                                 Your Role
                             </label>
                             <input type="text" x-model="newProject.role" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="e.g., Full Stack Developer, Lead Developer">
                         </div>
                     </div>
@@ -2133,7 +2596,7 @@
                                 Team Size
                             </label>
                             <input type="number" x-model="newProject.teamSize" min="1" max="50"
-                                   class="form-input w-full">
+                                   class="form-input">
                         </div>
                         
                         <div>
@@ -2141,7 +2604,7 @@
                                 Client/Company
                             </label>
                             <input type="text" x-model="newProject.client" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="Company name or individual client">
                         </div>
                     </div>
@@ -2153,7 +2616,7 @@
                                 Start Date
                             </label>
                             <input type="date" x-model="newProject.startDate" 
-                                   class="form-input w-full">
+                                   class="form-input">
                         </div>
                         
                         <div>
@@ -2163,7 +2626,7 @@
                             </label>
                             <input type="date" x-model="newProject.endDate" 
                                    :disabled="newProject.isOngoing"
-                                   class="form-input w-full">
+                                   class="form-input">
                         </div>
                     </div>
                     
@@ -2173,8 +2636,11 @@
                             Project Image URL
                         </label>
                         <input type="url" x-model="newProject.image" 
-                               class="form-input w-full"
+                               class="form-input"
                                placeholder="https://example.com/project-image.jpg">
+                        <p class="text-sm text-gray-500 dark-mode:text-gray-400 mt-2">
+                            Leave empty for default image
+                        </p>
                     </div>
                     
                     <!-- Links -->
@@ -2184,7 +2650,7 @@
                                 Live Demo URL
                             </label>
                             <input type="url" x-model="newProject.demoUrl" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="https://demo.example.com">
                         </div>
                         
@@ -2193,7 +2659,7 @@
                                 Source Code URL
                             </label>
                             <input type="url" x-model="newProject.sourceUrl" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="https://github.com/username/project">
                         </div>
                     </div>
@@ -2238,7 +2704,7 @@
 
     <!-- Edit Profile Modal -->
     <div x-show="modals.editProfile" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
-        <div class="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('editProfile')">
+        <div class="modal-content max-w-2xl w-full" @click.away="closeModal('editProfile')">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <h3 class="text-3xl font-bold">
@@ -2257,7 +2723,7 @@
                                 Full Name *
                             </label>
                             <input type="text" x-model="profile.name" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="John Doe">
                         </div>
                         
@@ -2266,7 +2732,7 @@
                                 Professional Title *
                             </label>
                             <input type="text" x-model="profile.title" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="Full Stack Developer">
                         </div>
                     </div>
@@ -2276,7 +2742,7 @@
                             Email Address *
                         </label>
                         <input type="email" x-model="profile.email" 
-                               class="form-input w-full"
+                               class="form-input"
                                placeholder="john@example.com">
                     </div>
                     
@@ -2286,7 +2752,7 @@
                                 Phone Number
                             </label>
                             <input type="tel" x-model="profile.phone" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="+1234567890">
                         </div>
                         
@@ -2295,7 +2761,7 @@
                                 Location
                             </label>
                             <input type="text" x-model="profile.location" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="San Francisco, CA">
                         </div>
                     </div>
@@ -2305,7 +2771,7 @@
                             Professional Bio *
                         </label>
                         <textarea x-model="profile.bio" rows="4"
-                                  class="form-input w-full"
+                                  class="form-input form-textarea"
                                   placeholder="Experienced Full Stack Developer with expertise in..."></textarea>
                         <p class="text-sm text-gray-500 dark-mode:text-gray-400 mt-2">
                             <span x-text="profile.bio?.length || 0"></span> characters
@@ -2320,7 +2786,7 @@
                             <input type="url" x-model="profile.image" 
                                    class="form-input flex-1"
                                    placeholder="https://example.com/profile.jpg">
-                            <button @click="profile.image = generateDefaultAvatar()" 
+                            <button @click="profile.image = ''" 
                                     class="btn btn-outline whitespace-nowrap">
                                 <i class="fas fa-sync-alt mr-2"></i>
                                 Use Default
@@ -2347,7 +2813,7 @@
 
     <!-- Edit Social Links Modal -->
     <div x-show="modals.editSocialLinks" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
-        <div class="modal-content max-w-3xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('editSocialLinks')">
+        <div class="modal-content max-w-3xl w-full" @click.away="closeModal('editSocialLinks')">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <h3 class="text-3xl font-bold">
@@ -2398,7 +2864,7 @@
                                 <div class="flex-shrink-0">
                                     <select x-model="link.platform" 
                                             @change="handlePlatformChange(link, index)"
-                                            class="form-input min-w-[180px]">
+                                            class="form-input form-select min-w-[180px]">
                                         <option value="">Select Platform</option>
                                         <template x-for="platform in allSocialPlatforms" :key="platform.name">
                                             <option :value="platform.name" x-text="platform.name"></option>
@@ -2408,7 +2874,7 @@
                                 
                                 <div class="flex-1">
                                     <input type="url" x-model="link.url" 
-                                           class="form-input w-full"
+                                           class="form-input"
                                            :placeholder="getSocialPlaceholder(link.platform)">
                                 </div>
                                 
@@ -2458,7 +2924,7 @@
 
     <!-- Edit Technology Spectrum Modal -->
     <div x-show="modals.editTechnologySpectrum" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
-        <div class="modal-content max-w-4xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('editTechnologySpectrum')">
+        <div class="modal-content max-w-4xl w-full" @click.away="closeModal('editTechnologySpectrum')">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <h3 class="text-3xl font-bold">
@@ -2480,7 +2946,7 @@
                                 Technology Name *
                             </label>
                             <input type="text" x-model="newTech.name" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="e.g., React, Node.js, Python">
                         </div>
                         
@@ -2488,7 +2954,7 @@
                             <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Category
                             </label>
-                            <select x-model="newTech.category" class="form-input w-full">
+                            <select x-model="newTech.category" class="form-input form-select">
                                 <option value="frontend">Frontend</option>
                                 <option value="backend">Backend</option>
                                 <option value="database">Database</option>
@@ -2506,7 +2972,7 @@
                                 Description
                             </label>
                             <input type="text" x-model="newTech.description" 
-                                   class="form-input w-full"
+                                   class="form-input"
                                    placeholder="Brief description">
                         </div>
                         
@@ -2514,7 +2980,7 @@
                             <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Color Theme
                             </label>
-                            <select x-model="newTech.color" class="form-input w-full">
+                            <select x-model="newTech.color" class="form-input form-select">
                                 <option value="blue">Blue</option>
                                 <option value="green">Green</option>
                                 <option value="purple">Purple</option>
@@ -2558,7 +3024,7 @@
                                  draggable="true"
                                  @dragstart="handleTechDragStart(index)"
                                  @dragover.prevent
-                                 @drop="handleTechDrop(event)">
+                                 @drop="handleTechDrop(index, $event)">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-4">
                                         <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" 
@@ -2647,22 +3113,35 @@
     </div>
 
     <!-- Toast Notification -->
-    <div x-show="showToast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-slide-up">
-        <div class="glass px-6 py-4 rounded-xl flex items-center gap-3 shadow-xl" 
+    <div x-show="showToast" 
+         class="fixed top-6 right-6 z-50 animate-slide-in-right"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="transform translate-x-full"
+         x-transition:enter-end="transform translate-x-0"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="transform translate-x-0"
+         x-transition:leave-end="transform translate-x-full">
+        <div class="glass px-6 py-4 rounded-xl flex items-center gap-3 shadow-xl max-w-md" 
              :class="{
-                 'bg-success/20 border-success/30': toastType === 'success',
-                 'bg-danger/20 border-danger/30': toastType === 'error',
-                 'bg-warning/20 border-warning/30': toastType === 'warning',
-                 'bg-info/20 border-info/30': toastType === 'info'
+                 'border-success/30': toastType === 'success',
+                 'border-danger/30': toastType === 'error',
+                 'border-warning/30': toastType === 'warning',
+                 'border-info/30': toastType === 'info'
              }" 
-             style="border-width: 1px;">
+             style="border-width: 2px;">
             <i :class="{
                 'fas fa-check-circle text-success': toastType === 'success',
                 'fas fa-times-circle text-danger': toastType === 'error',
                 'fas fa-exclamation-circle text-warning': toastType === 'warning',
                 'fas fa-info-circle text-info': toastType === 'info'
-            }"></i>
-            <span x-text="toastMessage" class="font-medium"></span>
+            }" class="text-xl"></i>
+            <div class="flex-1">
+                <p x-text="toastMessage" class="font-medium"></p>
+                <p x-show="toastSubMessage" x-text="toastSubMessage" class="text-sm opacity-75 mt-1"></p>
+            </div>
+            <button @click="showToast = false" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
 
@@ -2670,8 +3149,12 @@
     <div x-show="isLoading" class="fixed inset-0 loading-container flex items-center justify-center z-50 animate-fade-in">
         <div class="text-center">
             <div class="w-20 h-20 border-4 border-white/20 border-t-primary rounded-full animate-spin mx-auto mb-6"></div>
-            <div class="text-white text-xl font-semibold" x-text="loadingMessage"></div>
-            <div class="text-white/60 mt-2" x-text="loadingProgress + '%'"></div>
+            <div class="text-white text-xl font-semibold mb-2" x-text="loadingMessage"></div>
+            <div class="text-white/60" x-text="loadingSubMessage"></div>
+            <div class="w-64 h-2 bg-white/20 rounded-full overflow-hidden mt-4">
+                <div class="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300" 
+                     :style="'width: ' + loadingProgress + '%'"></div>
+            </div>
         </div>
     </div>
 
@@ -3165,6 +3648,30 @@
                     teamSize: 4,
                     startDate: '2023-09-01',
                     endDate: '2024-03-01'
+                },
+                {
+                    id: 5,
+                    name: 'Portfolio Website',
+                    description: 'Responsive portfolio website showcasing projects and skills with modern design and animations.',
+                    type: 'web',
+                    technologies: ['HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS', 'Alpine.js'],
+                    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    demoUrl: '#',
+                    sourceUrl: '#',
+                    features: [
+                        'Responsive design for all devices',
+                        'Smooth animations and transitions',
+                        'Dark mode support',
+                        'Interactive skill charts',
+                        'Contact form with validation',
+                        'Project filtering and sorting'
+                    ],
+                    status: 'completed',
+                    date: '2024',
+                    role: 'Full Stack Developer',
+                    teamSize: 1,
+                    startDate: '2024-01-01',
+                    endDate: '2024-02-01'
                 }
             ],
             socialLinks: [
@@ -3293,6 +3800,7 @@
                 // Load status
                 isLoading: true,
                 loadingMessage: 'Loading portfolio...',
+                loadingSubMessage: 'Initializing components...',
                 loadingProgress: 0,
                 portfolioDataLoaded: false,
 
@@ -3304,12 +3812,15 @@
                 isAtTop: true,
                 showToast: false,
                 toastMessage: '',
+                toastSubMessage: '',
                 toastType: 'success',
                 showDataPanel: false,
                 techInput: '',
                 skillSuggestions: [],
                 techSuggestions: [],
                 activeSkillCategory: 'all',
+                chartView: 'grid',
+                skillsChart: null,
                 selectedProject: null,
                 editingSkill: null,
                 editingProject: null,
@@ -3318,6 +3829,7 @@
                 isSubmitting: false,
                 deleteItem: { type: '', id: null, name: '' },
                 draggingTechIndex: null,
+                hasUnsavedChanges: false,
 
                 // Firebase State
                 firebaseApp: null,
@@ -3554,7 +4066,7 @@
                 },
 
                 // INITIALIZATION
-                init() {
+                async init() {
                     console.log('🚀 Portfolio initialization started');
                     
                     this.setupEventListeners();
@@ -3564,7 +4076,7 @@
                     
                     document.body.classList.add(this.isDark ? 'dark-mode' : 'light-mode');
 
-                    this.initParticles();
+                    await this.initParticles();
 
                     this.isOnline = navigator.onLine;
                     console.log('🌐 Online status:', this.isOnline);
@@ -3623,7 +4135,7 @@
                 },
 
                 // FIXED: FIREBASE INITIALIZATION UNTUK PUBLIC ACCESS
-                initFirebasePublic() {
+                async initFirebasePublic() {
                     console.log('🚀 Attempting to initialize Firebase for public access...');
                     
                     try {
@@ -3669,7 +4181,7 @@
                             console.warn('⚠️ Auth initialization warning:', authError);
                         }
                         
-                        this.loadPublicData();
+                        await this.loadPublicData();
                         
                     } catch (error) {
                         console.error('❌ General Firebase init error:', error);
@@ -3679,7 +4191,7 @@
                 },
 
                 // FIXED: LOAD PUBLIC DATA DARI FIREBASE
-                loadPublicData() {
+                async loadPublicData() {
                     if (!this.firestore || !this.isOnline) {
                         console.log('⚠️ Cannot load from Firebase: Firestore or internet not available');
                         this.usePredefinedData();
@@ -3690,50 +4202,52 @@
                     
                     this.isLoading = true;
                     this.loadingMessage = 'Loading portfolio data...';
+                    this.loadingProgress = 30;
                     
-                    const timeoutPromise = new Promise((_, reject) => {
-                        setTimeout(() => {
-                            reject(new Error('Timeout loading data from Firebase'));
-                        }, 10000);
-                    });
-                    
-                    const loadPromise = this.firestore.collection('publicPortfolios').doc('main').get();
-                    
-                    Promise.race([loadPromise, timeoutPromise])
-                        .then((doc) => {
-                            if (doc.exists) {
-                                const data = doc.data();
-                                console.log('✅ Public data loaded successfully from Firebase');
-                                
-                                this.updateDataFromFirebase(data);
-                                
-                                if (data.lastUpdated) {
-                                    this.lastSyncTime = new Date(data.lastUpdated.toDate()).toLocaleString();
-                                } else {
-                                    this.lastSyncTime = 'Recently';
-                                }
-                                
-                                this.dataStatus = 'synced';
-                                this.showToastMessage('Portfolio data loaded from cloud', 'success');
-                                
-                            } else {
-                                console.log('⚠️ No public data found in Firebase, using predefined data');
-                                this.usePredefinedData();
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('❌ Load public data error:', error);
-                            this.showToastMessage('Using predefined portfolio data', 'info');
-                            this.usePredefinedData();
-                        })
-                        .finally(() => {
-                            this.isLoading = false;
-                            this.portfolioDataLoaded = true;
+                    try {
+                        const timeoutPromise = new Promise((_, reject) => {
+                            setTimeout(() => {
+                                reject(new Error('Timeout loading data from Firebase'));
+                            }, 10000);
                         });
+                        
+                        const loadPromise = this.firestore.collection('publicPortfolios').doc('main').get();
+                        
+                        const doc = await Promise.race([loadPromise, timeoutPromise]);
+                        
+                        if (doc.exists) {
+                            const data = doc.data();
+                            console.log('✅ Public data loaded successfully from Firebase');
+                            
+                            this.loadingProgress = 70;
+                            await this.updateDataFromFirebase(data);
+                            
+                            if (data.lastUpdated) {
+                                this.lastSyncTime = new Date(data.lastUpdated.toDate()).toLocaleString();
+                            } else {
+                                this.lastSyncTime = 'Recently';
+                            }
+                            
+                            this.dataStatus = 'synced';
+                            this.showToastMessage('Portfolio data loaded from cloud', 'success');
+                            
+                        } else {
+                            console.log('⚠️ No public data found in Firebase, using predefined data');
+                            this.usePredefinedData();
+                        }
+                    } catch (error) {
+                        console.error('❌ Load public data error:', error);
+                        this.showToastMessage('Using predefined portfolio data', 'info');
+                        this.usePredefinedData();
+                    } finally {
+                        this.loadingProgress = 100;
+                        this.isLoading = false;
+                        this.portfolioDataLoaded = true;
+                    }
                 },
 
                 // FIXED: UPDATE DATA DARI FIREBASE
-                updateDataFromFirebase(data) {
+                async updateDataFromFirebase(data) {
                     try {
                         console.log('🔄 Updating data from Firebase...');
                         
@@ -3772,7 +4286,7 @@
                             console.log(`✅ Loaded ${this.technologySpectrum.length} technologies`);
                         }
                         
-                        this.saveToLocalStorage();
+                        await this.saveToLocalStorage();
                         
                     } catch (error) {
                         console.error('Error updating data from Firebase:', error);
@@ -3805,7 +4319,7 @@
                 },
 
                 // AUTH METHODS
-                loginWithGoogle() {
+                async loginWithGoogle() {
                     console.log('🔑 Memulai login Google...');
                     this.isSyncing = true;
                     this.showToastMessage('Sedang login...', 'info');
@@ -3825,47 +4339,39 @@
                         
                         console.log('🔑 Login dengan popup...');
                         
-                        this.auth.signInWithPopup(provider)
-                            .then((result) => {
-                                console.log('🎉 Login BERHASIL! User:', result.user.email);
-                                
-                                this.userId = result.user.uid;
-                                this.userEmail = result.user.email;
-                                this.isSyncing = false;
-                                this.isPublicMode = false;
-                                this.isOwner = true;
-                                
-                                // Simpan data auth
-                                this.saveAuthData(result.user);
-                                
-                                this.showToastMessage(`🎉 Selamat datang ${result.user.displayName || result.user.email}! Mode edit diaktifkan.`, 'success');
-                                
-                                // Muat data pengguna
-                                setTimeout(() => {
-                                    this.loadUserData();
-                                }, 500);
-                                
-                            })
-                            .catch((error) => {
-                                console.error('❌ Error login:', error);
-                                this.isSyncing = false;
-                                
-                                let errorMessage = 'Login gagal';
-                                if (error.code === 'auth/popup-blocked') {
-                                    errorMessage = 'Popup login diblokir. Silakan izinkan pop-up.';
-                                } else if (error.code === 'auth/popup-closed-by-user') {
-                                    errorMessage = 'Login dibatalkan';
-                                } else if (error.code === 'auth/network-request-failed') {
-                                    errorMessage = 'Error jaringan. Cek koneksi internet Anda.';
-                                }
-                                
-                                this.showToastMessage(`❌ ${errorMessage}`, 'error');
-                            });
-                            
-                    } catch (setupError) {
-                        console.error('❌ Setup login error:', setupError);
+                        const result = await this.auth.signInWithPopup(provider);
+                        console.log('🎉 Login BERHASIL! User:', result.user.email);
+                        
+                        this.userId = result.user.uid;
+                        this.userEmail = result.user.email;
                         this.isSyncing = false;
-                        this.showToastMessage('Setup login gagal. Silakan coba lagi.', 'error');
+                        this.isPublicMode = false;
+                        this.isOwner = true;
+                        
+                        // Simpan data auth
+                        this.saveAuthData(result.user);
+                        
+                        this.showToastMessage(`🎉 Selamat datang ${result.user.displayName || result.user.email}! Mode edit diaktifkan.`, 'success');
+                        
+                        // Muat data pengguna
+                        setTimeout(() => {
+                            this.loadUserData();
+                        }, 500);
+                        
+                    } catch (error) {
+                        console.error('❌ Error login:', error);
+                        this.isSyncing = false;
+                        
+                        let errorMessage = 'Login gagal';
+                        if (error.code === 'auth/popup-blocked') {
+                            errorMessage = 'Popup login diblokir. Silakan izinkan pop-up.';
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            errorMessage = 'Login dibatalkan';
+                        } else if (error.code === 'auth/network-request-failed') {
+                            errorMessage = 'Error jaringan. Cek koneksi internet Anda.';
+                        }
+                        
+                        this.showToastMessage(`❌ ${errorMessage}`, 'error');
                     }
                 },
 
@@ -3887,37 +4393,36 @@
                     }
                 },
 
-                signOut() {
+                async signOut() {
                     if (!this.auth) {
                         this.showToastMessage('Firebase Auth tidak terinisialisasi', 'warning');
                         return;
                     }
                     
                     if (confirm('Apakah Anda yakin ingin logout?')) {
-                        this.auth.signOut()
-                            .then(() => {
-                                console.log('✅ Logout berhasil');
-                                
-                                localStorage.removeItem('firebase_auth');
-                                this.userId = null;
-                                this.userEmail = null;
-                                this.isOwner = false;
-                                this.isPublicMode = true;
-                                
-                                // Muat ulang data publik
-                                this.loadPublicData();
-                                
-                                this.showToastMessage('Logout berhasil', 'success');
-                                
-                            })
-                            .catch((error) => {
-                                console.error('Error logout:', error);
-                                this.showToastMessage('Logout gagal', 'error');
-                            });
+                        try {
+                            await this.auth.signOut();
+                            console.log('✅ Logout berhasil');
+                            
+                            localStorage.removeItem('firebase_auth');
+                            this.userId = null;
+                            this.userEmail = null;
+                            this.isOwner = false;
+                            this.isPublicMode = true;
+                            
+                            // Muat ulang data publik
+                            this.loadPublicData();
+                            
+                            this.showToastMessage('Logout berhasil', 'success');
+                            
+                        } catch (error) {
+                            console.error('Error logout:', error);
+                            this.showToastMessage('Logout gagal', 'error');
+                        }
                     }
                 },
 
-                syncData() {
+                async syncData() {
                     if (!this.userId || !this.firestore || !this.isOnline) {
                         this.showToastMessage('Cannot sync: check internet connection', 'warning');
                         return;
@@ -3926,39 +4431,40 @@
                     this.isSyncing = true;
                     this.showToastMessage('Syncing data...', 'info');
                     
-                    // FIXED: Ensure social links are properly formatted before saving
-                    const formattedSocialLinks = this.socialLinks
-                        .filter(link => link.url && link.url.trim() !== '')
-                        .map(link => ({
-                            platform: link.platform,
-                            url: link.url.trim(),
-                            icon: link.icon
-                        }));
-                    
-                    const userData = {
-                        skills: this.skills,
-                        projects: this.projects,
-                        profile: this.profile,
-                        socialLinks: formattedSocialLinks,
-                        technologySpectrum: this.technologySpectrum,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    
-                    this.firestore.collection('portfolios').doc(this.userId)
-                        .set(userData, { merge: true })
-                        .then(() => {
-                            this.isSyncing = false;
-                            this.lastSyncTime = new Date().toLocaleTimeString();
-                            this.showToastMessage('Data synced successfully', 'success');
-                        })
-                        .catch((error) => {
-                            console.error('Error syncing data:', error);
-                            this.isSyncing = false;
-                            this.showToastMessage('Sync failed', 'error');
-                        });
+                    try {
+                        // FIXED: Ensure social links are properly formatted before saving
+                        const formattedSocialLinks = this.socialLinks
+                            .filter(link => link.url && link.url.trim() !== '')
+                            .map(link => ({
+                                platform: link.platform,
+                                url: link.url.trim(),
+                                icon: link.icon
+                            }));
+                        
+                        const userData = {
+                            skills: this.skills,
+                            projects: this.projects,
+                            profile: this.profile,
+                            socialLinks: formattedSocialLinks,
+                            technologySpectrum: this.technologySpectrum,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        
+                        await this.firestore.collection('portfolios').doc(this.userId)
+                            .set(userData, { merge: true });
+                        
+                        this.isSyncing = false;
+                        this.lastSyncTime = new Date().toLocaleTimeString();
+                        this.hasUnsavedChanges = false;
+                        this.showToastMessage('Data synced successfully', 'success');
+                    } catch (error) {
+                        console.error('Error syncing data:', error);
+                        this.isSyncing = false;
+                        this.showToastMessage('Sync failed', 'error');
+                    }
                 },
 
-                loadUserData() {
+                async loadUserData() {
                     if (!this.userId || !this.firestore || !this.isOnline) {
                         console.log('⚠️ Tidak bisa memuat data pengguna');
                         return;
@@ -3967,24 +4473,24 @@
                     console.log('📥 Memuat data pengguna untuk:', this.userId);
                     this.showToastMessage('Memuat data pribadi Anda...', 'info');
                     
-                    this.firestore.collection('portfolios').doc(this.userId).get()
-                        .then((doc) => {
-                            if (doc.exists) {
-                                const data = doc.data();
-                                console.log('✅ Data pengguna dimuat');
-                                
-                                // Gabungkan dengan data publik
-                                this.mergeUserData(data);
-                                this.showToastMessage('Data Anda dimuat dari cloud', 'success');
-                            } else {
-                                console.log('⚠️ Tidak ada data pengguna ditemukan, menggunakan data saat ini');
-                                this.showToastMessage('Membuat profil baru untuk Anda', 'info');
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('❌ Error memuat data pengguna:', error);
-                            this.showToastMessage('Error memuat data pribadi', 'warning');
-                        });
+                    try {
+                        const doc = await this.firestore.collection('portfolios').doc(this.userId).get();
+                        
+                        if (doc.exists) {
+                            const data = doc.data();
+                            console.log('✅ Data pengguna dimuat');
+                            
+                            // Gabungkan dengan data publik
+                            this.mergeUserData(data);
+                            this.showToastMessage('Data Anda dimuat dari cloud', 'success');
+                        } else {
+                            console.log('⚠️ Tidak ada data pengguna ditemukan, menggunakan data saat ini');
+                            this.showToastMessage('Membuat profil baru untuk Anda', 'info');
+                        }
+                    } catch (error) {
+                        console.error('❌ Error memuat data pengguna:', error);
+                        this.showToastMessage('Error memuat data pribadi', 'warning');
+                    }
                 },
 
                 mergeUserData(userData) {
@@ -4034,7 +4540,7 @@
                 },
 
                 // FIXED: PUBLISH TO PUBLIC METHOD
-                publishToPublic() {
+                async publishToPublic() {
                     console.log('🚀 Starting publish process...');
                     
                     if (!this.userId) {
@@ -4062,73 +4568,74 @@
                     this.isSyncing = true;
                     this.showToastMessage('Publishing your portfolio...', 'info');
                     
-                    // FIXED: Ensure all data is properly formatted
-                    const formattedSocialLinks = this.socialLinks
-                        .filter(link => link.url && link.url.trim() !== '')
-                        .map(link => ({
-                            platform: link.platform,
-                            url: link.url.trim(),
-                            icon: link.icon
-                        }));
-                    
-                    const publishData = {
-                        skills: this.skills,
-                        projects: this.projects,
-                        profile: this.profile,
-                        socialLinks: formattedSocialLinks,
-                        technologySpectrum: this.technologySpectrum,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-                        updatedBy: this.userEmail,
-                        version: '2.0',
-                        published: true,
-                        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    
-                    console.log('📤 Publishing data to public collection...', publishData);
-                    
-                    // FIXED: Use proper Firebase update with error handling
-                    const batch = this.firestore.batch();
-                    const publicDocRef = this.firestore.collection('publicPortfolios').doc('main');
-                    const userDocRef = this.firestore.collection('portfolios').doc(this.userId);
-                    
-                    // Update public portfolio
-                    batch.set(publicDocRef, publishData, { merge: true });
-                    
-                    // Also save to user's private collection
-                    const userData = {
-                        ...publishData,
-                        userId: this.userId
-                    };
-                    batch.set(userDocRef, userData, { merge: true });
-                    
-                    batch.commit()
-                        .then(() => {
-                            console.log('✅ Successfully published to public collection');
-                            
-                            this.lastSyncTime = new Date().toLocaleTimeString();
-                            this.dataStatus = 'synced';
-                            this.isSyncing = false;
-                            
-                            this.showToastMessage('✅ Portfolio successfully published!', 'success');
-                            this.addToSyncHistory('Data published', 'success');
-                            
-                        })
-                        .catch((error) => {
-                            console.error('❌ Publish error:', error);
-                            this.isSyncing = false;
-                            
-                            let errorMessage = 'Publish failed';
-                            if (error.code === 'permission-denied') {
-                                errorMessage = 'Permission denied. You may not have write access.';
-                            } else if (error.code === 'not-found') {
-                                errorMessage = 'Firebase collection not found. Please check configuration.';
-                            } else if (error.code === 'unavailable') {
-                                errorMessage = 'Firebase service unavailable. Please try again later.';
-                            }
-                            
-                            this.showToastMessage(`❌ ${errorMessage}`, 'error');
-                            this.addToSyncHistory('Publish failed', 'error');
-                        });
+                    try {
+                        // FIXED: Ensure all data is properly formatted
+                        const formattedSocialLinks = this.socialLinks
+                            .filter(link => link.url && link.url.trim() !== '')
+                            .map(link => ({
+                                platform: link.platform,
+                                url: link.url.trim(),
+                                icon: link.icon
+                            }));
+                        
+                        const publishData = {
+                            skills: this.skills,
+                            projects: this.projects,
+                            profile: this.profile,
+                            socialLinks: formattedSocialLinks,
+                            technologySpectrum: this.technologySpectrum,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                            updatedBy: this.userEmail,
+                            version: '2.0',
+                            published: true,
+                            publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        
+                        console.log('📤 Publishing data to public collection...', publishData);
+                        
+                        // FIXED: Use proper Firebase update with error handling
+                        const batch = this.firestore.batch();
+                        const publicDocRef = this.firestore.collection('publicPortfolios').doc('main');
+                        const userDocRef = this.firestore.collection('portfolios').doc(this.userId);
+                        
+                        // Update public portfolio
+                        batch.set(publicDocRef, publishData, { merge: true });
+                        
+                        // Also save to user's private collection
+                        const userData = {
+                            ...publishData,
+                            userId: this.userId
+                        };
+                        batch.set(userDocRef, userData, { merge: true });
+                        
+                        await batch.commit();
+                        
+                        console.log('✅ Successfully published to public collection');
+                        
+                        this.lastSyncTime = new Date().toLocaleTimeString();
+                        this.dataStatus = 'synced';
+                        this.isSyncing = false;
+                        this.hasUnsavedChanges = false;
+                        
+                        this.showToastMessage('✅ Portfolio successfully published!', 'success');
+                        this.addToSyncHistory('Data published', 'success');
+                        
+                    } catch (error) {
+                        console.error('❌ Publish error:', error);
+                        this.isSyncing = false;
+                        
+                        let errorMessage = 'Publish failed';
+                        if (error.code === 'permission-denied') {
+                            errorMessage = 'Permission denied. You may not have write access.';
+                        } else if (error.code === 'not-found') {
+                            errorMessage = 'Firebase collection not found. Please check configuration.';
+                        } else if (error.code === 'unavailable') {
+                            errorMessage = 'Firebase service unavailable. Please try again later.';
+                        }
+                        
+                        this.showToastMessage(`❌ ${errorMessage}`, 'error');
+                        this.addToSyncHistory('Publish failed', 'error');
+                    }
                 },
 
                 // EVENT LISTENERS
@@ -4137,10 +4644,17 @@
                     window.addEventListener('resize', this.handleResize.bind(this));
                     
                     window.addEventListener('beforeunload', () => {
-                        if (!this.isPublicMode) {
-                            this.saveToLocalStorage();
+                        if (!this.isPublicMode && this.hasUnsavedChanges) {
+                            return 'You have unsaved changes. Are you sure you want to leave?';
                         }
                     });
+                    
+                    // Auto-save interval
+                    setInterval(() => {
+                        if (!this.isPublicMode && this.hasUnsavedChanges) {
+                            this.saveToLocalStorage();
+                        }
+                    }, 30000); // Auto-save every 30 seconds
                 },
 
                 handleScroll() {
@@ -4219,6 +4733,11 @@
                     }
                     this.modals[modalName] = true;
                     document.body.style.overflow = 'hidden';
+                    
+                    // Initialize charts if opening skills modal
+                    if (modalName === 'addSkill' && this.chartView === 'chart') {
+                        setTimeout(() => this.initSkillsChart(), 100);
+                    }
                 },
 
                 closeModal(modalName) {
@@ -4336,9 +4855,15 @@
                         }
 
                         this.ensureMinimumProficiency();
+                        this.hasUnsavedChanges = true;
                         this.saveToLocalStorage();
                         this.closeModal('addSkill');
                         this.resetSkillForm();
+                        
+                        // Update chart if in chart view
+                        if (this.chartView === 'chart') {
+                            this.initSkillsChart();
+                        }
                     } catch (error) {
                         this.showToastMessage('Error saving skill', 'error');
                         console.error('Error adding skill:', error);
@@ -4435,6 +4960,7 @@
                         }
 
                         this.updateProjectSlides();
+                        this.hasUnsavedChanges = true;
                         this.saveToLocalStorage();
                         this.closeModal('addProject');
                         this.resetProjectForm();
@@ -4457,17 +4983,23 @@
                 executeDelete() {
                     if (this.isPublicMode) return;
                     
-                    if (this.deleteItem.type === 'skill') {
-                        this.skills = this.skills.filter(skill => skill.id !== this.deleteItem.id);
-                        this.showToastMessage('Skill deleted successfully', 'success');
-                    } else if (this.deleteItem.type === 'project') {
-                        this.projects = this.projects.filter(project => project.id !== this.deleteItem.id);
-                        this.updateProjectSlides();
-                        this.showToastMessage('Project deleted successfully', 'success');
+                    try {
+                        if (this.deleteItem.type === 'skill') {
+                            this.skills = this.skills.filter(skill => skill.id !== this.deleteItem.id);
+                            this.showToastMessage('Skill deleted successfully', 'success');
+                        } else if (this.deleteItem.type === 'project') {
+                            this.projects = this.projects.filter(project => project.id !== this.deleteItem.id);
+                            this.updateProjectSlides();
+                            this.showToastMessage('Project deleted successfully', 'success');
+                        }
+                        
+                        this.hasUnsavedChanges = true;
+                        this.saveToLocalStorage();
+                        this.closeModal('deleteConfirm');
+                    } catch (error) {
+                        this.showToastMessage('Error deleting item', 'error');
+                        console.error('Error deleting:', error);
                     }
-                    
-                    this.saveToLocalStorage();
-                    this.closeModal('deleteConfirm');
                 },
 
                 // PROFILE METHODS
@@ -4503,6 +5035,7 @@
                     }
                     
                     try {
+                        this.hasUnsavedChanges = true;
                         this.saveToLocalStorage();
                         this.showToastMessage('Profile updated successfully', 'success');
                         this.closeModal('editProfile');
@@ -4558,6 +5091,7 @@
                         // Update the reactive array
                         this.socialLinks = cleanedLinks;
                         
+                        this.hasUnsavedChanges = true;
                         this.saveToLocalStorage();
                         this.showToastMessage('Social links saved successfully', 'success');
                         this.closeModal('editSocialLinks');
@@ -4637,6 +5171,7 @@
                     };
                     
                     this.technologySpectrum.push(newTech);
+                    this.hasUnsavedChanges = true;
                     this.resetTechForm();
                     this.showToastMessage('Technology added to spectrum', 'success');
                 },
@@ -4660,6 +5195,7 @@
                     this.technologySpectrum.forEach((tech, index) => {
                         tech.order = index + 1;
                     });
+                    this.hasUnsavedChanges = true;
                     this.showToastMessage('Technology removed from spectrum', 'success');
                 },
 
@@ -4667,6 +5203,7 @@
                     if (this.isPublicMode) return;
                     
                     try {
+                        this.hasUnsavedChanges = true;
                         this.saveToLocalStorage();
                         this.showToastMessage('Technology spectrum saved successfully', 'success');
                         this.closeModal('editTechnologySpectrum');
@@ -4684,27 +5221,25 @@
                     this.draggingTechIndex = null;
                 },
 
-                handleTechDrop(event) {
+                handleTechDrop(dropIndex, event) {
                     event.preventDefault();
-                    if (this.draggingTechIndex === null) return;
+                    if (this.draggingTechIndex === null || dropIndex === this.draggingTechIndex) return;
                     
-                    const dropIndex = Array.from(event.target.closest('.sortable-list').children)
-                        .findIndex(child => child.contains(event.target));
+                    const draggedItem = this.technologySpectrum[this.draggingTechIndex];
+                    this.technologySpectrum.splice(this.draggingTechIndex, 1);
+                    this.technologySpectrum.splice(dropIndex, 0, draggedItem);
                     
-                    if (dropIndex !== -1 && dropIndex !== this.draggingTechIndex) {
-                        const draggedItem = this.technologySpectrum[this.draggingTechIndex];
-                        this.technologySpectrum.splice(this.draggingTechIndex, 1);
-                        this.technologySpectrum.splice(dropIndex, 0, draggedItem);
-                        
-                        // Update order
-                        this.technologySpectrum.forEach((tech, index) => {
-                            tech.order = index + 1;
-                        });
-                    }
+                    // Update order
+                    this.technologySpectrum.forEach((tech, index) => {
+                        tech.order = index + 1;
+                    });
+                    
+                    this.draggingTechIndex = null;
+                    this.hasUnsavedChanges = true;
                 },
 
                 // CONTACT FORM
-                submitContact() {
+                async submitContact() {
                     try {
                         this.isSubmitting = true;
                         
@@ -4745,41 +5280,33 @@
                             reply_to: this.contactForm.email
                         };
                         
-                        emailjs.send(serviceID, templateID, templateParams)
-                            .then((response) => {
-                                console.log('Email response:', response);
-                                
-                                if (response.status === 200) {
-                                    this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
-                                    
-                                    this.contactForm = {
-                                        name: '',
-                                        email: '',
-                                        subject: '',
-                                        message: ''
-                                    };
-                                } else {
-                                    throw new Error(`EmailJS responded with status: ${response.status}`);
-                                }
-                            })
-                            .catch((error) => {
-                                console.error('Email sending error:', error);
-                                
-                                let errorMessage = 'Error sending message. Please try again later.';
-                                
-                                if (error.text) {
-                                    console.error('EmailJS error text:', error.text);
-                                }
-                                
-                                this.showToastMessage(errorMessage, 'error');
-                            })
-                            .finally(() => {
-                                this.isSubmitting = false;
-                            });
+                        const response = await emailjs.send(serviceID, templateID, templateParams);
+                        console.log('Email response:', response);
+                        
+                        if (response.status === 200) {
+                            this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+                            
+                            this.contactForm = {
+                                name: '',
+                                email: '',
+                                subject: '',
+                                message: ''
+                            };
+                        } else {
+                            throw new Error(`EmailJS responded with status: ${response.status}`);
+                        }
                         
                     } catch (error) {
                         console.error('Email sending error:', error);
-                        this.showToastMessage('Error sending message. Please try again later.', 'error');
+                        
+                        let errorMessage = 'Error sending message. Please try again later.';
+                        
+                        if (error.text) {
+                            console.error('EmailJS error text:', error.text);
+                        }
+                        
+                        this.showToastMessage(errorMessage, 'error');
+                    } finally {
                         this.isSubmitting = false;
                     }
                 },
@@ -4795,19 +5322,21 @@
                     return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${bgColor}&color=${textColor}&size=${size}&bold=true&font-size=0.5`;
                 },
 
-                showToastMessage(message, type = 'success') {
+                showToastMessage(message, type = 'success', subMessage = '') {
                     this.toastMessage = message;
+                    this.toastSubMessage = subMessage;
                     this.toastType = type;
                     this.showToast = true;
                     
+                    // Auto hide after 5 seconds
                     setTimeout(() => {
                         this.showToast = false;
-                    }, 3000);
+                    }, 5000);
                 },
 
-                initParticles() {
+                async initParticles() {
                     if (typeof particlesJS === 'function') {
-                        particlesJS('particles-js', {
+                        await particlesJS('particles-js', {
                             particles: {
                                 number: { 
                                     value: 80, 
@@ -4846,6 +5375,7 @@
                                 }
                             },
                             interactivity: {
+                                detect_on: "canvas",
                                 events: {
                                     onhover: { 
                                         enable: true, 
@@ -4858,16 +5388,20 @@
                 },
 
                 // DATA MANAGEMENT METHODS
-                saveToLocalStorage() {
+                async saveToLocalStorage() {
                     if (this.isPublicMode) return;
                     
                     try {
-                        localStorage.setItem('portfolioSkills', JSON.stringify(this.skills));
-                        localStorage.setItem('portfolioProjects', JSON.stringify(this.projects));
-                        localStorage.setItem('portfolioProfile', JSON.stringify(this.profile));
-                        localStorage.setItem('portfolioSocialLinks', JSON.stringify(this.socialLinks));
-                        localStorage.setItem('portfolioTechnologySpectrum', JSON.stringify(this.technologySpectrum));
+                        const portfolioData = {
+                            skills: this.skills,
+                            projects: this.projects,
+                            profile: this.profile,
+                            socialLinks: this.socialLinks,
+                            technologySpectrum: this.technologySpectrum,
+                            lastSaved: new Date().toISOString()
+                        };
                         
+                        localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
                         localStorage.setItem('portfolioCacheTime', new Date().toISOString());
                         
                         console.log('✅ Data saved locally');
@@ -4950,12 +5484,16 @@
                 nextSlide() {
                     if (this.currentSlide < this.projectSlides.length - 1) {
                         this.currentSlide++;
+                    } else {
+                        this.currentSlide = 0;
                     }
                 },
 
                 prevSlide() {
                     if (this.currentSlide > 0) {
                         this.currentSlide--;
+                    } else {
+                        this.currentSlide = this.projectSlides.length - 1;
                     }
                 },
 
@@ -4970,16 +5508,107 @@
                     
                     if (this.autoSlideEnabled) {
                         this.autoSlideInterval = setInterval(() => {
-                            if (this.currentSlide < this.projectSlides.length - 1) {
-                                this.currentSlide++;
-                            } else {
-                                this.currentSlide = 0;
-                            }
+                            this.nextSlide();
                         }, 5000);
                     } else if (this.autoSlideInterval) {
                         clearInterval(this.autoSlideInterval);
                         this.autoSlideInterval = null;
                     }
+                },
+
+                // CHART METHODS
+                toggleChartView() {
+                    this.chartView = this.chartView === 'grid' ? 'chart' : 'grid';
+                    if (this.chartView === 'chart') {
+                        setTimeout(() => this.initSkillsChart(), 100);
+                    }
+                },
+
+                initSkillsChart() {
+                    const ctx = document.getElementById('skillsChart');
+                    if (!ctx) return;
+                    
+                    if (this.skillsChart) {
+                        this.skillsChart.destroy();
+                    }
+                    
+                    const filteredSkills = this.filteredSkills;
+                    const labels = filteredSkills.map(skill => skill.name);
+                    const data = filteredSkills.map(skill => skill.level);
+                    const backgroundColors = filteredSkills.map(skill => {
+                        const category = skill.category;
+                        const colors = {
+                            'frontend': 'rgba(59, 130, 246, 0.8)',
+                            'backend': 'rgba(16, 185, 129, 0.8)',
+                            'database': 'rgba(245, 158, 11, 0.8)',
+                            'mobile': 'rgba(139, 92, 246, 0.8)',
+                            'devops': 'rgba(239, 68, 68, 0.8)',
+                            'cloud': 'rgba(14, 165, 233, 0.8)',
+                            'design': 'rgba(236, 72, 153, 0.8)',
+                            'ai': 'rgba(168, 85, 247, 0.8)',
+                            'tools': 'rgba(107, 114, 128, 0.8)'
+                        };
+                        return colors[category] || 'rgba(59, 130, 246, 0.8)';
+                    });
+                    
+                    this.skillsChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Proficiency Level',
+                                data: data,
+                                backgroundColor: backgroundColors,
+                                borderColor: backgroundColors.map(color => color.replace('0.8', '1')),
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                borderSkipped: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.label}: ${context.raw}%`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
+                                }
+                            },
+                            animation: {
+                                duration: 1000,
+                                easing: 'easeOutQuart'
+                            }
+                        }
+                    });
                 },
 
                 // CATEGORY & ICON HELPER METHODS
@@ -5255,6 +5884,10 @@
                     this.openModal('projectDetail');
                 },
 
+                viewTechDetails(tech) {
+                    this.showToastMessage(tech.name, 'info', tech.description);
+                },
+
                 // IMAGE UPLOAD METHODS
                 uploadProfileImage(event) {
                     const file = event.target.files[0];
@@ -5270,10 +5903,16 @@
                         reader.onload = (e) => {
                             this.profile.image = e.target.result;
                             this.uploadingProfileImage = false;
+                            this.hasUnsavedChanges = true;
                             this.showToastMessage('Profile image updated successfully', 'success');
                         };
                         reader.readAsDataURL(file);
                     }
+                },
+
+                handleProfileImageError(event) {
+                    console.error('Error loading profile image:', event);
+                    event.target.src = this.generateDefaultAvatar();
                 },
 
                 handleProjectImageError(event, projectId) {
