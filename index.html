@@ -695,203 +695,203 @@
         }
 
         /* Enhanced Professional Theme - Light Mode */
-        body:not(.dark) {
+        body.light-mode {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
-            color: #1e293b;
+            color: #1e293b !important;
         }
 
-        body:not(.dark) .glass {
+        body.light-mode .glass {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(20px);
             border: 1px solid rgba(226, 232, 240, 0.8);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
         }
 
-        body:not(.dark) .card-hover {
+        body.light-mode .card-hover {
             background: white;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
-        body:not(.dark) .card-hover:hover {
+        body.light-mode .card-hover:hover {
             border-color: #3b82f6;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 32px rgba(59, 130, 246, 0.15);
         }
 
-        body:not(.dark) .modal-content {
+        body.light-mode .modal-content {
             background: white !important;
             border: 1px solid #e2e8f0;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
 
-        body:not(.dark) .contact-form-container {
+        body.light-mode .contact-form-container {
             background: white;
             border: 1px solid #e2e8f0;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
         }
 
-        body:not(.dark) .nav-link {
+        body.light-mode .nav-link {
             color: #475569;
         }
 
-        body:not(.dark) .nav-link:hover,
-        body:not(.dark) .nav-link.active {
+        body.light-mode .nav-link:hover,
+        body.light-mode .nav-link.active {
             background: rgba(59, 130, 246, 0.1);
             color: #2563eb;
         }
 
-        body:not(.dark) .tag {
+        body.light-mode .tag {
             background: rgba(59, 130, 246, 0.1);
             color: #2563eb;
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
-        body:not(.dark) .tag:hover {
+        body.light-mode .tag:hover {
             background: rgba(59, 130, 246, 0.15);
             border-color: rgba(59, 130, 246, 0.3);
         }
 
-        body:not(.dark) .project-meta-item {
+        body.light-mode .project-meta-item {
             background: rgba(59, 130, 246, 0.05);
             border: 1px solid rgba(59, 130, 246, 0.1);
         }
 
-        body:not(.dark) .status-badge {
+        body.light-mode .status-badge {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
-        body:not(.dark) .btn-outline {
+        body.light-mode .btn-outline {
             border-color: #3b82f6;
             color: #3b82f6;
             background: transparent;
         }
 
-        body:not(.dark) .btn-outline:hover {
+        body.light-mode .btn-outline:hover {
             background: #3b82f6;
             color: white;
         }
 
-        body:not(.dark) .form-input {
+        body.light-mode .form-input {
             background: white;
             border: 2px solid #e2e8f0;
             color: #1e293b;
         }
 
-        body:not(.dark) .form-input:focus {
+        body.light-mode .form-input:focus {
             border-color: #3b82f6;
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
-        body:not(.dark) .gradient-text {
+        body.light-mode .gradient-text {
             background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        body:not(.dark) .divider {
+        body.light-mode .divider {
             background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
         }
 
-        body:not(.dark) .skill-bar {
+        body.light-mode .skill-bar {
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
         }
 
-        body:not(.dark) ::-webkit-scrollbar-track {
+        body.light-mode ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
 
-        body:not(.dark) .bg-grid-pattern {
+        body.light-mode .bg-grid-pattern {
             background-image: 
                 linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
         }
 
         /* Enhanced Dark Mode */
-        body.dark {
+        body.dark-mode {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
-            color: #e2e8f0;
+            color: #e2e8f0 !important;
         }
 
-        body.dark .glass {
+        body.dark-mode .glass {
             background: rgba(30, 41, 59, 0.8) !important;
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        body.dark .card-hover {
+        body.dark-mode .card-hover {
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        body.dark .card-hover:hover {
+        body.dark-mode .card-hover:hover {
             border-color: rgba(59, 130, 246, 0.4);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(59, 130, 246, 0.2);
         }
 
-        body.dark .modal-content {
+        body.dark-mode .modal-content {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        body.dark .contact-form-container {
+        body.dark-mode .contact-form-container {
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        body.dark .btn-outline {
+        body.dark-mode .btn-outline {
             border-color: rgba(255, 255, 255, 0.2);
             color: #e2e8f0;
             background: transparent;
         }
 
-        body.dark .btn-outline:hover {
+        body.dark-mode .btn-outline:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.3);
         }
 
-        body.dark .form-input {
+        body.dark-mode .form-input {
             background: rgba(30, 41, 59, 0.8);
             border: 2px solid rgba(255, 255, 255, 0.1);
             color: #e2e8f0;
         }
 
-        body.dark .form-input:focus {
+        body.dark-mode .form-input:focus {
             border-color: #3b82f6;
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
         }
 
-        body.dark .gradient-text {
+        body.dark-mode .gradient-text {
             background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        body.dark .divider {
+        body.dark-mode .divider {
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         }
 
-        body.dark .skill-bar {
+        body.dark-mode .skill-bar {
             background: linear-gradient(90deg, #60a5fa, #a78bfa);
             box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
         }
 
-        body.dark ::-webkit-scrollbar-track {
+        body.dark-mode ::-webkit-scrollbar-track {
             background: rgba(30, 41, 59, 0.5);
         }
 
-        body.dark ::-webkit-scrollbar-thumb {
+        body.dark-mode ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #60a5fa, #a78bfa);
         }
 
-        body.dark .bg-grid-pattern {
+        body.dark-mode .bg-grid-pattern {
             background-image: 
                 linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
@@ -904,12 +904,12 @@
             transition: all 0.3s ease;
         }
 
-        body:not(.dark) nav.glass {
+        body.light-mode nav.glass {
             background: rgba(255, 255, 255, 0.9) !important;
             border-bottom-color: rgba(226, 232, 240, 0.8);
         }
 
-        body.dark nav.glass {
+        body.dark-mode nav.glass {
             background: rgba(30, 41, 59, 0.8) !important;
             border-bottom-color: rgba(255, 255, 255, 0.08);
         }
@@ -919,32 +919,103 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode h5, body.dark-mode h6 {
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         /* Enhanced Dark Mode Specific */
-        .dark .form-input:focus {
+        .dark-mode .form-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
             background: #1e293b;
         }
 
-        .dark .nav-link {
+        .dark-mode .nav-link {
             color: #cbd5e1;
         }
 
-        .dark .skill-bar-container {
+        .dark-mode .skill-bar-container {
             background: rgba(71, 85, 105, 0.3);
         }
 
-        .dark .tag {
+        .dark-mode .tag {
             background: rgba(59, 130, 246, 0.2);
             color: #93c5fd;
         }
+
+        /* Nav Down Arrow */
+        .nav-down-arrow {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .nav-down-arrow {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        body.dark-mode .nav-down-arrow {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        .nav-down-arrow:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Fix untuk skill bar max 100% */
+        .skill-percentage {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .skill-percentage.high {
+            color: #10b981;
+        }
+
+        .skill-percentage.medium {
+            color: #f59e0b;
+        }
+
+        .skill-percentage.low {
+            color: #ef4444;
+        }
+
+        /* Fix untuk social links yang hilang */
+        .social-link-item {
+            transition: all 0.3s ease;
+        }
+
+        .social-link-item:hover {
+            transform: translateY(-3px);
+        }
     </style>
 </head>
-<body :class="{'dark': isDark}" class="bg-gray-50 text-gray-800 transition-colors duration-300 overflow-x-hidden">
+<body :class="{'dark-mode': isDark, 'light-mode': !isDark}" class="bg-gray-50 text-gray-800 transition-colors duration-300 overflow-x-hidden">
     
     <!-- Professional Background Elements -->
     <div class="fixed inset-0 bg-grid-pattern z-0"></div>
@@ -969,7 +1040,7 @@
         <!-- Edit Mode Profile Dropdown -->
         <div x-show="!isPublicMode" x-data="{ profileMenuOpen: false }" class="relative animate-fade-in">
             <button @click="profileMenuOpen = !profileMenuOpen" 
-                    class="glass px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    class="glass px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors">
                 <i class="fas fa-user-circle text-primary text-xl"></i>
                 <span x-text="userEmail?.split('@')[0] || 'User'" class="font-medium hidden md:inline"></span>
                 <i class="fas fa-chevron-down text-sm transition-transform duration-300" 
@@ -979,42 +1050,42 @@
             <!-- Profile Dropdown Menu -->
             <div x-show="profileMenuOpen" 
                  @click.away="profileMenuOpen = false"
-                 class="absolute right-0 mt-2 w-64 glass rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-slide-up">
-                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                 class="absolute right-0 mt-2 w-64 glass rounded-xl shadow-xl border border-gray-200 dark-mode:border-gray-700 overflow-hidden animate-slide-up">
+                <div class="p-4 border-b border-gray-200 dark-mode:border-gray-700">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
                             <i class="fas fa-user text-white"></i>
                         </div>
                         <div>
                             <p class="font-semibold" x-text="userEmail?.split('@')[0] || 'User'"></p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" x-text="userEmail"></p>
+                            <p class="text-sm text-gray-600 dark-mode:text-gray-400 truncate" x-text="userEmail"></p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="py-2">
                     <button @click="syncData()" 
-                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3">
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors flex items-center gap-3">
                         <i class="fas fa-sync-alt text-primary"></i>
                         <span>Sync Data</span>
                     </button>
                     
                     <button @click="profileMenuOpen = false; openModal('editProfile')" 
-                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3">
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors flex items-center gap-3">
                         <i class="fas fa-user-edit text-primary"></i>
                         <span>Edit Profile</span>
                     </button>
                     
                     <button @click="profileMenuOpen = false; openModal('editSocialLinks')" 
-                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3">
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors flex items-center gap-3">
                         <i class="fas fa-share-alt text-primary"></i>
                         <span>Social Links</span>
                     </button>
                     
-                    <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                    <div class="border-t border-gray-200 dark-mode:border-gray-700 my-2"></div>
                     
                     <button @click="signOut()" 
-                            class="w-full text-left px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-3 text-red-600 dark:text-red-400">
+                            class="w-full text-left px-4 py-3 hover:bg-red-50 dark-mode:hover:bg-red-900/20 transition-colors flex items-center gap-3 text-red-600 dark-mode:text-red-400">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                     </button>
@@ -1042,8 +1113,8 @@
                         <i class="fas fa-code text-white"></i>
                     </div>
                     <div>
-                        <div class="text-xl font-bold text-gray-900 dark:text-white">Portfolio</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400">Full Stack Developer</div>
+                        <div class="text-xl font-bold text-gray-900 dark-mode:text-white">Portfolio</div>
+                        <div class="text-xs text-gray-500 dark-mode:text-gray-400">Full Stack Developer</div>
                     </div>
                 </div>
                 
@@ -1064,8 +1135,8 @@
                 <div class="flex items-center gap-6">
                     <!-- Theme Toggle -->
                     <button @click="toggleTheme()" 
-                            class="w-14 h-7 rounded-full bg-gray-200 dark:bg-gray-700 relative transition-all duration-300 hover:scale-105">
-                        <div class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white dark:bg-gray-900 transition-transform duration-300 shadow-lg" 
+                            class="w-14 h-7 rounded-full bg-gray-200 dark-mode:bg-gray-700 relative transition-all duration-300 hover:scale-105">
+                        <div class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white dark-mode:bg-gray-900 transition-transform duration-300 shadow-lg" 
                              :class="{'translate-x-7': isDark}"></div>
                         <div class="absolute top-1 left-2">
                             <i class="fas fa-sun text-yellow-500 text-xs"></i>
@@ -1076,8 +1147,8 @@
                     </button>
                     
                     <!-- Mobile Menu Button -->
-                    <button @click="mobileMenu = !mobileMenu" class="md:hidden w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-bars text-gray-700 dark:text-gray-300"></i>
+                    <button @click="mobileMenu = !mobileMenu" class="md:hidden w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-bars text-gray-700 dark-mode:text-gray-300"></i>
                     </button>
                 </div>
             </div>
@@ -1088,8 +1159,8 @@
                     <template x-for="item in navItems" :key="item.name">
                         <a :href="item.href" 
                            @click.prevent="scrollTo(item.href.substring(1)); mobileMenu = false"
-                           class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                           :class="{'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400': activeSection === item.href.substring(1)}">
+                           class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark-mode:text-gray-300 hover:bg-gray-100 dark-mode:hover:bg-gray-800 transition-colors"
+                           :class="{'bg-primary-50 dark-mode:bg-primary-900/30 text-primary-600 dark-mode:text-primary-400': activeSection === item.href.substring(1)}">
                             <i :class="item.icon" class="w-5 text-center"></i>
                             <span x-text="item.name"></span>
                         </a>
@@ -1110,7 +1181,7 @@
                     <!-- Hero Content -->
                     <div class="text-center lg:text-left animate-slide-in-left">
                         <div class="mb-12">
-                            <div class="inline-flex items-center gap-3 bg-primary-50 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-6 py-3 rounded-full mb-8 animate-fade-in">
+                            <div class="inline-flex items-center gap-3 bg-primary-50 dark-mode:bg-primary-900/30 text-primary-800 dark-mode:text-primary-300 px-6 py-3 rounded-full mb-8 animate-fade-in">
                                 <i class="fas fa-terminal"></i>
                                 <span class="text-lg font-semibold">Full Stack Developer</span>
                             </div>
@@ -1119,11 +1190,11 @@
                                 <span class="gradient-text" x-text="profile.name"></span>
                             </h1>
                             
-                            <p class="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
+                            <p class="text-2xl md:text-3xl text-gray-700 dark-mode:text-gray-300 mb-8 leading-relaxed">
                                 Crafting <span class="gradient-text font-bold">Digital Excellence</span> through code
                             </p>
                             
-                            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed" x-text="profile.bio"></p>
+                            <p class="text-xl text-gray-600 dark-mode:text-gray-400 max-w-2xl leading-relaxed" x-text="profile.bio"></p>
                         </div>
                         
                         <!-- CTA Buttons -->
@@ -1141,15 +1212,15 @@
                         <div class="grid grid-cols-3 gap-6 max-w-lg">
                             <div class="stat-card">
                                 <div class="text-4xl font-bold gradient-text mb-2" x-text="skills.length"></div>
-                                <div class="text-gray-600 dark:text-gray-400 font-medium">Tech Skills</div>
+                                <div class="text-gray-600 dark-mode:text-gray-400 font-medium">Tech Skills</div>
                             </div>
                             <div class="stat-card">
                                 <div class="text-4xl font-bold gradient-text mb-2" x-text="projects.length"></div>
-                                <div class="text-gray-600 dark:text-gray-400 font-medium">Projects</div>
+                                <div class="text-gray-600 dark-mode:text-gray-400 font-medium">Projects</div>
                             </div>
                             <div class="stat-card">
-                                <div class="text-4xl font-bold gradient-text mb-2" x-text="averageSkillLevel + '%'"></div>
-                                <div class="text-gray-600 dark:text-gray-400 font-medium">Proficiency</div>
+                                <div class="text-4xl font-bold gradient-text mb-2" x-text="getAverageSkillLevel()"></div>
+                                <div class="text-gray-600 dark-mode:text-gray-400 font-medium">Proficiency</div>
                             </div>
                         </div>
                     </div>
@@ -1159,7 +1230,7 @@
                         <div class="relative mx-auto lg:mx-0 max-w-md">
                             <!-- Profile Image -->
                             <div class="relative mb-12">
-                                <div class="w-72 h-72 mx-auto rounded-full border-8 border-white/10 dark:border-gray-800/50 shadow-2xl overflow-hidden">
+                                <div class="w-72 h-72 mx-auto rounded-full border-8 border-white/10 dark-mode:border-gray-800/50 shadow-2xl overflow-hidden">
                                     <img :src="profileImageSrc" 
                                          alt="Profile Picture" 
                                          class="w-full h-full object-cover">
@@ -1188,10 +1259,8 @@
             </div>
             
             <!-- Scroll Indicator -->
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-                <button @click="scrollTo('skills')" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors animate-pulse-subtle">
-                    <i class="fas fa-chevron-down text-3xl"></i>
-                </button>
+            <div class="nav-down-arrow" @click="scrollTo('skills')">
+                <i class="fas fa-chevron-down text-xl"></i>
             </div>
         </section>
 
@@ -1207,7 +1276,7 @@
                             <span class="gradient-text">Skills & Expertise</span>
                         </h2>
                     </div>
-                    <p class="text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    <p class="text-2xl text-gray-600 dark-mode:text-gray-400 max-w-3xl mx-auto leading-relaxed">
                         Mastering modern technologies with precision and depth
                     </p>
                 </div>
@@ -1232,7 +1301,7 @@
                                     <i :class="tech.icon" class="text-white text-2xl"></i>
                                 </div>
                                 <h4 class="font-bold text-lg text-center mb-2" x-text="tech.name"></h4>
-                                <p class="text-gray-600 dark:text-gray-400 text-center text-sm" x-text="tech.description"></p>
+                                <p class="text-gray-600 dark-mode:text-gray-400 text-center text-sm" x-text="tech.description"></p>
                             </div>
                         </template>
                     </div>
@@ -1285,7 +1354,9 @@
                                             <h3 class="font-bold text-xl mb-2" x-text="skill.name"></h3>
                                             <div class="flex items-center gap-2">
                                                 <i :class="getProficiencyIcon(skill.level)" class="text-yellow-500"></i>
-                                                <span class="text-gray-600 dark:text-gray-400" x-text="skill.level + '% Proficiency'"></span>
+                                                <span class="skill-percentage" 
+                                                      :class="getProficiencyLevelClass(skill.level)"
+                                                      x-text="Math.min(100, skill.level) + '% Proficiency'"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -1301,15 +1372,15 @@
                                     </div>
                                 </div>
                                 
-                                <p class="text-gray-600 dark:text-gray-300 mb-6" x-text="skill.description"></p>
+                                <p class="text-gray-600 dark-mode:text-gray-300 mb-6" x-text="skill.description"></p>
                                 
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600 dark:text-gray-400 font-medium">Proficiency</span>
-                                        <span class="font-bold gradient-text" x-text="skill.level + '%'"></span>
+                                        <span class="text-gray-600 dark-mode:text-gray-400 font-medium">Proficiency</span>
+                                        <span class="font-bold gradient-text" x-text="Math.min(100, skill.level) + '%'"></span>
                                     </div>
                                     <div class="skill-bar-container">
-                                        <div class="skill-bar" :style="'width: ' + skill.level + '%'"></div>
+                                        <div class="skill-bar" :style="'width: ' + Math.min(100, skill.level) + '%'"></div>
                                     </div>
                                     
                                     <div class="flex justify-between text-sm text-gray-500">
@@ -1321,6 +1392,11 @@
                         </template>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="nav-down-arrow" @click="scrollTo('projects')">
+                <i class="fas fa-chevron-down text-xl"></i>
             </div>
         </section>
 
@@ -1336,7 +1412,7 @@
                             <span class="gradient-text">Featured Projects</span>
                         </h2>
                     </div>
-                    <p class="text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    <p class="text-2xl text-gray-600 dark-mode:text-gray-400 max-w-3xl mx-auto leading-relaxed">
                         Innovative solutions for complex challenges
                     </p>
                 </div>
@@ -1382,7 +1458,7 @@
                             
                             <div class="p-6">
                                 <h3 class="text-xl font-bold mb-3" x-text="project.name"></h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2" x-text="project.description"></p>
+                                <p class="text-gray-600 dark-mode:text-gray-300 mb-4 line-clamp-2" x-text="project.description"></p>
                                 
                                 <div class="tech-stack-container mb-6">
                                     <template x-for="tech in project.technologies.slice(0, 4)" :key="tech">
@@ -1396,7 +1472,7 @@
                                 <div class="divider"></div>
                                 
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500 dark:text-gray-400" x-text="project.date || '2024'"></span>
+                                    <span class="text-gray-500 dark-mode:text-gray-400" x-text="project.date || '2024'"></span>
                                     <div class="action-buttons">
                                         <button @click="viewProject(project.id)" class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye mr-2"></i>
@@ -1412,6 +1488,11 @@
                     </template>
                 </div>
             </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="nav-down-arrow" @click="scrollTo('contact')">
+                <i class="fas fa-chevron-down text-xl"></i>
+            </div>
         </section>
 
         <!-- Contact Section -->
@@ -1426,7 +1507,7 @@
                             <span class="gradient-text">Get In Touch</span>
                         </h2>
                     </div>
-                    <p class="text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    <p class="text-2xl text-gray-600 dark-mode:text-gray-400 max-w-3xl mx-auto leading-relaxed">
                         Let's build something amazing together
                     </p>
                 </div>
@@ -1442,42 +1523,42 @@
                             
                             <div class="space-y-6">
                                 <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-user text-primary-600 dark:text-primary-400"></i>
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-secondary-100 dark-mode:from-primary-900/30 dark-mode:to-secondary-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-user text-primary-600 dark-mode:text-primary-400"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-lg mb-1">Name</h4>
-                                        <p class="text-gray-600 dark:text-gray-300" x-text="profile.name"></p>
+                                        <p class="text-gray-600 dark-mode:text-gray-300" x-text="profile.name"></p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-envelope text-green-600 dark:text-green-400"></i>
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 dark-mode:from-green-900/30 dark-mode:to-emerald-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-envelope text-green-600 dark-mode:text-green-400"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-lg mb-1">Email</h4>
-                                        <p class="text-gray-600 dark:text-gray-300" x-text="profile.email"></p>
+                                        <p class="text-gray-600 dark-mode:text-gray-300" x-text="profile.email"></p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-phone text-purple-600 dark:text-purple-400"></i>
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 dark-mode:from-purple-900/30 dark-mode:to-pink-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-phone text-purple-600 dark-mode:text-purple-400"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-lg mb-1">Phone</h4>
-                                        <p class="text-gray-600 dark:text-gray-300" x-text="profile.phone"></p>
+                                        <p class="text-gray-600 dark-mode:text-gray-300" x-text="profile.phone"></p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-map-marker-alt text-orange-600 dark:text-orange-400"></i>
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-red-100 dark-mode:from-orange-900/30 dark-mode:to-red-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-map-marker-alt text-orange-600 dark-mode:text-orange-400"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-lg mb-1">Location</h4>
-                                        <p class="text-gray-600 dark:text-gray-300" x-text="profile.location"></p>
+                                        <p class="text-gray-600 dark-mode:text-gray-300" x-text="profile.location"></p>
                                     </div>
                                 </div>
                             </div>
@@ -1503,12 +1584,12 @@
                             
                             <div class="social-grid">
                                 <template x-for="link in socialLinks" :key="link.platform">
-                                    <a :href="link.url" target="_blank" class="card-hover p-4 text-center">
+                                    <a :href="link.url" target="_blank" class="social-link-item card-hover p-4 text-center">
                                         <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" :style="'background: ' + getSocialPlatformColor(link.platform)">
                                             <i :class="link.icon" class="text-white text-lg"></i>
                                         </div>
                                         <h4 class="font-bold text-sm" x-text="link.platform"></h4>
-                                        <p class="text-gray-600 dark:text-gray-400 text-xs mt-1" x-text="getSocialUsername(link.url)"></p>
+                                        <p class="text-gray-600 dark-mode:text-gray-400 text-xs mt-1" x-text="getSocialUsername(link.url)"></p>
                                     </a>
                                 </template>
                             </div>
@@ -1526,7 +1607,7 @@
                             <form @submit.prevent="submitContact">
                                 <div class="grid md:grid-cols-2 gap-6 mb-6">
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                             Your Name
                                         </label>
                                         <input type="text" x-model="contactForm.name" 
@@ -1536,7 +1617,7 @@
                                     </div>
                                     
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                             Your Email
                                         </label>
                                         <input type="email" x-model="contactForm.email" 
@@ -1547,7 +1628,7 @@
                                 </div>
                                 
                                 <div class="mb-6">
-                                    <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                    <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                         Subject
                                     </label>
                                     <input type="text" x-model="contactForm.subject" 
@@ -1557,7 +1638,7 @@
                                 </div>
                                 
                                 <div class="mb-8">
-                                    <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                    <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                         Your Message
                                     </label>
                                     <textarea x-model="contactForm.message" rows="6"
@@ -1628,14 +1709,14 @@
                                     <i class="fas fa-circle text-xs"></i>
                                     <span x-text="selectedProject?.status || 'Completed'"></span>
                                 </span>
-                                <span class="text-gray-500 dark:text-gray-400">
+                                <span class="text-gray-500 dark-mode:text-gray-400">
                                     <i class="fas fa-calendar mr-1"></i>
                                     <span x-text="selectedProject?.date || '2024'"></span>
                                 </span>
                             </div>
                         </div>
-                        <button @click="closeModal('projectDetail')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                        <button @click="closeModal('projectDetail')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
                         </button>
                     </div>
                     
@@ -1654,7 +1735,7 @@
                                 <i class="fas fa-file-alt text-primary"></i>
                                 Project Overview
                             </h4>
-                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg" x-text="selectedProject?.description"></p>
+                            <p class="text-gray-600 dark-mode:text-gray-300 leading-relaxed text-lg" x-text="selectedProject?.description"></p>
                         </div>
                         
                         <!-- Project Metadata -->
@@ -1662,7 +1743,7 @@
                             <div class="project-meta-item" x-show="selectedProject?.role">
                                 <i class="fas fa-user-tie text-primary"></i>
                                 <div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">Role</div>
+                                    <div class="text-sm text-gray-500 dark-mode:text-gray-400">Role</div>
                                     <div class="font-medium" x-text="selectedProject?.role"></div>
                                 </div>
                             </div>
@@ -1670,7 +1751,7 @@
                             <div class="project-meta-item" x-show="selectedProject?.client">
                                 <i class="fas fa-building text-primary"></i>
                                 <div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">Client</div>
+                                    <div class="text-sm text-gray-500 dark-mode:text-gray-400">Client</div>
                                     <div class="font-medium" x-text="selectedProject?.client"></div>
                                 </div>
                             </div>
@@ -1678,7 +1759,7 @@
                             <div class="project-meta-item" x-show="selectedProject?.teamSize">
                                 <i class="fas fa-users text-primary"></i>
                                 <div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">Team Size</div>
+                                    <div class="text-sm text-gray-500 dark-mode:text-gray-400">Team Size</div>
                                     <div class="font-medium" x-text="selectedProject?.teamSize + ' members'"></div>
                                 </div>
                             </div>
@@ -1686,7 +1767,7 @@
                             <div class="project-meta-item">
                                 <i class="fas fa-clock text-primary"></i>
                                 <div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">Duration</div>
+                                    <div class="text-sm text-gray-500 dark-mode:text-gray-400">Duration</div>
                                     <div class="font-medium" x-text="selectedProject?.startDate + ' - ' + (selectedProject?.endDate || 'Present')"></div>
                                 </div>
                             </div>
@@ -1766,15 +1847,15 @@
                         <i class="fas fa-magic mr-3 gradient-text"></i>
                         <span x-text="editingSkill ? 'Edit Skill' : 'Add New Skill'"></span>
                     </h3>
-                    <button @click="closeModal('addSkill')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    <button @click="closeModal('addSkill')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
                     </button>
                 </div>
                 
                 <div class="space-y-6">
                     <!-- Skill Name -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Skill Name *
                         </label>
                         <div class="relative">
@@ -1788,7 +1869,7 @@
                                 <div class="glass rounded-xl shadow-lg overflow-hidden">
                                     <template x-for="suggestion in skillSuggestions" :key="suggestion">
                                         <button @click="selectSkillSuggestion(suggestion)"
-                                                class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                                                class="w-full text-left px-4 py-3 hover:bg-gray-100 dark-mode:hover:bg-gray-700 transition-colors flex items-center gap-3">
                                             <i :class="getTechIcon(suggestion)" class="text-primary"></i>
                                             <span x-text="suggestion"></span>
                                         </button>
@@ -1801,7 +1882,7 @@
                     <!-- Category and Level -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Category
                             </label>
                             <select x-model="newSkill.category" class="form-input w-full">
@@ -1818,11 +1899,11 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
-                                Proficiency Level: <span x-text="newSkill.level + '%'" class="text-primary font-bold"></span>
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
+                                Proficiency Level: <span x-text="Math.min(100, newSkill.level) + '%'" class="text-primary font-bold"></span>
                             </label>
                             <input type="range" x-model="newSkill.level" min="0" max="100" step="5"
-                                   class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                   class="w-full h-2 bg-gray-200 dark-mode:bg-gray-700 rounded-lg appearance-none cursor-pointer">
                             <div class="flex justify-between text-sm text-gray-500 mt-2">
                                 <span>Beginner</span>
                                 <span>Intermediate</span>
@@ -1835,7 +1916,7 @@
                     <!-- Experience -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Years of Experience
                             </label>
                             <div class="flex items-center gap-3">
@@ -1853,7 +1934,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Projects Completed
                             </label>
                             <div class="flex items-center gap-3">
@@ -1873,7 +1954,7 @@
                     
                     <!-- Icon Selection -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Icon
                         </label>
                         <div class="flex flex-wrap gap-3">
@@ -1882,7 +1963,7 @@
                                         class="w-12 h-12 rounded-xl flex items-center justify-center transition-all"
                                         :class="newSkill.icon === icon 
                                             ? 'bg-primary text-white' 
-                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'">
+                                            : 'bg-gray-100 dark-mode:bg-gray-800 text-gray-700 dark-mode:text-gray-300 hover:bg-gray-200 dark-mode:hover:bg-gray-700'">
                                     <i :class="icon"></i>
                                 </button>
                             </template>
@@ -1891,7 +1972,7 @@
                     
                     <!-- Description -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Description
                         </label>
                         <textarea x-model="newSkill.description" rows="3"
@@ -1900,7 +1981,7 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark-mode:border-gray-700">
                     <button @click="closeModal('addSkill')" class="btn btn-outline">
                         Cancel
                     </button>
@@ -1922,8 +2003,8 @@
                         <i class="fas fa-rocket mr-3 gradient-text"></i>
                         <span x-text="editingProject ? 'Edit Project' : 'Add New Project'"></span>
                     </h3>
-                    <button @click="closeModal('addProject')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    <button @click="closeModal('addProject')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
                     </button>
                 </div>
                 
@@ -1931,7 +2012,7 @@
                     <!-- Basic Info -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Project Name *
                             </label>
                             <input type="text" x-model="newProject.name" 
@@ -1940,7 +2021,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Project Type
                             </label>
                             <select x-model="newProject.type" class="form-input w-full">
@@ -1956,7 +2037,7 @@
                     
                     <!-- Description -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Project Description *
                         </label>
                         <textarea x-model="newProject.description" rows="4"
@@ -1966,7 +2047,7 @@
                     
                     <!-- Technologies -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Technologies Used
                         </label>
                         <div class="relative mb-3">
@@ -1981,7 +2062,7 @@
                                 <div class="glass rounded-xl shadow-lg overflow-hidden">
                                     <template x-for="tech in techSuggestions" :key="tech">
                                         <button @click="addTechFromSuggestion(tech)"
-                                                class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                                                class="w-full text-left px-4 py-3 hover:bg-gray-100 dark-mode:hover:bg-gray-700 transition-colors flex items-center gap-3">
                                             <i :class="getTechIcon(tech)" class="text-primary"></i>
                                             <span x-text="tech"></span>
                                         </button>
@@ -2007,7 +2088,7 @@
                     <!-- Project Details -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Status
                             </label>
                             <select x-model="newProject.status" class="form-input w-full">
@@ -2019,7 +2100,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Your Role
                             </label>
                             <input type="text" x-model="newProject.role" 
@@ -2031,7 +2112,7 @@
                     <!-- Team & Client -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Team Size
                             </label>
                             <input type="number" x-model="newProject.teamSize" min="1" max="50"
@@ -2039,7 +2120,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Client/Company
                             </label>
                             <input type="text" x-model="newProject.client" 
@@ -2051,7 +2132,7 @@
                     <!-- Timeline -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Start Date
                             </label>
                             <input type="date" x-model="newProject.startDate" 
@@ -2059,7 +2140,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 <input type="checkbox" x-model="newProject.isOngoing" class="mr-2">
                                 Ongoing Project
                             </label>
@@ -2071,7 +2152,7 @@
                     
                     <!-- Image URL -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Project Image URL
                         </label>
                         <input type="url" x-model="newProject.image" 
@@ -2082,7 +2163,7 @@
                     <!-- Links -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Live Demo URL
                             </label>
                             <input type="url" x-model="newProject.demoUrl" 
@@ -2091,7 +2172,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Source Code URL
                             </label>
                             <input type="url" x-model="newProject.sourceUrl" 
@@ -2102,7 +2183,7 @@
                     
                     <!-- Key Features -->
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Key Features
                         </label>
                         <div class="space-y-2">
@@ -2125,7 +2206,7 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark-mode:border-gray-700">
                     <button @click="closeModal('addProject')" class="btn btn-outline">
                         Cancel
                     </button>
@@ -2147,15 +2228,15 @@
                         <i class="fas fa-user-edit mr-3 gradient-text"></i>
                         Edit Profile
                     </h3>
-                    <button @click="closeModal('editProfile')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    <button @click="closeModal('editProfile')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
                     </button>
                 </div>
                 
                 <div class="space-y-6">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Full Name *
                             </label>
                             <input type="text" x-model="profile.name" 
@@ -2164,7 +2245,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Professional Title *
                             </label>
                             <input type="text" x-model="profile.title" 
@@ -2174,7 +2255,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Email Address *
                         </label>
                         <input type="email" x-model="profile.email" 
@@ -2184,7 +2265,7 @@
                     
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Phone Number
                             </label>
                             <input type="tel" x-model="profile.phone" 
@@ -2193,7 +2274,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Location
                             </label>
                             <input type="text" x-model="profile.location" 
@@ -2203,19 +2284,19 @@
                     </div>
                     
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Professional Bio *
                         </label>
                         <textarea x-model="profile.bio" rows="4"
                                   class="form-input w-full"
                                   placeholder="Experienced Full Stack Developer with expertise in..."></textarea>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                        <p class="text-sm text-gray-500 dark-mode:text-gray-400 mt-2">
                             <span x-text="profile.bio?.length || 0"></span> characters
                         </p>
                     </div>
                     
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                        <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                             Profile Image URL
                         </label>
                         <div class="flex gap-3">
@@ -2228,13 +2309,13 @@
                                 Use Default
                             </button>
                         </div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                        <p class="text-sm text-gray-500 dark-mode:text-gray-400 mt-2">
                             Leave empty for auto-generated avatar
                         </p>
                     </div>
                 </div>
                 
-                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark-mode:border-gray-700">
                     <button @click="closeModal('editProfile')" class="btn btn-outline">
                         Cancel
                     </button>
@@ -2256,14 +2337,14 @@
                         <i class="fas fa-share-alt mr-3 gradient-text"></i>
                         Edit Social Links
                     </h3>
-                    <button @click="closeModal('editSocialLinks')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    <button @click="closeModal('editSocialLinks')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
                     </button>
                 </div>
                 
                 <!-- Quick Add Buttons -->
                 <div class="mb-8">
-                    <h4 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Quick Add</h4>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-700 dark-mode:text-gray-300">Quick Add</h4>
                     <div class="flex flex-wrap gap-3">
                         <template x-for="platform in popularSocialPlatforms" :key="platform.name">
                             <button @click="addQuickSocialLink(platform.name)" 
@@ -2278,7 +2359,7 @@
                 <!-- Social Links List -->
                 <div class="space-y-4 mb-8">
                     <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                        <h4 class="text-lg font-semibold text-gray-700 dark-mode:text-gray-300">
                             Your Social Links (Total: <span x-text="socialLinks.length"></span>)
                         </h4>
                         <button @click="addSocialLink()" class="btn btn-primary btn-sm">
@@ -2288,9 +2369,9 @@
                     </div>
                     
                     <template x-if="socialLinks.length === 0">
-                        <div class="text-center py-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl">
-                            <i class="fas fa-share-alt text-4xl text-gray-400 dark:text-gray-600 mb-4"></i>
-                            <p class="text-gray-500 dark:text-gray-400">No social links added yet</p>
+                        <div class="text-center py-8 border-2 border-dashed border-gray-300 dark-mode:border-gray-700 rounded-2xl">
+                            <i class="fas fa-share-alt text-4xl text-gray-400 dark-mode:text-gray-600 mb-4"></i>
+                            <p class="text-gray-500 dark-mode:text-gray-400">No social links added yet</p>
                         </div>
                     </template>
                     
@@ -2345,7 +2426,7 @@
                     </template>
                 </div>
                 
-                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark-mode:border-gray-700">
                     <button @click="closeModal('editSocialLinks')" class="btn btn-outline">
                         Cancel
                     </button>
@@ -2367,18 +2448,18 @@
                         <i class="fas fa-layer-group mr-3 gradient-text"></i>
                         Technology Spectrum
                     </h3>
-                    <button @click="closeModal('editTechnologySpectrum')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    <button @click="closeModal('editTechnologySpectrum')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
                     </button>
                 </div>
                 
                 <!-- Add New Tech Form -->
                 <div class="card-hover p-6 mb-8">
-                    <h4 class="text-xl font-bold mb-4 text-gray-700 dark:text-gray-300">Add New Technology</h4>
+                    <h4 class="text-xl font-bold mb-4 text-gray-700 dark-mode:text-gray-300">Add New Technology</h4>
                     
                     <div class="grid md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Technology Name *
                             </label>
                             <input type="text" x-model="newTech.name" 
@@ -2387,7 +2468,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Category
                             </label>
                             <select x-model="newTech.category" class="form-input w-full">
@@ -2404,7 +2485,7 @@
                     
                     <div class="grid md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Description
                             </label>
                             <input type="text" x-model="newTech.description" 
@@ -2413,7 +2494,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
                                 Color Theme
                             </label>
                             <select x-model="newTech.color" class="form-input w-full">
@@ -2442,15 +2523,15 @@
                 <!-- Existing Technologies -->
                 <div>
                     <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-xl font-bold text-gray-700 dark:text-gray-300">
+                        <h4 class="text-xl font-bold text-gray-700 dark-mode:text-gray-300">
                             Current Technologies (Total: <span x-text="technologySpectrum.length"></span>)
                         </h4>
                     </div>
                     
                     <template x-if="technologySpectrum.length === 0">
-                        <div class="text-center py-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl">
-                            <i class="fas fa-code text-4xl text-gray-400 dark:text-gray-600 mb-4"></i>
-                            <p class="text-gray-500 dark:text-gray-400">No technologies added yet</p>
+                        <div class="text-center py-8 border-2 border-dashed border-gray-300 dark-mode:border-gray-700 rounded-2xl">
+                            <i class="fas fa-code text-4xl text-gray-400 dark-mode:text-gray-600 mb-4"></i>
+                            <p class="text-gray-500 dark-mode:text-gray-400">No technologies added yet</p>
                         </div>
                     </template>
                     
@@ -2470,13 +2551,13 @@
                                         
                                         <div>
                                             <h5 class="font-bold text-lg" x-text="tech.name"></h5>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm" x-text="tech.description"></p>
+                                            <p class="text-gray-600 dark-mode:text-gray-400 text-sm" x-text="tech.description"></p>
                                             <div class="flex items-center gap-2 mt-1">
-                                                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                                                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark-mode:bg-gray-800 text-gray-600 dark-mode:text-gray-400">
                                                     <i class="fas fa-tag mr-1"></i>
                                                     <span x-text="tech.category"></span>
                                                 </span>
-                                                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                                                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark-mode:bg-gray-800 text-gray-600 dark-mode:text-gray-400">
                                                     <i class="fas fa-sort-numeric-up mr-1"></i>
                                                     Order: <span x-text="tech.order"></span>
                                                 </span>
@@ -2506,7 +2587,7 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark-mode:border-gray-700">
                     <button @click="closeModal('editTechnologySpectrum')" class="btn btn-outline">
                         Cancel
                     </button>
@@ -2524,11 +2605,11 @@
         <div class="modal-content max-w-md w-full" @click.away="closeModal('deleteConfirm')">
             <div class="p-8">
                 <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div class="w-16 h-16 bg-red-100 dark-mode:bg-red-900/30 text-red-600 dark-mode:text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-exclamation-triangle text-2xl"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-2">Confirm Delete</h3>
-                    <p class="text-gray-600 dark:text-gray-400">
+                    <p class="text-gray-600 dark-mode:text-gray-400">
                         Are you sure you want to delete 
                         <span class="font-bold text-primary" x-text="deleteItem.name"></span>?
                         This action cannot be undone.
@@ -2647,9 +2728,9 @@
                 { name: 'MongoDB', icon: 'fas fa-database' },
                 { name: 'PostgreSQL', icon: 'fas fa-database' },
                 { name: 'MySQL', icon: 'fas fa-database' },
+                { name: 'SQLite', icon: 'fas fa-database' },
                 { name: 'Redis', icon: 'fas fa-database' },
                 { name: 'Firebase', icon: 'fas fa-fire' },
-                { name: 'SQLite', icon: 'fas fa-database' },
                 { name: 'Oracle', icon: 'fas fa-database' },
                 { name: 'Elasticsearch', icon: 'fas fa-search' },
                 { name: 'Cassandra', icon: 'fas fa-database' },
@@ -3256,11 +3337,11 @@
                 },
 
                 // Profile Data
-                profile: { ...predefinedPublicData.profile },
-                skills: [...predefinedPublicData.skills],
-                projects: [...predefinedPublicData.projects],
-                socialLinks: [...predefinedPublicData.socialLinks],
-                technologySpectrum: [...predefinedPublicData.technologySpectrum],
+                profile: JSON.parse(JSON.stringify(predefinedPublicData.profile)),
+                skills: JSON.parse(JSON.stringify(predefinedPublicData.skills)),
+                projects: JSON.parse(JSON.stringify(predefinedPublicData.projects)),
+                socialLinks: JSON.parse(JSON.stringify(predefinedPublicData.socialLinks)),
+                technologySpectrum: JSON.parse(JSON.stringify(predefinedPublicData.technologySpectrum)),
                 portfolioYear: new Date().getFullYear(),
 
                 // Navigation
@@ -3414,11 +3495,11 @@
                     return this.skills.filter(skill => skill.category === this.activeSkillCategory);
                 },
 
-                get averageSkillLevel() {
-                    if (this.skills.length === 0) return 70;
-                    const total = this.skills.reduce((sum, skill) => sum + skill.level, 0);
+                getAverageSkillLevel() {
+                    if (this.skills.length === 0) return '70%';
+                    const total = this.skills.reduce((sum, skill) => sum + Math.min(100, skill.level), 0);
                     const avg = total / this.skills.length;
-                    return Math.round(avg >= 70 ? avg : 70);
+                    return Math.round(avg) + '%';
                 },
 
                 get totalProjectCount() {
@@ -3463,6 +3544,8 @@
                     
                     const savedTheme = localStorage.getItem('theme');
                     this.isDark = savedTheme ? savedTheme === 'dark' : true;
+                    
+                    document.body.classList.add(this.isDark ? 'dark-mode' : 'light-mode');
 
                     this.initParticles();
 
@@ -3522,7 +3605,7 @@
                     }, 1500);
                 },
 
-                // FIREBASE INITIALIZATION UNTUK PUBLIC ACCESS
+                // FIXED: FIREBASE INITIALIZATION UNTUK PUBLIC ACCESS
                 initFirebasePublic() {
                     console.log('🚀 Attempting to initialize Firebase for public access...');
                     
@@ -3578,7 +3661,7 @@
                     }
                 },
 
-                // LOAD PUBLIC DATA DARI FIREBASE
+                // FIXED: LOAD PUBLIC DATA DARI FIREBASE
                 loadPublicData() {
                     if (!this.firestore || !this.isOnline) {
                         console.log('⚠️ Cannot load from Firebase: Firestore or internet not available');
@@ -3632,7 +3715,7 @@
                         });
                 },
 
-                // UPDATE DATA DARI FIREBASE
+                // FIXED: UPDATE DATA DARI FIREBASE
                 updateDataFromFirebase(data) {
                     try {
                         console.log('🔄 Updating data from Firebase...');
@@ -3653,12 +3736,17 @@
                             console.log('✅ Profile data loaded');
                         }
                         
+                        // FIX: Handle social links properly
                         if (data.socialLinks) {
-                            this.socialLinks = data.socialLinks.map(link => ({
-                                platform: link.platform,
-                                url: link.url || '',
-                                icon: link.icon || this.getSocialIcon(link.platform)
-                            }));
+                            this.socialLinks = data.socialLinks.map(link => {
+                                // Ensure link has all required properties
+                                const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                                return {
+                                    platform: link.platform || 'Custom',
+                                    url: link.url || '',
+                                    icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
+                                };
+                            }).filter(link => link.url && link.url.trim() !== '');
                             console.log(`✅ Loaded ${this.socialLinks.length} social links`);
                         }
                         
@@ -3675,15 +3763,16 @@
                     }
                 },
 
-                // USE PREDEFINED DATA (fallback)
+                // FIXED: USE PREDEFINED DATA (fallback)
                 usePredefinedData() {
                     console.log('📊 Using predefined portfolio data');
                     
-                    this.skills = [...predefinedPublicData.skills];
-                    this.projects = [...predefinedPublicData.projects];
-                    this.profile = { ...predefinedPublicData.profile };
-                    this.socialLinks = [...predefinedPublicData.socialLinks];
-                    this.technologySpectrum = [...predefinedPublicData.technologySpectrum];
+                    // Use deep copy to avoid reference issues
+                    this.skills = JSON.parse(JSON.stringify(predefinedPublicData.skills));
+                    this.projects = JSON.parse(JSON.stringify(predefinedPublicData.projects));
+                    this.profile = JSON.parse(JSON.stringify(predefinedPublicData.profile));
+                    this.socialLinks = JSON.parse(JSON.stringify(predefinedPublicData.socialLinks));
+                    this.technologySpectrum = JSON.parse(JSON.stringify(predefinedPublicData.technologySpectrum));
                     
                     this.updateProjectSlides();
                     this.saveToLocalStorage();
@@ -3887,12 +3976,16 @@
                             console.log('✅ Data profil dimuat');
                         }
                         
+                        // FIX: Properly handle social links merge
                         if (userData.socialLinks) {
-                            this.socialLinks = userData.socialLinks.map(link => ({
-                                platform: link.platform,
-                                url: link.url || '',
-                                icon: link.icon || this.getSocialIcon(link.platform)
-                            }));
+                            this.socialLinks = userData.socialLinks.map(link => {
+                                const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                                return {
+                                    platform: link.platform || 'Custom',
+                                    url: link.url || '',
+                                    icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
+                                };
+                            }).filter(link => link.url && link.url.trim() !== '');
                             console.log(`✅ Dimuat ${this.socialLinks.length} link sosial`);
                         }
                         
@@ -3935,11 +4028,18 @@
                     this.isSyncing = true;
                     this.showToastMessage('Mempublish portfolio Anda...', 'info');
                     
+                    // FIX: Ensure social links are properly formatted
+                    const formattedSocialLinks = this.socialLinks.map(link => ({
+                        platform: link.platform,
+                        url: link.url,
+                        icon: link.icon
+                    })).filter(link => link.url && link.url.trim() !== '');
+                    
                     const data = {
                         skills: this.skills,
                         projects: this.projects,
                         profile: this.profile,
-                        socialLinks: this.socialLinks,
+                        socialLinks: formattedSocialLinks,
                         technologySpectrum: this.technologySpectrum,
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
                         updatedBy: this.userEmail,
@@ -3947,7 +4047,7 @@
                         published: true
                     };
                     
-                    console.log('Mempublish data ke koleksi publik...');
+                    console.log('Mempublish data ke koleksi publik...', data);
                     
                     this.firestore.collection('publicPortfolios').doc('main')
                         .set(data, { merge: true })
@@ -4030,6 +4130,10 @@
                 toggleTheme() {
                     this.isDark = !this.isDark;
                     localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
+                    
+                    // Update body class
+                    document.body.classList.remove(this.isDark ? 'light-mode' : 'dark-mode');
+                    document.body.classList.add(this.isDark ? 'dark-mode' : 'light-mode');
                     
                     // Update particles color based on theme
                     if (window.pJSDom && window.pJSDom.length > 0) {
@@ -4156,6 +4260,7 @@
                         return;
                     }
                     
+                    // FIX: Ensure level doesn't exceed 100%
                     if (this.newSkill.level < 0 || this.newSkill.level > 100) {
                         this.showToastMessage('Skill level must be between 0 and 100', 'error');
                         return;
@@ -4167,7 +4272,8 @@
                         const newSkill = {
                             id: this.editingSkill ? this.editingSkill.id : Date.now(),
                             ...this.newSkill,
-                            icon: this.newSkill.icon || this.getTechIcon(this.newSkill.name)
+                            icon: this.newSkill.icon || this.getTechIcon(this.newSkill.name),
+                            level: Math.min(100, this.newSkill.level) // Ensure max 100%
                         };
 
                         if (this.editingSkill) {
@@ -4197,7 +4303,7 @@
                     // Ensure at least one skill has 90%+ to maintain 70% average
                     const hasHighProficiency = this.skills.some(skill => skill.level >= 90);
                     if (!hasHighProficiency && this.skills.length > 0) {
-                        this.skills[0].level = 95;
+                        this.skills[0].level = Math.min(100, 95);
                     }
                 },
 
@@ -4358,7 +4464,7 @@
                     }
                 },
 
-                // SOCIAL LINKS METHODS
+                // FIXED: SOCIAL LINKS METHODS
                 validateSocialLinks() {
                     const errors = [];
                     
@@ -4381,15 +4487,23 @@
                     }
                     
                     try {
-                        // Remove empty URLs
-                        this.socialLinks = this.socialLinks.filter(link => link.url.trim());
+                        // Remove empty URLs and ensure proper formatting
+                        this.socialLinks = this.socialLinks
+                            .filter(link => link.url && link.url.trim())
+                            .map(link => ({
+                                platform: link.platform || 'Custom',
+                                url: link.url.trim(),
+                                icon: link.icon || this.getSocialIcon(link.platform)
+                            }));
+                        
+                        console.log('Saving social links:', this.socialLinks);
                         
                         this.saveToLocalStorage();
                         this.showToastMessage('Social links saved successfully', 'success');
                         this.closeModal('editSocialLinks');
                     } catch (error) {
-                        this.showToastMessage('Error saving social links', 'error');
                         console.error('Error saving social links:', error);
+                        this.showToastMessage('Error saving social links', 'error');
                     }
                 },
 
@@ -4494,8 +4608,8 @@
                         this.showToastMessage('Technology spectrum saved successfully', 'success');
                         this.closeModal('editTechnologySpectrum');
                     } catch (error) {
-                        this.showToastMessage('Error saving technology spectrum', 'error');
                         console.error('Error saving technology spectrum:', error);
+                        this.showToastMessage('Error saving technology spectrum', 'error');
                     }
                 },
 
@@ -4852,17 +4966,26 @@
                 },
 
                 getProficiencyLevel(level) {
-                    if (level >= 90) return 'Expert';
-                    if (level >= 70) return 'Advanced';
-                    if (level >= 50) return 'Intermediate';
-                    if (level >= 30) return 'Beginner';
+                    const cappedLevel = Math.min(100, level);
+                    if (cappedLevel >= 90) return 'Expert';
+                    if (cappedLevel >= 70) return 'Advanced';
+                    if (cappedLevel >= 50) return 'Intermediate';
+                    if (cappedLevel >= 30) return 'Beginner';
                     return 'Novice';
                 },
 
+                getProficiencyLevelClass(level) {
+                    const cappedLevel = Math.min(100, level);
+                    if (cappedLevel >= 90) return 'high';
+                    if (cappedLevel >= 70) return 'medium';
+                    return 'low';
+                },
+
                 getProficiencyIcon(level) {
-                    if (level >= 90) return 'fas fa-fire';
-                    if (level >= 70) return 'fas fa-chart-line';
-                    if (level >= 50) return 'fas fa-seedling';
+                    const cappedLevel = Math.min(100, level);
+                    if (cappedLevel >= 90) return 'fas fa-fire';
+                    if (cappedLevel >= 70) return 'fas fa-chart-line';
+                    if (cappedLevel >= 50) return 'fas fa-seedling';
                     return 'fas fa-leaf';
                 },
 
