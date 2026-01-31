@@ -1465,8 +1465,8 @@
     
     <!-- Publish Button -->
     <div x-show="!isPublicMode" class="fixed bottom-6 right-6 z-50 animate-slide-up">
-        <button @click="publishToPublic()" class="btn btn-success shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
-            <i class="fas fa-cloud-upload-alt"></i>
+        <button @click="openPublishModal()" class="btn btn-success shadow-lg hover:shadow-xl transform hover:scale-105 transition-all group">
+            <i class="fas fa-cloud-upload-alt animate-bounce group-hover:animate-none"></i>
             <span class="hidden sm:inline">Publish Changes</span>
             <span class="sm:hidden">Publish</span>
         </button>
@@ -3083,6 +3083,132 @@
         </div>
     </div>
 
+    <!-- Publish Modal -->
+    <div x-show="modals.publish" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-2xl w-full" @click.away="closeModal('publish')">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-cloud-upload-alt mr-3 gradient-text"></i>
+                        Publish Portfolio
+                    </h3>
+                    <button @click="closeModal('publish')" class="w-10 h-10 rounded-xl bg-gray-100 dark-mode:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark-mode:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark-mode:text-gray-300"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-6 mb-8">
+                    <div class="bg-gradient-to-r from-primary-50 to-secondary-50 dark-mode:from-primary-900/20 dark-mode:to-secondary-900/20 p-6 rounded-2xl border-2 border-primary-200 dark-mode:border-primary-700">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+                                <i class="fas fa-globe text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold">Make Your Portfolio Public</h4>
+                                <p class="text-gray-600 dark-mode:text-gray-300">Publish your changes to make them visible to everyone</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Publish Summary -->
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-bold text-gray-700 dark-mode:text-gray-300">What will be published:</h4>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark-mode:bg-gray-800/50 p-4 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-100 dark-mode:bg-blue-900/30 flex items-center justify-center">
+                                        <i class="fas fa-user text-blue-600 dark-mode:text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold" x-text="profile.name"></p>
+                                        <p class="text-sm text-gray-500 dark-mode:text-gray-400">Profile</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark-mode:bg-gray-800/50 p-4 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-green-100 dark-mode:bg-green-900/30 flex items-center justify-center">
+                                        <i class="fas fa-code text-green-600 dark-mode:text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold" x-text="skills.length"></p>
+                                        <p class="text-sm text-gray-500 dark-mode:text-gray-400">Skills</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark-mode:bg-gray-800/50 p-4 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-100 dark-mode:bg-purple-900/30 flex items-center justify-center">
+                                        <i class="fas fa-briefcase text-purple-600 dark-mode:text-purple-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold" x-text="projects.length"></p>
+                                        <p class="text-sm text-gray-500 dark-mode:text-gray-400">Projects</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark-mode:bg-gray-800/50 p-4 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-pink-100 dark-mode:bg-pink-900/30 flex items-center justify-center">
+                                        <i class="fas fa-share-alt text-pink-600 dark-mode:text-pink-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold" x-text="socialLinks.filter(l => l.url).length"></p>
+                                        <p class="text-sm text-gray-500 dark-mode:text-gray-400">Social Links</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Changes Summary -->
+                    <div x-show="hasUnsavedChanges" class="bg-yellow-50 dark-mode:bg-yellow-900/20 border-2 border-yellow-200 dark-mode:border-yellow-700 p-4 rounded-xl">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 dark-mode:text-yellow-400"></i>
+                            <div>
+                                <p class="font-semibold text-yellow-800 dark-mode:text-yellow-300">Unsaved Changes Detected</p>
+                                <p class="text-sm text-yellow-700 dark-mode:text-yellow-400">You have unsaved changes. Publishing will save all changes automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Publish Options -->
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 text-gray-700 dark-mode:text-gray-300">Publish Options</h4>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" x-model="publishOptions.includeContactInfo" class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="text-gray-700 dark-mode:text-gray-300">Include contact information</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" x-model="publishOptions.includeSocialLinks" class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="text-gray-700 dark-mode:text-gray-300">Include social links</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" x-model="publishOptions.includeAllProjects" class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="text-gray-700 dark-mode:text-gray-300">Include all projects (including private ones)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark-mode:border-gray-700">
+                    <button @click="closeModal('publish')" class="btn btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="executePublish()" :disabled="isPublishing" class="btn btn-success">
+                        <i class="fas" :class="isPublishing ? 'fa-spinner fa-spin' : 'fa-cloud-upload-alt'"></i>
+                        <span x-text="isPublishing ? 'Publishing...' : 'Publish Now'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div x-show="modals.deleteConfirm" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
         <div class="modal-content max-w-md w-full" @click.away="closeModal('deleteConfirm')">
@@ -3377,12 +3503,13 @@
             { name: 'Fiverr', icon: 'fas fa-dollar-sign', placeholder: 'https://fiverr.com/username', category: 'freelance' },
             { name: 'Freelancer', icon: 'fas fa-briefcase', placeholder: 'https://freelancer.com/u/username', category: 'freelance' },
             { name: 'Kaggle', icon: 'fab fa-kaggle', placeholder: 'https://kaggle.com/username', category: 'data' },
-            { name: 'ResearchGate', icon: 'fas fa-flask', placeholder: 'https://researchgate.net/profile/username', category: 'academic' }
+            { name: 'ResearchGate', icon: 'fas fa-flask', placeholder: 'https://researchgate.net/profile/username', category: 'academic' },
+            { name: 'Email', icon: 'fas fa-envelope', placeholder: 'mailto:your@email.com', category: 'communication' },
+            { name: 'Website', icon: 'fas fa-globe', placeholder: 'https://yourwebsite.com', category: 'other' }
         ];
 
         // Database of all skills for auto-suggest
         const skillsDatabase = [
-            // Frontend Skills
             'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 'Svelte',
             'Next.js', 'Nuxt.js', 'Gatsby', 'Redux', 'MobX', 'GraphQL', 'Apollo', 'Webpack',
             'Babel', 'ESLint', 'Prettier', 'Jest', 'Testing Library', 'Cypress', 'Storybook',
@@ -3827,6 +3954,7 @@
                 uploadingImage: false,
                 uploadingProfileImage: false,
                 isSubmitting: false,
+                isPublishing: false,
                 deleteItem: { type: '', id: null, name: '' },
                 draggingTechIndex: null,
                 hasUnsavedChanges: false,
@@ -3855,6 +3983,13 @@
                 autoSlideEnabled: false,
                 autoSlideInterval: null,
                 projectsPerSlide: 3,
+
+                // Publish Options
+                publishOptions: {
+                    includeContactInfo: true,
+                    includeSocialLinks: true,
+                    includeAllProjects: true
+                },
 
                 // Storage Configuration
                 storageConfig: {
@@ -3943,15 +4078,9 @@
                 ],
 
                 // Popular Social Platforms
-                popularSocialPlatforms: [
-                    { name: 'GitHub', icon: 'fab fa-github' },
-                    { name: 'LinkedIn', icon: 'fab fa-linkedin-in' },
-                    { name: 'Twitter', icon: 'fab fa-twitter' },
-                    { name: 'Instagram', icon: 'fab fa-instagram' },
-                    { name: 'YouTube', icon: 'fab fa-youtube' },
-                    { name: 'Facebook', icon: 'fab fa-facebook-f' },
-                    { name: 'Email', icon: 'fas fa-envelope' }
-                ],
+                popularSocialPlatforms: socialPlatformsDatabase.filter(p => 
+                    ['GitHub', 'LinkedIn', 'Twitter', 'Instagram', 'YouTube', 'Facebook', 'Email', 'WhatsApp', 'Telegram', 'Discord'].includes(p.name)
+                ),
 
                 // All Social Platforms
                 allSocialPlatforms: socialPlatformsDatabase,
@@ -4013,6 +4142,7 @@
                     editProfile: false,
                     editSocialLinks: false,
                     editTechnologySpectrum: false,
+                    publish: false,
                     deleteConfirm: false
                 },
 
@@ -4305,11 +4435,14 @@
                     this.technologySpectrum = JSON.parse(JSON.stringify(predefinedPublicData.technologySpectrum));
                     
                     // FIXED: Ensure social links are properly copied
-                    this.socialLinks = predefinedPublicData.socialLinks.map(link => ({
-                        platform: link.platform,
-                        url: link.url,
-                        icon: link.icon
-                    }));
+                    this.socialLinks = predefinedPublicData.socialLinks.map(link => {
+                        const platformData = socialPlatformsDatabase.find(p => p.name === link.platform);
+                        return {
+                            platform: link.platform,
+                            url: link.url,
+                            icon: link.icon || (platformData ? platformData.icon : 'fas fa-external-link-alt')
+                        };
+                    });
                     
                     this.updateProjectSlides();
                     this.saveToLocalStorage();
@@ -4539,8 +4672,17 @@
                     }
                 },
 
-                // FIXED: PUBLISH TO PUBLIC METHOD
-                async publishToPublic() {
+                // PUBLISH METHODS
+                openPublishModal() {
+                    if (this.isPublicMode) {
+                        this.showToastMessage('Please login first to publish', 'warning');
+                        return;
+                    }
+                    
+                    this.openModal('publish');
+                },
+
+                async executePublish() {
                     console.log('🚀 Starting publish process...');
                     
                     if (!this.userId) {
@@ -4561,11 +4703,7 @@
                         return;
                     }
                     
-                    if (!confirm('Publish your changes to make them visible to the public?')) {
-                        return;
-                    }
-                    
-                    this.isSyncing = true;
+                    this.isPublishing = true;
                     this.showToastMessage('Publishing your portfolio...', 'info');
                     
                     try {
@@ -4578,11 +4716,17 @@
                                 icon: link.icon
                             }));
                         
+                        // Prepare data based on options
                         const publishData = {
                             skills: this.skills,
-                            projects: this.projects,
-                            profile: this.profile,
-                            socialLinks: formattedSocialLinks,
+                            projects: this.publishOptions.includeAllProjects ? this.projects : this.projects.filter(p => p.status === 'completed'),
+                            profile: this.publishOptions.includeContactInfo ? this.profile : {
+                                ...this.profile,
+                                email: '',
+                                phone: '',
+                                location: ''
+                            },
+                            socialLinks: this.publishOptions.includeSocialLinks ? formattedSocialLinks : [],
                             technologySpectrum: this.technologySpectrum,
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
                             updatedBy: this.userEmail,
@@ -4591,7 +4735,7 @@
                             publishedAt: firebase.firestore.FieldValue.serverTimestamp()
                         };
                         
-                        console.log('📤 Publishing data to public collection...', publishData);
+                        console.log('📤 Publishing data to public collection...');
                         
                         // FIXED: Use proper Firebase update with error handling
                         const batch = this.firestore.batch();
@@ -4614,15 +4758,16 @@
                         
                         this.lastSyncTime = new Date().toLocaleTimeString();
                         this.dataStatus = 'synced';
-                        this.isSyncing = false;
+                        this.isPublishing = false;
                         this.hasUnsavedChanges = false;
                         
+                        this.closeModal('publish');
                         this.showToastMessage('✅ Portfolio successfully published!', 'success');
                         this.addToSyncHistory('Data published', 'success');
                         
                     } catch (error) {
                         console.error('❌ Publish error:', error);
-                        this.isSyncing = false;
+                        this.isPublishing = false;
                         
                         let errorMessage = 'Publish failed';
                         if (error.code === 'permission-denied') {
@@ -4727,7 +4872,7 @@
 
                 // MODAL METHODS
                 openModal(modalName) {
-                    if (this.isPublicMode && (modalName === 'addSkill' || modalName === 'addProject' || modalName === 'editProfile' || modalName === 'editSocialLinks' || modalName === 'editTechnologySpectrum' || modalName === 'deleteConfirm')) {
+                    if (this.isPublicMode && (modalName === 'addSkill' || modalName === 'addProject' || modalName === 'editProfile' || modalName === 'editSocialLinks' || modalName === 'editTechnologySpectrum' || modalName === 'deleteConfirm' || modalName === 'publish')) {
                         this.showToastMessage('Please switch to edit mode to make changes', 'info');
                         return;
                     }
@@ -4750,6 +4895,8 @@
                         this.resetProjectForm();
                     } else if (modalName === 'editTechnologySpectrum') {
                         this.resetTechForm();
+                    } else if (modalName === 'publish') {
+                        this.isPublishing = false;
                     }
                 },
 
@@ -5050,7 +5197,7 @@
                     const errors = [];
                     
                     for (const link of this.socialLinks) {
-                        if (link.url && !this.isValidUrl(link.url)) {
+                        if (link.url && link.url.trim() !== '' && !this.isValidUrl(link.url)) {
                             errors.push(`Invalid URL for ${link.platform}: ${link.url}`);
                         }
                     }
@@ -5116,9 +5263,16 @@
                     
                     const platformData = socialPlatformsDatabase.find(p => p.name === platform);
                     if (platformData) {
+                        // Check if platform already exists
+                        const exists = this.socialLinks.some(link => link.platform === platform);
+                        if (exists) {
+                            this.showToastMessage(`${platform} already exists`, 'warning');
+                            return;
+                        }
+                        
                         this.socialLinks.push({
                             platform: platformData.name,
-                            url: platformData.placeholder.includes('username') ? '' : platformData.placeholder,
+                            url: '',
                             icon: platformData.icon
                         });
                     }
@@ -5152,9 +5306,9 @@
                         // Update icon immediately
                         link.icon = platformData.icon;
                         
-                        // Only update URL if it's empty
-                        if (!link.url || link.url === '') {
-                            link.url = platformData.placeholder.includes('username') ? '' : platformData.placeholder;
+                        // Only update URL if it's empty or still using placeholder
+                        if (!link.url || link.url === '' || link.url.includes('username')) {
+                            link.url = '';
                         }
                     }
                 },
@@ -5763,6 +5917,9 @@
                         'YouTube': 'linear-gradient(135deg, #ff0000, #cc0000)',
                         'Facebook': 'linear-gradient(135deg, #1877f2, #166fe5)',
                         'Email': 'linear-gradient(135deg, #ea4335, #d93025)',
+                        'WhatsApp': 'linear-gradient(135deg, #25d366, #128c7e)',
+                        'Telegram': 'linear-gradient(135deg, #0088cc, #006699)',
+                        'Discord': 'linear-gradient(135deg, #5865f2, #404eed)',
                         'GitLab': 'linear-gradient(135deg, #fc6d26, #e24329)',
                         'Stack Overflow': 'linear-gradient(135deg, #f48024, #e06c1f)',
                         'Medium': 'linear-gradient(135deg, #000, #333)',
@@ -5792,6 +5949,10 @@
                 getSocialUsername(url) {
                     if (!url) return 'Not set';
                     try {
+                        if (url.startsWith('mailto:')) {
+                            return url.replace('mailto:', '');
+                        }
+                        
                         const urlObj = new URL(url);
                         if (url.includes('github.com')) {
                             const path = urlObj.pathname.split('/').filter(p => p);
@@ -5804,6 +5965,12 @@
                             return urlObj.pathname.split('/')[1] || 'username';
                         }
                         if (url.includes('instagram.com/')) {
+                            return urlObj.pathname.split('/')[1] || 'username';
+                        }
+                        if (url.includes('youtube.com/c/')) {
+                            return urlObj.pathname.split('/c/')[1] || 'username';
+                        }
+                        if (url.includes('facebook.com/')) {
                             return urlObj.pathname.split('/')[1] || 'username';
                         }
                         return urlObj.hostname.replace('www.', '');
