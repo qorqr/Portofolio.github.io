@@ -156,6 +156,7 @@
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Professional Loading */
@@ -318,11 +319,6 @@
             animation: scaleIn 0.3s ease-out;
         }
 
-        .dark .modal-content {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
         /* Enhanced Form Elements */
         .form-input {
             background: rgba(255, 255, 255, 0.9);
@@ -339,18 +335,6 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
             background: white;
-        }
-
-        .dark .form-input {
-            background: rgba(30, 41, 59, 0.9);
-            border-color: #475569;
-            color: white;
-        }
-
-        .dark .form-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-            background: #1e293b;
         }
 
         /* Enhanced Navigation */
@@ -373,20 +357,12 @@
             color: var(--primary);
         }
 
-        .dark .nav-link {
-            color: #cbd5e1;
-        }
-
         /* Enhanced Skill Bars */
         .skill-bar-container {
             background: rgba(226, 232, 240, 0.3);
             border-radius: 10px;
             overflow: hidden;
             height: 8px;
-        }
-
-        .dark .skill-bar-container {
-            background: rgba(71, 85, 105, 0.3);
         }
 
         .skill-bar {
@@ -442,21 +418,11 @@
             background: rgba(59, 130, 246, 0.15);
         }
 
-        .dark .tag {
-            background: rgba(59, 130, 246, 0.2);
-            color: #93c5fd;
-        }
-
         /* Glass Effect */
         .glass {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .dark .glass {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         /* Professional Grid */
@@ -540,11 +506,6 @@
             background: rgba(59, 130, 246, 0.05);
             border-radius: 12px;
             border: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .dark .project-meta-item {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: rgba(59, 130, 246, 0.2);
         }
 
         .tech-stack-container {
@@ -732,9 +693,258 @@
             background-size: 200% 100%;
             animation: gradientShift 2s ease infinite;
         }
+
+        /* Enhanced Professional Theme - Light Mode */
+        body:not(.dark) {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            color: #1e293b;
+        }
+
+        body:not(.dark) .glass {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        body:not(.dark) .card-hover {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        body:not(.dark) .card-hover:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 32px rgba(59, 130, 246, 0.15);
+        }
+
+        body:not(.dark) .modal-content {
+            background: white !important;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        body:not(.dark) .contact-form-container {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        body:not(.dark) .nav-link {
+            color: #475569;
+        }
+
+        body:not(.dark) .nav-link:hover,
+        body:not(.dark) .nav-link.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+        }
+
+        body:not(.dark) .tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        body:not(.dark) .tag:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body:not(.dark) .project-meta-item {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        body:not(.dark) .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        body:not(.dark) .btn-outline {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background: transparent;
+        }
+
+        body:not(.dark) .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        body:not(.dark) .form-input {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        body:not(.dark) .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        body:not(.dark) .gradient-text {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body:not(.dark) .divider {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+        }
+
+        body:not(.dark) .skill-bar {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+        }
+
+        body:not(.dark) ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        body:not(.dark) .bg-grid-pattern {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+        }
+
+        /* Enhanced Dark Mode */
+        body.dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+            color: #e2e8f0;
+        }
+
+        body.dark .glass {
+            background: rgba(30, 41, 59, 0.8) !important;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark .card-hover {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark .card-hover:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(59, 130, 246, 0.2);
+        }
+
+        body.dark .modal-content {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark .contact-form-container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark .btn-outline {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #e2e8f0;
+            background: transparent;
+        }
+
+        body.dark .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        body.dark .form-input {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        body.dark .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        body.dark .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark .divider {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        body.dark .skill-bar {
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+        }
+
+        body.dark ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        body.dark ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        }
+
+        body.dark .bg-grid-pattern {
+            background-image: 
+                linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
+        }
+
+        /* Professional Navigation */
+        nav.glass {
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        body:not(.dark) nav.glass {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-bottom-color: rgba(226, 232, 240, 0.8);
+        }
+
+        body.dark nav.glass {
+            background: rgba(30, 41, 59, 0.8) !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Premium Typography */
+        h1, h2, h3, h4, h5, h6 {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced Dark Mode Specific */
+        .dark .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+            background: #1e293b;
+        }
+
+        .dark .nav-link {
+            color: #cbd5e1;
+        }
+
+        .dark .skill-bar-container {
+            background: rgba(71, 85, 105, 0.3);
+        }
+
+        .dark .tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
     </style>
 </head>
-<body :class="{'dark': isDark}" class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 overflow-x-hidden">
+<body :class="{'dark': isDark}" class="bg-gray-50 text-gray-800 transition-colors duration-300 overflow-x-hidden">
     
     <!-- Professional Background Elements -->
     <div class="fixed inset-0 bg-grid-pattern z-0"></div>
@@ -1501,7 +1711,7 @@
         </div>
     </div>
 
-    <!-- Add/Edit Skill Modal (remains mostly the same but with enhanced buttons) -->
+    <!-- Add/Edit Skill Modal -->
     <div x-show="modals.addSkill" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
         <div class="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('addSkill')">
             <div class="p-8">
@@ -1515,8 +1725,134 @@
                     </button>
                 </div>
                 
-                <!-- Form content remains the same -->
-                <!-- ... -->
+                <div class="space-y-6">
+                    <!-- Skill Name -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Skill Name *
+                        </label>
+                        <div class="relative">
+                            <input type="text" x-model="newSkill.name" 
+                                   @input="filterSkillSuggestions()"
+                                   class="form-input w-full"
+                                   placeholder="e.g., React, Node.js, Python">
+                            
+                            <!-- Skill Suggestions -->
+                            <div x-show="skillSuggestions.length > 0" class="absolute z-10 w-full mt-1">
+                                <div class="glass rounded-xl shadow-lg overflow-hidden">
+                                    <template x-for="suggestion in skillSuggestions" :key="suggestion">
+                                        <button @click="selectSkillSuggestion(suggestion)"
+                                                class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                                            <i :class="getTechIcon(suggestion)" class="text-primary"></i>
+                                            <span x-text="suggestion"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Category and Level -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Category
+                            </label>
+                            <select x-model="newSkill.category" class="form-input w-full">
+                                <option value="frontend">Frontend</option>
+                                <option value="backend">Backend</option>
+                                <option value="database">Database</option>
+                                <option value="mobile">Mobile</option>
+                                <option value="devops">DevOps</option>
+                                <option value="cloud">Cloud</option>
+                                <option value="tools">Tools</option>
+                                <option value="design">Design</option>
+                                <option value="ai">AI/ML</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Proficiency Level: <span x-text="newSkill.level + '%'" class="text-primary font-bold"></span>
+                            </label>
+                            <input type="range" x-model="newSkill.level" min="0" max="100" step="5"
+                                   class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-sm text-gray-500 mt-2">
+                                <span>Beginner</span>
+                                <span>Intermediate</span>
+                                <span>Advanced</span>
+                                <span>Expert</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Years of Experience
+                            </label>
+                            <div class="flex items-center gap-3">
+                                <button @click="newSkill.years = Math.max(0, newSkill.years - 1)"
+                                        class="btn btn-icon btn-outline">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" x-model="newSkill.years" min="0" max="20"
+                                       class="form-input w-full text-center">
+                                <button @click="newSkill.years = Math.min(20, newSkill.years + 1)"
+                                        class="btn btn-icon btn-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Projects Completed
+                            </label>
+                            <div class="flex items-center gap-3">
+                                <button @click="newSkill.projects = Math.max(0, newSkill.projects - 1)"
+                                        class="btn btn-icon btn-outline">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" x-model="newSkill.projects" min="0" max="50"
+                                       class="form-input w-full text-center">
+                                <button @click="newSkill.projects = Math.min(50, newSkill.projects + 1)"
+                                        class="btn btn-icon btn-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Icon Selection -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Icon
+                        </label>
+                        <div class="flex flex-wrap gap-3">
+                            <template x-for="icon in skillIcons" :key="icon">
+                                <button @click="newSkill.icon = icon"
+                                        class="w-12 h-12 rounded-xl flex items-center justify-center transition-all"
+                                        :class="newSkill.icon === icon 
+                                            ? 'bg-primary text-white' 
+                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'">
+                                    <i :class="icon"></i>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Description
+                        </label>
+                        <textarea x-model="newSkill.description" rows="3"
+                                  class="form-input w-full"
+                                  placeholder="Brief description of your expertise with this skill..."></textarea>
+                    </div>
+                </div>
                 
                 <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                     <button @click="closeModal('addSkill')" class="btn btn-outline">
@@ -1531,7 +1867,7 @@
         </div>
     </div>
 
-    <!-- Add/Edit Project Modal (remains mostly the same but with enhanced buttons) -->
+    <!-- Add/Edit Project Modal -->
     <div x-show="modals.addProject" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
         <div class="modal-content max-w-4xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('addProject')">
             <div class="p-8">
@@ -1545,8 +1881,203 @@
                     </button>
                 </div>
                 
-                <!-- Form content remains the same -->
-                <!-- ... -->
+                <div class="space-y-6">
+                    <!-- Basic Info -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Project Name *
+                            </label>
+                            <input type="text" x-model="newProject.name" 
+                                   class="form-input w-full"
+                                   placeholder="E-Commerce Platform">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Project Type
+                            </label>
+                            <select x-model="newProject.type" class="form-input w-full">
+                                <option value="web">Web Application</option>
+                                <option value="mobile">Mobile Application</option>
+                                <option value="api">API/Backend</option>
+                                <option value="desktop">Desktop Application</option>
+                                <option value="ai">AI/ML Project</option>
+                                <option value="saas">SaaS Product</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Project Description *
+                        </label>
+                        <textarea x-model="newProject.description" rows="4"
+                                  class="form-input w-full"
+                                  placeholder="Describe your project..."></textarea>
+                    </div>
+                    
+                    <!-- Technologies -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Technologies Used
+                        </label>
+                        <div class="relative mb-3">
+                            <input type="text" x-model="techInput" 
+                                   @input="filterTechSuggestions()"
+                                   @keydown.enter.prevent="addTechnology()"
+                                   class="form-input w-full"
+                                   placeholder="Add technologies (press Enter to add)">
+                            
+                            <!-- Tech Suggestions -->
+                            <div x-show="techSuggestions.length > 0" class="absolute z-10 w-full mt-1">
+                                <div class="glass rounded-xl shadow-lg overflow-hidden">
+                                    <template x-for="tech in techSuggestions" :key="tech">
+                                        <button @click="addTechFromSuggestion(tech)"
+                                                class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                                            <i :class="getTechIcon(tech)" class="text-primary"></i>
+                                            <span x-text="tech"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Selected Technologies -->
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <template x-for="tech in newProject.technologies" :key="tech">
+                                <span class="tag flex items-center gap-2">
+                                    <i :class="getTechIcon(tech)"></i>
+                                    <span x-text="tech"></span>
+                                    <button @click="removeTech(tech)" class="text-xs hover:text-red-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Details -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Status
+                            </label>
+                            <select x-model="newProject.status" class="form-input w-full">
+                                <option value="completed">Completed</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="planned">Planned</option>
+                                <option value="on-hold">On Hold</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Your Role
+                            </label>
+                            <input type="text" x-model="newProject.role" 
+                                   class="form-input w-full"
+                                   placeholder="e.g., Full Stack Developer, Lead Developer">
+                        </div>
+                    </div>
+                    
+                    <!-- Team & Client -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Team Size
+                            </label>
+                            <input type="number" x-model="newProject.teamSize" min="1" max="50"
+                                   class="form-input w-full">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Client/Company
+                            </label>
+                            <input type="text" x-model="newProject.client" 
+                                   class="form-input w-full"
+                                   placeholder="Company name or individual client">
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Start Date
+                            </label>
+                            <input type="date" x-model="newProject.startDate" 
+                                   class="form-input w-full">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                <input type="checkbox" x-model="newProject.isOngoing" class="mr-2">
+                                Ongoing Project
+                            </label>
+                            <input type="date" x-model="newProject.endDate" 
+                                   :disabled="newProject.isOngoing"
+                                   class="form-input w-full">
+                        </div>
+                    </div>
+                    
+                    <!-- Image URL -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Project Image URL
+                        </label>
+                        <input type="url" x-model="newProject.image" 
+                               class="form-input w-full"
+                               placeholder="https://example.com/project-image.jpg">
+                    </div>
+                    
+                    <!-- Links -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Live Demo URL
+                            </label>
+                            <input type="url" x-model="newProject.demoUrl" 
+                                   class="form-input w-full"
+                                   placeholder="https://demo.example.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Source Code URL
+                            </label>
+                            <input type="url" x-model="newProject.sourceUrl" 
+                                   class="form-input w-full"
+                                   placeholder="https://github.com/username/project">
+                        </div>
+                    </div>
+                    
+                    <!-- Features -->
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Key Features
+                        </label>
+                        <div class="space-y-2">
+                            <template x-for="(feature, index) in newProject.features" :key="index">
+                                <div class="flex gap-2">
+                                    <input type="text" x-model="newProject.features[index]"
+                                           class="form-input flex-1"
+                                           placeholder="Feature description">
+                                    <button @click="newProject.features.splice(index, 1)" 
+                                            class="btn btn-danger btn-icon">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </template>
+                            <button @click="newProject.features.push('')" class="btn btn-outline">
+                                <i class="fas fa-plus mr-2"></i>
+                                Add Feature
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                     <button @click="closeModal('addProject')" class="btn btn-outline">
@@ -1555,6 +2086,387 @@
                     <button @click="addNewProject()" :disabled="!newProject.name || !newProject.description" class="btn btn-success">
                         <i class="fas fa-check mr-2"></i>
                         <span x-text="editingProject ? 'Update Project' : 'Add Project'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div x-show="modals.editProfile" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('editProfile')">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-user-edit mr-3 gradient-text"></i>
+                        Edit Profile
+                    </h3>
+                    <button @click="closeModal('editProfile')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Full Name *
+                            </label>
+                            <input type="text" x-model="profile.name" 
+                                   class="form-input w-full"
+                                   placeholder="John Doe">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Professional Title *
+                            </label>
+                            <input type="text" x-model="profile.title" 
+                                   class="form-input w-full"
+                                   placeholder="Full Stack Developer">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Email Address *
+                        </label>
+                        <input type="email" x-model="profile.email" 
+                               class="form-input w-full"
+                               placeholder="john@example.com">
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Phone Number
+                            </label>
+                            <input type="tel" x-model="profile.phone" 
+                                   class="form-input w-full"
+                                   placeholder="+1234567890">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Location
+                            </label>
+                            <input type="text" x-model="profile.location" 
+                                   class="form-input w-full"
+                                   placeholder="San Francisco, CA">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Professional Bio *
+                        </label>
+                        <textarea x-model="profile.bio" rows="4"
+                                  class="form-input w-full"
+                                  placeholder="Experienced Full Stack Developer with expertise in..."></textarea>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                            <span x-text="profile.bio?.length || 0"></span> characters
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                            Profile Image URL
+                        </label>
+                        <div class="flex gap-3">
+                            <input type="url" x-model="profile.image" 
+                                   class="form-input flex-1"
+                                   placeholder="https://example.com/profile.jpg">
+                            <button @click="profile.image = generateDefaultAvatar()" 
+                                    class="btn btn-outline whitespace-nowrap">
+                                <i class="fas fa-sync-alt mr-2"></i>
+                                Use Default
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                            Leave empty for auto-generated avatar
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="closeModal('editProfile')" class="btn btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="updateProfile()" class="btn btn-success">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Social Links Modal -->
+    <div x-show="modals.editSocialLinks" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-3xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('editSocialLinks')">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-share-alt mr-3 gradient-text"></i>
+                        Edit Social Links
+                    </h3>
+                    <button @click="closeModal('editSocialLinks')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    </button>
+                </div>
+                
+                <!-- Quick Add Buttons -->
+                <div class="mb-8">
+                    <h4 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Quick Add</h4>
+                    <div class="flex flex-wrap gap-3">
+                        <template x-for="platform in popularSocialPlatforms" :key="platform.name">
+                            <button @click="addQuickSocialLink(platform.name)" 
+                                    class="btn btn-outline btn-sm">
+                                <i :class="platform.icon" class="mr-2"></i>
+                                <span x-text="platform.name"></span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                
+                <!-- Social Links List -->
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                            Your Social Links (Total: <span x-text="socialLinks.length"></span>)
+                        </h4>
+                        <button @click="addSocialLink()" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus mr-2"></i>
+                            Add New
+                        </button>
+                    </div>
+                    
+                    <template x-if="socialLinks.length === 0">
+                        <div class="text-center py-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl">
+                            <i class="fas fa-share-alt text-4xl text-gray-400 dark:text-gray-600 mb-4"></i>
+                            <p class="text-gray-500 dark:text-gray-400">No social links added yet</p>
+                        </div>
+                    </template>
+                    
+                    <template x-for="(link, index) in socialLinks" :key="index">
+                        <div class="card-hover p-4">
+                            <div class="flex items-center gap-4">
+                                <div class="flex-shrink-0">
+                                    <select x-model="link.platform" 
+                                            @change="handlePlatformChange(link, index)"
+                                            class="form-input min-w-[180px]">
+                                        <option value="">Select Platform</option>
+                                        <template x-for="platform in allSocialPlatforms" :key="platform.name">
+                                            <option :value="platform.name" x-text="platform.name"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                
+                                <div class="flex-1">
+                                    <input type="url" x-model="link.url" 
+                                           class="form-input w-full"
+                                           :placeholder="getSocialPlaceholder(link.platform)">
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" 
+                                         :style="'background: ' + getSocialPlatformColor(link.platform)">
+                                        <i :class="link.icon" class="text-white"></i>
+                                    </div>
+                                    
+                                    <div class="flex gap-2">
+                                        <button @click="moveSocialLink(index, 'up')" 
+                                                x-show="index > 0"
+                                                class="btn btn-icon btn-sm"
+                                                title="Move Up">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </button>
+                                        <button @click="moveSocialLink(index, 'down')" 
+                                                x-show="index < socialLinks.length - 1"
+                                                class="btn btn-icon btn-sm"
+                                                title="Move Down">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                        <button @click="removeSocialLink(index)" 
+                                                class="btn btn-danger btn-icon btn-sm"
+                                                title="Remove">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="closeModal('editSocialLinks')" class="btn btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="saveSocialLinks()" class="btn btn-success">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Technology Spectrum Modal -->
+    <div x-show="modals.editTechnologySpectrum" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+        <div class="modal-content max-w-4xl w-full max-h-[90vh] overflow-y-auto" @click.away="closeModal('editTechnologySpectrum')">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <i class="fas fa-layer-group mr-3 gradient-text"></i>
+                        Technology Spectrum
+                    </h3>
+                    <button @click="closeModal('editTechnologySpectrum')" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-times text-gray-700 dark:text-gray-300"></i>
+                    </button>
+                </div>
+                
+                <!-- Add New Tech Form -->
+                <div class="card-hover p-6 mb-8">
+                    <h4 class="text-xl font-bold mb-4 text-gray-700 dark:text-gray-300">Add New Technology</h4>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Technology Name *
+                            </label>
+                            <input type="text" x-model="newTech.name" 
+                                   class="form-input w-full"
+                                   placeholder="e.g., React, Node.js, Python">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Category
+                            </label>
+                            <select x-model="newTech.category" class="form-input w-full">
+                                <option value="frontend">Frontend</option>
+                                <option value="backend">Backend</option>
+                                <option value="database">Database</option>
+                                <option value="devops">DevOps</option>
+                                <option value="mobile">Mobile</option>
+                                <option value="design">Design</option>
+                                <option value="tools">Tools</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Description
+                            </label>
+                            <input type="text" x-model="newTech.description" 
+                                   class="form-input w-full"
+                                   placeholder="Brief description">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
+                                Color Theme
+                            </label>
+                            <select x-model="newTech.color" class="form-input w-full">
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="purple">Purple</option>
+                                <option value="pink">Pink</option>
+                                <option value="orange">Orange</option>
+                                <option value="red">Red</option>
+                                <option value="teal">Teal</option>
+                                <option value="indigo">Indigo</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button @click="addTechnologyToSpectrum()" 
+                                :disabled="!newTech.name"
+                                class="btn btn-primary">
+                            <i class="fas fa-plus mr-2"></i>
+                            Add to Spectrum
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Existing Technologies -->
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-xl font-bold text-gray-700 dark:text-gray-300">
+                            Current Technologies (Total: <span x-text="technologySpectrum.length"></span>)
+                        </h4>
+                    </div>
+                    
+                    <template x-if="technologySpectrum.length === 0">
+                        <div class="text-center py-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl">
+                            <i class="fas fa-code text-4xl text-gray-400 dark:text-gray-600 mb-4"></i>
+                            <p class="text-gray-500 dark:text-gray-400">No technologies added yet</p>
+                        </div>
+                    </template>
+                    
+                    <div class="space-y-4 mb-8">
+                        <template x-for="(tech, index) in technologySpectrum" :key="tech.id">
+                            <div class="card-hover p-4"
+                                 draggable="true"
+                                 @dragstart="handleTechDragStart(index)"
+                                 @dragover.prevent
+                                 @drop="handleTechDrop(event)">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" 
+                                             :style="'background: ' + getTechColor(tech.color)">
+                                            <i :class="tech.icon" class="text-white text-lg"></i>
+                                        </div>
+                                        
+                                        <div>
+                                            <h5 class="font-bold text-lg" x-text="tech.name"></h5>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm" x-text="tech.description"></p>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                                                    <i class="fas fa-tag mr-1"></i>
+                                                    <span x-text="tech.category"></span>
+                                                </span>
+                                                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                                                    <i class="fas fa-sort-numeric-up mr-1"></i>
+                                                    Order: <span x-text="tech.order"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex gap-2">
+                                        <button @click="editTechnology(tech)" 
+                                                class="btn btn-primary btn-icon btn-sm"
+                                                title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button @click="removeTechnologyFromSpectrum(tech.id)" 
+                                                class="btn btn-danger btn-icon btn-sm"
+                                                title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-sm cursor-move" 
+                                                title="Drag to reorder">
+                                            <i class="fas fa-grip-vertical"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-4 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <button @click="closeModal('editTechnologySpectrum')" class="btn btn-outline">
+                        Cancel
+                    </button>
+                    <button @click="saveTechnologySpectrum()" class="btn btn-success">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Spectrum
                     </button>
                 </div>
             </div>
@@ -1619,8 +2531,8 @@
         </div>
     </div>
 
-    <!-- JavaScript (keep the existing Alpine.js component code) -->
-     <script>
+    <!-- JavaScript -->
+    <script>
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBAuVIJp4jZCzxuBIBFez2SdLMi7MNHNJk",
@@ -2023,12 +2935,12 @@
 
         function portfolio() {
             return {
-                // STATE BARU: Mode Management
+                // State Management
                 isPublicMode: true,
                 isOwner: false,
                 showAuthModal: false,
                 
-                // STATE YANG DIUPDATE: Load status
+                // Load status
                 isLoading: true,
                 loadingMessage: 'Loading portfolio...',
                 loadingProgress: 0,
@@ -2101,16 +3013,44 @@
 
                 // Navigation
                 navItems: [
-                    { name: 'Home', href: '#home' },
-                    { name: 'Skills', href: '#skills' },
-                    { name: 'Projects', href: '#projects' },
-                    { name: 'Contact', href: '#contact' }
+                    { name: 'Home', href: '#home', icon: 'fas fa-home' },
+                    { name: 'Skills', href: '#skills', icon: 'fas fa-code' },
+                    { name: 'Projects', href: '#projects', icon: 'fas fa-briefcase' },
+                    { name: 'Contact', href: '#contact', icon: 'fas fa-envelope' }
                 ],
 
                 // Skill Categories
                 skillCategories: [
                     'frontend', 'backend', 'database', 'mobile', 
                     'devops', 'cloud', 'tools', 'design', 'ai'
+                ],
+
+                // Skill Icons
+                skillIcons: [
+                    'fab fa-react',
+                    'fab fa-node-js',
+                    'fab fa-python',
+                    'fab fa-js',
+                    'fab fa-html5',
+                    'fab fa-css3-alt',
+                    'fas fa-database',
+                    'fab fa-docker',
+                    'fab fa-aws',
+                    'fab fa-git-alt',
+                    'fab fa-laravel',
+                    'fab fa-vuejs',
+                    'fab fa-angular',
+                    'fab fa-php',
+                    'fab fa-java',
+                    'fas fa-code',
+                    'fas fa-server',
+                    'fas fa-cloud',
+                    'fas fa-mobile-alt',
+                    'fas fa-paint-brush',
+                    'fas fa-brain',
+                    'fas fa-chart-line',
+                    'fas fa-shield-alt',
+                    'fas fa-bolt'
                 ],
 
                 // Popular Social Platforms
@@ -2172,6 +3112,7 @@
                 contactForm: {
                     name: '',
                     email: '',
+                    subject: '',
                     message: ''
                 },
 
@@ -2778,6 +3719,7 @@
                     this.isDark = !this.isDark;
                     localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
                     
+                    // Update particles color based on theme
                     if (window.pJSDom && window.pJSDom.length > 0) {
                         const particles = window.pJSDom[0].pJS;
                         if (particles) {
@@ -2786,6 +3728,8 @@
                             particles.fn.particlesRefresh();
                         }
                     }
+                    
+                    this.showToastMessage(`Switched to ${this.isDark ? 'dark' : 'light'} mode`, 'info');
                 },
 
                 scrollTo(sectionId) {
@@ -2871,6 +3815,16 @@
                 addNewSkill() {
                     if (this.isPublicMode) return;
                     
+                    if (!this.newSkill.name?.trim()) {
+                        this.showToastMessage('Skill name is required', 'error');
+                        return;
+                    }
+                    
+                    if (this.newSkill.level < 0 || this.newSkill.level > 100) {
+                        this.showToastMessage('Skill level must be between 0 and 100', 'error');
+                        return;
+                    }
+                    
                     try {
                         this.isSubmitting = true;
 
@@ -2891,9 +3845,7 @@
                             this.showToastMessage('Skill added successfully', 'success');
                         }
 
-                        // Update average proficiency to ensure minimum 70%
                         this.ensureMinimumProficiency();
-                        
                         this.saveToLocalStorage();
                         this.closeModal('addSkill');
                         this.resetSkillForm();
@@ -2962,6 +3914,16 @@
                 addNewProject() {
                     if (this.isPublicMode) return;
                     
+                    if (!this.newProject.name?.trim()) {
+                        this.showToastMessage('Project name is required', 'error');
+                        return;
+                    }
+                    
+                    if (!this.newProject.description?.trim()) {
+                        this.showToastMessage('Project description is required', 'error');
+                        return;
+                    }
+                    
                     try {
                         this.isSubmitting = true;
 
@@ -3019,8 +3981,36 @@
                 },
 
                 // PROFILE METHODS
+                validateProfileForm() {
+                    const errors = [];
+                    
+                    if (!this.profile.name?.trim()) {
+                        errors.push('Name is required');
+                    }
+                    
+                    if (!this.profile.email?.trim()) {
+                        errors.push('Email is required');
+                    } else if (!this.isValidEmail(this.profile.email)) {
+                        errors.push('Please enter a valid email');
+                    }
+                    
+                    if (!this.profile.bio?.trim()) {
+                        errors.push('Bio is required');
+                    } else if (this.profile.bio.length < 50) {
+                        errors.push('Bio should be at least 50 characters');
+                    }
+                    
+                    return errors;
+                },
+
                 updateProfile() {
                     if (this.isPublicMode) return;
+                    
+                    const errors = this.validateProfileForm();
+                    if (errors.length > 0) {
+                        this.showToastMessage(errors[0], 'error');
+                        return;
+                    }
                     
                     try {
                         this.saveToLocalStorage();
@@ -3033,17 +4023,30 @@
                 },
 
                 // SOCIAL LINKS METHODS
+                validateSocialLinks() {
+                    const errors = [];
+                    
+                    for (const link of this.socialLinks) {
+                        if (link.url && !this.isValidUrl(link.url)) {
+                            errors.push(`Invalid URL for ${link.platform}: ${link.url}`);
+                        }
+                    }
+                    
+                    return errors;
+                },
+
                 saveSocialLinks() {
                     if (this.isPublicMode) return;
                     
+                    const errors = this.validateSocialLinks();
+                    if (errors.length > 0) {
+                        this.showToastMessage(errors[0], 'error');
+                        return;
+                    }
+                    
                     try {
-                        // Validate URLs
-                        for (const link of this.socialLinks) {
-                            if (link.url && !this.isValidUrl(link.url)) {
-                                this.showToastMessage(`Invalid URL for ${link.platform}: ${link.url}`, 'error');
-                                return;
-                            }
-                        }
+                        // Remove empty URLs
+                        this.socialLinks = this.socialLinks.filter(link => link.url.trim());
                         
                         this.saveToLocalStorage();
                         this.showToastMessage('Social links saved successfully', 'success');
@@ -3239,6 +4242,7 @@
                                     this.contactForm = {
                                         name: '',
                                         email: '',
+                                        subject: '',
                                         message: ''
                                     };
                                 } else {
@@ -3584,20 +4588,6 @@
                     return colors[color] || colors.blue;
                 },
 
-                getTechTextColor(color) {
-                    const colors = {
-                        'blue': 'text-blue-100',
-                        'green': 'text-green-100',
-                        'purple': 'text-purple-100',
-                        'pink': 'text-pink-100',
-                        'orange': 'text-orange-100',
-                        'red': 'text-red-100',
-                        'teal': 'text-teal-100',
-                        'indigo': 'text-indigo-100'
-                    };
-                    return colors[color] || colors.blue;
-                },
-
                 // SOCIAL MEDIA HELPER METHODS
                 getSocialIcon(platform) {
                     const platformData = socialPlatformsDatabase.find(p => p.name === platform);
@@ -3607,10 +4597,6 @@
                 getSocialPlaceholder(platform) {
                     const platformData = socialPlatformsDatabase.find(p => p.name === platform);
                     return platformData ? platformData.placeholder : 'https://example.com';
-                },
-
-                getSocialPlatformName(platform) {
-                    return platform;
                 },
 
                 getSocialPlatformColor(platform) {
@@ -3641,6 +4627,11 @@
                     } catch (_) {
                         return false;
                     }
+                },
+
+                isValidEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
                 },
 
                 getSocialUsername(url) {
@@ -3770,7 +4761,6 @@
                 }
             };
         }
-    </script>>
+    </script>
 </body>
 </html>
-    <!-- JavaScript (sama seperti sebelumnya) -->
