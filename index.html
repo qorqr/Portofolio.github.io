@@ -955,8 +955,9 @@
     <div class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-600 z-50" 
          :style="'width: ' + scrollProgress + '%'"></div>
     
-    <!-- Auth Container -->
+    <!-- Auth Container with Profile Dropdown -->
     <div class="fixed top-6 right-6 z-50">
+        <!-- Public Mode Login Button -->
         <div x-show="isPublicMode" class="flex items-center gap-4">
             <button @click="loginWithGoogle()" class="btn btn-primary animate-fade-in">
                 <i class="fas fa-sign-in-alt"></i>
@@ -965,15 +966,60 @@
             </button>
         </div>
         
-        <div x-show="!isPublicMode" class="flex items-center gap-4 animate-fade-in">
-            <div class="glass px-4 py-2 rounded-xl flex items-center gap-3">
-                <i class="fas fa-user-circle text-primary"></i>
+        <!-- Edit Mode Profile Dropdown -->
+        <div x-show="!isPublicMode" x-data="{ profileMenuOpen: false }" class="relative animate-fade-in">
+            <button @click="profileMenuOpen = !profileMenuOpen" 
+                    class="glass px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                <i class="fas fa-user-circle text-primary text-xl"></i>
                 <span x-text="userEmail?.split('@')[0] || 'User'" class="font-medium hidden md:inline"></span>
-            </div>
-            <button @click="signOut()" class="btn btn-danger btn-sm">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="hidden sm:inline">Logout</span>
+                <i class="fas fa-chevron-down text-sm transition-transform duration-300" 
+                   :class="{'rotate-180': profileMenuOpen}"></i>
             </button>
+            
+            <!-- Profile Dropdown Menu -->
+            <div x-show="profileMenuOpen" 
+                 @click.away="profileMenuOpen = false"
+                 class="absolute right-0 mt-2 w-64 glass rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-slide-up">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold" x-text="userEmail?.split('@')[0] || 'User'"></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" x-text="userEmail"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="py-2">
+                    <button @click="syncData()" 
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3">
+                        <i class="fas fa-sync-alt text-primary"></i>
+                        <span>Sync Data</span>
+                    </button>
+                    
+                    <button @click="profileMenuOpen = false; openModal('editProfile')" 
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3">
+                        <i class="fas fa-user-edit text-primary"></i>
+                        <span>Edit Profile</span>
+                    </button>
+                    
+                    <button @click="profileMenuOpen = false; openModal('editSocialLinks')" 
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3">
+                        <i class="fas fa-share-alt text-primary"></i>
+                        <span>Social Links</span>
+                    </button>
+                    
+                    <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                    
+                    <button @click="signOut()" 
+                            class="w-full text-left px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-3 text-red-600 dark:text-red-400">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -1239,7 +1285,7 @@
                                             <h3 class="font-bold text-xl mb-2" x-text="skill.name"></h3>
                                             <div class="flex items-center gap-2">
                                                 <i :class="getProficiencyIcon(skill.level)" class="text-yellow-500"></i>
-                                                <span class="text-gray-600 dark:text-gray-400" x-text="getProficiencyLevel(skill.level)"></span>
+                                                <span class="text-gray-600 dark:text-gray-400" x-text="skill.level + '% Proficiency'"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -1662,7 +1708,7 @@
                             </div>
                         </div>
                         
-                        <!-- Features -->
+                        <!-- Key Features -->
                         <div x-show="selectedProject?.features?.length > 0">
                             <h4 class="text-2xl font-bold mb-4 flex items-center gap-3">
                                 <i class="fas fa-star text-primary"></i>
@@ -2054,7 +2100,7 @@
                         </div>
                     </div>
                     
-                    <!-- Features -->
+                    <!-- Key Features -->
                     <div>
                         <label class="block text-gray-700 dark:text-gray-300 mb-3 font-semibold">
                             Key Features
@@ -2562,7 +2608,14 @@
                 { name: 'Webpack', icon: 'fas fa-cube' },
                 { name: 'Babel', icon: 'fas fa-cogs' },
                 { name: 'Redux', icon: 'fas fa-database' },
-                { name: 'GraphQL', icon: 'fas fa-project-diagram' }
+                { name: 'GraphQL', icon: 'fas fa-project-diagram' },
+                { name: 'jQuery', icon: 'fab fa-js' },
+                { name: 'Material-UI', icon: 'fas fa-palette' },
+                { name: 'Chakra UI', icon: 'fas fa-palette' },
+                { name: 'Ant Design', icon: 'fas fa-palette' },
+                { name: 'Three.js', icon: 'fas fa-cube' },
+                { name: 'GSAP', icon: 'fas fa-bolt' },
+                { name: 'Framer Motion', icon: 'fas fa-bolt' }
             ],
             backend: [
                 { name: 'Node.js', icon: 'fab fa-node-js' },
@@ -2581,7 +2634,14 @@
                 { name: '.NET', icon: 'fab fa-microsoft' },
                 { name: 'FastAPI', icon: 'fas fa-bolt' },
                 { name: 'NestJS', icon: 'fas fa-feather-alt' },
-                { name: 'Socket.io', icon: 'fas fa-plug' }
+                { name: 'Socket.io', icon: 'fas fa-plug' },
+                { name: 'Koa', icon: 'fas fa-server' },
+                { name: 'Hapi', icon: 'fas fa-server' },
+                { name: 'ASP.NET', icon: 'fab fa-microsoft' },
+                { name: 'Spring', icon: 'fab fa-java' },
+                { name: 'GraphQL', icon: 'fas fa-project-diagram' },
+                { name: 'gRPC', icon: 'fas fa-bolt' },
+                { name: 'Fastify', icon: 'fas fa-bolt' }
             ],
             database: [
                 { name: 'MongoDB', icon: 'fas fa-database' },
@@ -2592,7 +2652,15 @@
                 { name: 'SQLite', icon: 'fas fa-database' },
                 { name: 'Oracle', icon: 'fas fa-database' },
                 { name: 'Elasticsearch', icon: 'fas fa-search' },
-                { name: 'Cassandra', icon: 'fas fa-database' }
+                { name: 'Cassandra', icon: 'fas fa-database' },
+                { name: 'MariaDB', icon: 'fas fa-database' },
+                { name: 'DynamoDB', icon: 'fas fa-database' },
+                { name: 'CouchDB', icon: 'fas fa-database' },
+                { name: 'Neo4j', icon: 'fas fa-project-diagram' },
+                { name: 'InfluxDB', icon: 'fas fa-chart-line' },
+                { name: 'Snowflake', icon: 'fas fa-snowflake' },
+                { name: 'BigQuery', icon: 'fas fa-search' },
+                { name: 'Cosmos DB', icon: 'fas fa-database' }
             ],
             devops: [
                 { name: 'Docker', icon: 'fab fa-docker' },
@@ -2606,7 +2674,19 @@
                 { name: 'Terraform', icon: 'fas fa-mountain' },
                 { name: 'Ansible', icon: 'fas fa-cogs' },
                 { name: 'Nginx', icon: 'fas fa-server' },
-                { name: 'Linux', icon: 'fab fa-linux' }
+                { name: 'Linux', icon: 'fab fa-linux' },
+                { name: 'DigitalOcean', icon: 'fas fa-cloud' },
+                { name: 'Heroku', icon: 'fas fa-cloud' },
+                { name: 'Vercel', icon: 'fas fa-cloud' },
+                { name: 'Netlify', icon: 'fas fa-cloud' },
+                { name: 'CircleCI', icon: 'fas fa-sync' },
+                { name: 'Travis CI', icon: 'fas fa-sync' },
+                { name: 'GitLab CI', icon: 'fab fa-gitlab' },
+                { name: 'Prometheus', icon: 'fas fa-chart-line' },
+                { name: 'Grafana', icon: 'fas fa-chart-bar' },
+                { name: 'ELK Stack', icon: 'fas fa-search' },
+                { name: 'Helm', icon: 'fas fa-cog' },
+                { name: 'Istio', icon: 'fas fa-project-diagram' }
             ],
             mobile: [
                 { name: 'React Native', icon: 'fab fa-react' },
@@ -2614,14 +2694,30 @@
                 { name: 'Android', icon: 'fab fa-android' },
                 { name: 'iOS', icon: 'fab fa-apple' },
                 { name: 'Ionic', icon: 'fas fa-mobile' },
-                { name: 'Xamarin', icon: 'fab fa-microsoft' }
+                { name: 'Xamarin', icon: 'fab fa-microsoft' },
+                { name: 'Swift', icon: 'fab fa-apple' },
+                { name: 'Kotlin', icon: 'fab fa-android' },
+                { name: 'Java', icon: 'fab fa-java' },
+                { name: 'Cordova', icon: 'fas fa-mobile' },
+                { name: 'PhoneGap', icon: 'fas fa-mobile' },
+                { name: 'Expo', icon: 'fab fa-react' },
+                { name: 'NativeScript', icon: 'fas fa-code' }
             ],
             design: [
                 { name: 'Figma', icon: 'fab fa-figma' },
                 { name: 'Adobe XD', icon: 'fas fa-palette' },
                 { name: 'Sketch', icon: 'fas fa-palette' },
                 { name: 'Photoshop', icon: 'fas fa-image' },
-                { name: 'Illustrator', icon: 'fas fa-paint-brush' }
+                { name: 'Illustrator', icon: 'fas fa-paint-brush' },
+                { name: 'InDesign', icon: 'fas fa-newspaper' },
+                { name: 'After Effects', icon: 'fas fa-film' },
+                { name: 'Premiere Pro', icon: 'fas fa-video' },
+                { name: 'Canva', icon: 'fas fa-palette' },
+                { name: 'Blender', icon: 'fas fa-cube' },
+                { name: 'Zeplin', icon: 'fas fa-palette' },
+                { name: 'InVision', icon: 'fas fa-palette' },
+                { name: 'Adobe Creative Cloud', icon: 'fas fa-cloud' },
+                { name: 'Adobe Photoshop', icon: 'fas fa-image' }
             ],
             tools: [
                 { name: 'GitHub', icon: 'fab fa-github' },
@@ -2632,7 +2728,34 @@
                 { name: 'Slack', icon: 'fab fa-slack' },
                 { name: 'VS Code', icon: 'fas fa-code' },
                 { name: 'Postman', icon: 'fas fa-paper-plane' },
-                { name: 'Swagger', icon: 'fas fa-file-code' }
+                { name: 'Swagger', icon: 'fas fa-file-code' },
+                { name: 'Docker Compose', icon: 'fab fa-docker' },
+                { name: 'Kubernetes', icon: 'fas fa-ship' },
+                { name: 'WebStorm', icon: 'fas fa-code' },
+                { name: 'IntelliJ IDEA', icon: 'fas fa-code' },
+                { name: 'PyCharm', icon: 'fas fa-code' },
+                { name: 'Android Studio', icon: 'fab fa-android' },
+                { name: 'Xcode', icon: 'fab fa-apple' },
+                { name: 'Notion', icon: 'fas fa-sticky-note' },
+                { name: 'Trello', icon: 'fas fa-trello' },
+                { name: 'Asana', icon: 'fas fa-tasks' },
+                { name: 'Figma', icon: 'fab fa-figma' }
+            ],
+            ai: [
+                { name: 'TensorFlow', icon: 'fas fa-brain' },
+                { name: 'PyTorch', icon: 'fas fa-brain' },
+                { name: 'Keras', icon: 'fas fa-brain' },
+                { name: 'Scikit-learn', icon: 'fas fa-brain' },
+                { name: 'OpenCV', icon: 'fas fa-eye' },
+                { name: 'Pandas', icon: 'fas fa-table' },
+                { name: 'NumPy', icon: 'fas fa-calculator' },
+                { name: 'Jupyter', icon: 'fas fa-book' },
+                { name: 'Matplotlib', icon: 'fas fa-chart-line' },
+                { name: 'Seaborn', icon: 'fas fa-chart-bar' },
+                { name: 'NLTK', icon: 'fas fa-language' },
+                { name: 'SpaCy', icon: 'fas fa-language' },
+                { name: 'Hugging Face', icon: 'fas fa-robot' },
+                { name: 'GPT', icon: 'fas fa-robot' }
             ]
         };
 
@@ -2683,42 +2806,56 @@
             'Next.js', 'Nuxt.js', 'Gatsby', 'Redux', 'MobX', 'GraphQL', 'Apollo', 'Webpack',
             'Babel', 'ESLint', 'Prettier', 'Jest', 'Testing Library', 'Cypress', 'Storybook',
             'Tailwind CSS', 'Bootstrap', 'Material-UI', 'Chakra UI', 'Styled Components',
-            'SASS/SCSS', 'LESS', 'PWA', 'WebSockets', 'WebRTC',
+            'SASS/SCSS', 'LESS', 'PWA', 'WebSockets', 'WebRTC', 'Three.js', 'GSAP', 'Framer Motion',
+            'jQuery', 'Ant Design', 'Vuetify', 'Quasar', 'Semantic UI', 'Foundation', 'Bulma',
             
             // Backend Skills
             'Node.js', 'Express.js', 'NestJS', 'Fastify', 'Python', 'Django', 'Flask', 'FastAPI',
             'Java', 'Spring Boot', 'Kotlin', 'PHP', 'Laravel', 'Symfony', 'Ruby', 'Ruby on Rails',
             'Go', 'Rust', 'C#', '.NET', 'ASP.NET', 'C++', 'Scala', 'Haskell',
             'REST API', 'GraphQL API', 'Microservices', 'Serverless', 'WebSockets', 'OAuth', 'JWT',
+            'gRPC', 'SOAP', 'Koa', 'Hapi', 'AdonisJS', 'Sails.js',
             
             // Database Skills
             'MongoDB', 'PostgreSQL', 'MySQL', 'SQLite', 'Redis', 'Elasticsearch', 'Cassandra',
             'DynamoDB', 'Firebase', 'Supabase', 'Prisma', 'Sequelize', 'TypeORM', 'Mongoose',
-            'Database Design', 'SQL Optimization', 'NoSQL', 'Data Modeling', 'ETL',
+            'Database Design', 'SQL Optimization', 'NoSQL', 'Data Modeling', 'ETL', 'MariaDB',
+            'Oracle', 'Microsoft SQL Server', 'DB2', 'CouchDB', 'Neo4j', 'InfluxDB',
             
             // DevOps Skills
             'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'DigitalOcean', 'Heroku',
             'Vercel', 'Netlify', 'Git', 'GitHub Actions', 'GitLab CI', 'Jenkins', 'CircleCI',
             'Travis CI', 'Terraform', 'Ansible', 'Prometheus', 'Grafana', 'ELK Stack',
-            'Nginx', 'Apache', 'Linux', 'Shell Scripting', 'Bash', 'PowerShell',
+            'Nginx', 'Apache', 'Linux', 'Shell Scripting', 'Bash', 'PowerShell', 'CI/CD',
+            'Helm', 'Istio', 'Linkerd', 'Kafka', 'RabbitMQ', 'Redis',
             
             // Mobile Skills
             'React Native', 'Flutter', 'Ionic', 'Swift', 'Kotlin', 'Java (Android)', 'Objective-C',
             'Xamarin', 'Cordova', 'Mobile UI/UX', 'App Store', 'Google Play', 'Push Notifications',
+            'Expo', 'NativeScript', 'PhoneGap', 'Capacitor', 'App Center',
             
             // Design Skills
             'UI Design', 'UX Design', 'Figma', 'Adobe XD', 'Sketch', 'Photoshop', 'Illustrator',
             'InDesign', 'Design Systems', 'Prototyping', 'Wireframing', 'User Research',
-            'Accessibility', 'Responsive Design', 'Motion Design',
+            'Accessibility', 'Responsive Design', 'Motion Design', 'After Effects', 'Premiere Pro',
+            'Blender', 'Canva', 'Zeplin', 'InVision', 'Adobe Creative Cloud',
+            
+            // AI/ML Skills
+            'TensorFlow', 'PyTorch', 'Keras', 'Scikit-learn', 'OpenCV', 'Pandas', 'NumPy',
+            'Jupyter', 'Matplotlib', 'Seaborn', 'NLTK', 'SpaCy', 'Hugging Face', 'GPT',
+            'Computer Vision', 'Natural Language Processing', 'Machine Learning', 'Deep Learning',
+            'Data Science', 'Big Data', 'Hadoop', 'Spark', 'Tableau', 'Power BI',
             
             // Soft Skills
             'Problem Solving', 'Team Leadership', 'Project Management', 'Agile/Scrum',
             'Communication', 'Time Management', 'Mentoring', 'Public Speaking', 'Technical Writing',
+            'Team Collaboration', 'Critical Thinking', 'Adaptability', 'Creativity', 'Attention to Detail',
             
             // Other Skills
-            'Machine Learning', 'Data Science', 'Blockchain', 'Web3', 'Smart Contracts',
-            'Cybersecurity', 'SEO', 'Performance Optimization', 'Internationalization',
-            'Payment Integration', 'Web Analytics', 'Chatbots', 'AR/VR'
+            'Blockchain', 'Web3', 'Smart Contracts', 'Solidity', 'Ethereum', 'Bitcoin',
+            'Cybersecurity', 'Penetration Testing', 'Network Security', 'Cryptography',
+            'SEO', 'Performance Optimization', 'Internationalization', 'Localization',
+            'Payment Integration', 'Web Analytics', 'Chatbots', 'AR/VR', 'IoT'
         ];
 
         // Predefined public portfolio data
@@ -2770,7 +2907,7 @@
                     level: 90,
                     years: 2,
                     projects: 10,
-                    icon: 'fas fa-paint-brush',
+                    icon: 'fas fa-wind',
                     description: 'Utility-first CSS framework for rapid UI development'
                 },
                 {
@@ -2792,6 +2929,46 @@
                     projects: 7,
                     icon: 'fab fa-python',
                     description: 'Backend development and automation scripts'
+                },
+                {
+                    id: 7,
+                    name: 'TypeScript',
+                    category: 'frontend',
+                    level: 88,
+                    years: 2,
+                    projects: 9,
+                    icon: 'fab fa-js-square',
+                    description: 'Type-safe JavaScript for better code quality'
+                },
+                {
+                    id: 8,
+                    name: 'AWS',
+                    category: 'devops',
+                    level: 78,
+                    years: 1,
+                    projects: 4,
+                    icon: 'fab fa-aws',
+                    description: 'Cloud infrastructure and deployment'
+                },
+                {
+                    id: 9,
+                    name: 'Next.js',
+                    category: 'frontend',
+                    level: 85,
+                    years: 2,
+                    projects: 6,
+                    icon: 'fas fa-arrow-right',
+                    description: 'React framework with SSR and static generation'
+                },
+                {
+                    id: 10,
+                    name: 'PostgreSQL',
+                    category: 'database',
+                    level: 82,
+                    years: 2,
+                    projects: 7,
+                    icon: 'fas fa-database',
+                    description: 'Relational database management and optimization'
                 }
             ],
             projects: [
@@ -2804,35 +2981,92 @@
                     image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     demoUrl: '#',
                     sourceUrl: '#',
-                    features: ['Real-time inventory', 'Payment integration', 'Admin dashboard', 'Customer analytics'],
+                    features: [
+                        'Real-time inventory management',
+                        'Secure payment integration with Stripe',
+                        'Admin dashboard for product management',
+                        'Customer analytics and reporting',
+                        'Responsive design for mobile and desktop',
+                        'User authentication and authorization'
+                    ],
                     status: 'completed',
-                    date: '2024'
+                    date: '2024',
+                    role: 'Full Stack Developer',
+                    teamSize: 3,
+                    startDate: '2023-01-01',
+                    endDate: '2023-06-01'
                 },
                 {
                     id: 2,
                     name: 'Task Management App',
                     description: 'Collaborative task management application with real-time updates, team features, and drag-and-drop interface. Built with Vue.js and Firebase.',
                     type: 'web',
-                    technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router', 'Tailwind CSS'],
+                    technologies: ['Vue.js', 'Firebase', 'Vuex', 'Vue Router', 'Tailwind CSS', 'Socket.io'],
                     image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     demoUrl: '#',
                     sourceUrl: '#',
-                    features: ['Real-time collaboration', 'Team management', 'File attachments', 'Drag & drop'],
+                    features: [
+                        'Real-time collaboration between team members',
+                        'Drag and drop task organization',
+                        'Team management and user roles',
+                        'File attachments and comments',
+                        'Task prioritization and deadlines',
+                        'Progress tracking and analytics'
+                    ],
                     status: 'completed',
-                    date: '2024'
+                    date: '2024',
+                    role: 'Frontend Developer',
+                    teamSize: 2,
+                    startDate: '2023-03-01',
+                    endDate: '2023-08-01'
                 },
                 {
                     id: 3,
                     name: 'Weather Dashboard',
                     description: 'Real-time weather dashboard with multiple city support, 7-day forecast, and interactive maps. Uses OpenWeather API and Chart.js.',
                     type: 'web',
-                    technologies: ['React', 'Chart.js', 'OpenWeather API', 'Leaflet.js', 'CSS3'],
+                    technologies: ['React', 'Chart.js', 'OpenWeather API', 'Leaflet.js', 'CSS3', 'Axios'],
                     image: 'https://images.unsplash.com/photo-1592210454359-9043f067919b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     demoUrl: '#',
                     sourceUrl: '#',
-                    features: ['Multiple cities', '7-day forecast', 'Interactive maps', 'Data visualization'],
+                    features: [
+                        'Multiple cities weather tracking',
+                        '7-day forecast with detailed information',
+                        'Interactive maps with weather overlays',
+                        'Data visualization with Chart.js',
+                        'Responsive design for all devices',
+                        'Local storage for favorite cities'
+                    ],
                     status: 'completed',
-                    date: '2023'
+                    date: '2023',
+                    role: 'Full Stack Developer',
+                    teamSize: 1,
+                    startDate: '2022-11-01',
+                    endDate: '2023-01-01'
+                },
+                {
+                    id: 4,
+                    name: 'AI-Powered Chatbot',
+                    description: 'Intelligent chatbot using natural language processing and machine learning to provide customer support and automate responses.',
+                    type: 'ai',
+                    technologies: ['Python', 'TensorFlow', 'Flask', 'React', 'MongoDB', 'NLTK'],
+                    image: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    demoUrl: '#',
+                    sourceUrl: '#',
+                    features: [
+                        'Natural language processing for understanding queries',
+                        'Machine learning model for response generation',
+                        'Integration with customer database',
+                        'Multi-language support',
+                        'Analytics dashboard for performance monitoring',
+                        'Customizable response templates'
+                    ],
+                    status: 'in-progress',
+                    date: '2024',
+                    role: 'AI Developer',
+                    teamSize: 4,
+                    startDate: '2023-09-01',
+                    endDate: '2024-03-01'
                 }
             ],
             socialLinks: [
@@ -2929,6 +3163,24 @@
                     category: 'database',
                     color: 'blue',
                     order: 8
+                },
+                {
+                    id: 9,
+                    name: 'TypeScript',
+                    icon: 'fab fa-js-square',
+                    description: 'Type-safe JavaScript',
+                    category: 'frontend',
+                    color: 'indigo',
+                    order: 9
+                },
+                {
+                    id: 10,
+                    name: 'TensorFlow',
+                    icon: 'fas fa-brain',
+                    description: 'Machine Learning',
+                    category: 'ai',
+                    color: 'pink',
+                    order: 10
                 }
             ]
         };
@@ -3025,7 +3277,7 @@
                     'devops', 'cloud', 'tools', 'design', 'ai'
                 ],
 
-                // Skill Icons
+                // Skill Icons - Expanded with real icons
                 skillIcons: [
                     'fab fa-react',
                     'fab fa-node-js',
@@ -3050,7 +3302,34 @@
                     'fas fa-brain',
                     'fas fa-chart-line',
                     'fas fa-shield-alt',
-                    'fas fa-bolt'
+                    'fas fa-bolt',
+                    'fab fa-github',
+                    'fab fa-gitlab',
+                    'fab fa-bitbucket',
+                    'fab fa-linux',
+                    'fab fa-microsoft',
+                    'fab fa-google',
+                    'fab fa-apple',
+                    'fab fa-android',
+                    'fab fa-figma',
+                    'fas fa-fire',
+                    'fas fa-search',
+                    'fas fa-cogs',
+                    'fas fa-tools',
+                    'fas fa-palette',
+                    'fas fa-image',
+                    'fas fa-video',
+                    'fas fa-film',
+                    'fas fa-cube',
+                    'fas fa-project-diagram',
+                    'fas fa-language',
+                    'fas fa-robot',
+                    'fas fa-eye',
+                    'fas fa-table',
+                    'fas fa-calculator',
+                    'fas fa-book',
+                    'fas fa-chart-bar',
+                    'fas fa-snowflake'
                 ],
 
                 // Popular Social Platforms
@@ -3526,6 +3805,39 @@
                     }
                 },
 
+                syncData() {
+                    if (!this.userId || !this.firestore || !this.isOnline) {
+                        this.showToastMessage('Cannot sync: check internet connection', 'warning');
+                        return;
+                    }
+                    
+                    this.isSyncing = true;
+                    this.showToastMessage('Syncing data...', 'info');
+                    
+                    // Save current data to user's collection
+                    const userData = {
+                        skills: this.skills,
+                        projects: this.projects,
+                        profile: this.profile,
+                        socialLinks: this.socialLinks,
+                        technologySpectrum: this.technologySpectrum,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    this.firestore.collection('portfolios').doc(this.userId)
+                        .set(userData, { merge: true })
+                        .then(() => {
+                            this.isSyncing = false;
+                            this.lastSyncTime = new Date().toLocaleTimeString();
+                            this.showToastMessage('Data synced successfully', 'success');
+                        })
+                        .catch((error) => {
+                            console.error('Error syncing data:', error);
+                            this.isSyncing = false;
+                            this.showToastMessage('Sync failed', 'error');
+                        });
+                },
+
                 loadUserData() {
                     if (!this.userId || !this.firestore || !this.isOnline) {
                         console.log('⚠️ Tidak bisa memuat data pengguna');
@@ -3794,20 +4106,44 @@
                     const skillLower = skill.toLowerCase();
                     
                     if (skillLower.includes('react') || skillLower.includes('vue') || skillLower.includes('angular') || 
-                        skillLower.includes('html') || skillLower.includes('css') || skillLower.includes('javascript')) {
+                        skillLower.includes('html') || skillLower.includes('css') || skillLower.includes('javascript') ||
+                        skillLower.includes('typescript') || skillLower.includes('svelte') || skillLower.includes('next') ||
+                        skillLower.includes('nuxt') || skillLower.includes('gatsby') || skillLower.includes('tailwind') ||
+                        skillLower.includes('bootstrap') || skillLower.includes('material') || skillLower.includes('chakra')) {
                         this.newSkill.category = 'frontend';
                         this.newSkill.icon = this.getTechIcon(skill);
                     } else if (skillLower.includes('node') || skillLower.includes('python') || skillLower.includes('java') || 
-                               skillLower.includes('php') || skillLower.includes('ruby') || skillLower.includes('go')) {
+                               skillLower.includes('php') || skillLower.includes('ruby') || skillLower.includes('go') ||
+                               skillLower.includes('rust') || skillLower.includes('c#') || skillLower.includes('.net') ||
+                               skillLower.includes('django') || skillLower.includes('flask') || skillLower.includes('laravel') ||
+                               skillLower.includes('spring') || skillLower.includes('express') || skillLower.includes('nest')) {
                         this.newSkill.category = 'backend';
                         this.newSkill.icon = this.getTechIcon(skill);
                     } else if (skillLower.includes('mongo') || skillLower.includes('sql') || skillLower.includes('database') || 
-                               skillLower.includes('redis')) {
+                               skillLower.includes('redis') || skillLower.includes('postgres') || skillLower.includes('mysql') ||
+                               skillLower.includes('oracle') || skillLower.includes('firebase') || skillLower.includes('elastic')) {
                         this.newSkill.category = 'database';
                         this.newSkill.icon = this.getTechIcon(skill);
                     } else if (skillLower.includes('docker') || skillLower.includes('kubernetes') || skillLower.includes('aws') || 
-                               skillLower.includes('azure') || skillLower.includes('devops')) {
+                               skillLower.includes('azure') || skillLower.includes('devops') || skillLower.includes('jenkins') ||
+                               skillLower.includes('terraform') || skillLower.includes('ansible') || skillLower.includes('nginx') ||
+                               skillLower.includes('linux')) {
                         this.newSkill.category = 'devops';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    } else if (skillLower.includes('tensorflow') || skillLower.includes('pytorch') || skillLower.includes('keras') ||
+                               skillLower.includes('machine') || skillLower.includes('ai') || skillLower.includes('deep') ||
+                               skillLower.includes('scikit') || skillLower.includes('opencv') || skillLower.includes('nlp')) {
+                        this.newSkill.category = 'ai';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    } else if (skillLower.includes('figma') || skillLower.includes('photoshop') || skillLower.includes('illustrator') ||
+                               skillLower.includes('adobe') || skillLower.includes('sketch') || skillLower.includes('canva') ||
+                               skillLower.includes('blender')) {
+                        this.newSkill.category = 'design';
+                        this.newSkill.icon = this.getTechIcon(skill);
+                    } else if (skillLower.includes('react native') || skillLower.includes('flutter') || skillLower.includes('ionic') ||
+                               skillLower.includes('android') || skillLower.includes('ios') || skillLower.includes('swift') ||
+                               skillLower.includes('kotlin')) {
+                        this.newSkill.category = 'mobile';
                         this.newSkill.icon = this.getTechIcon(skill);
                     }
                 },
@@ -4570,6 +4906,9 @@
                     if (techLower.includes('html')) return 'fab fa-html5';
                     if (techLower.includes('css')) return 'fab fa-css3-alt';
                     if (techLower.includes('javascript') || techLower.includes('typescript')) return 'fab fa-js';
+                    if (techLower.includes('tensorflow') || techLower.includes('pytorch') || techLower.includes('keras')) return 'fas fa-brain';
+                    if (techLower.includes('figma') || techLower.includes('photoshop') || techLower.includes('illustrator')) return 'fas fa-palette';
+                    if (techLower.includes('mobile') || techLower.includes('android') || techLower.includes('ios')) return 'fas fa-mobile-alt';
                     
                     return 'fas fa-code';
                 },
