@@ -1583,23 +1583,21 @@
                             </div>
                             
                             <div class="social-grid">
-                                <template x-if="socialLinks && socialLinks.length > 0">
-                                    <template x-for="link in socialLinks" :key="link.platform">
-                                        <a :href="link.url" target="_blank" 
-                                           class="social-link-item card-hover p-4 text-center"
-                                           x-show="link.url && link.url.trim() !== ''">
-                                            <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" 
-                                                 :style="'background: ' + getSocialPlatformColor(link.platform)">
-                                                <i :class="link.icon" class="text-white text-lg"></i>
-                                            </div>
-                                            <h4 class="font-bold text-sm" x-text="link.platform"></h4>
-                                            <p class="text-gray-600 dark-mode:text-gray-400 text-xs mt-1" 
-                                               x-text="getSocialUsername(link.url)"></p>
-                                        </a>
-                                    </template>
+                                <template x-for="(link, index) in socialLinks" :key="index">
+                                    <a :href="link.url" target="_blank" 
+                                       x-show="link.url && link.url.trim() !== ''"
+                                       class="social-link-item card-hover p-4 text-center block">
+                                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" 
+                                             :style="'background: ' + getSocialPlatformColor(link.platform)">
+                                            <i :class="link.icon" class="text-white text-lg"></i>
+                                        </div>
+                                        <h4 class="font-bold text-sm" x-text="link.platform"></h4>
+                                        <p class="text-gray-600 dark-mode:text-gray-400 text-xs mt-1" 
+                                           x-text="getSocialUsername(link.url)"></p>
+                                    </a>
                                 </template>
                                 
-                                <template x-if="!socialLinks || socialLinks.length === 0">
+                                <template x-if="socialLinks.length === 0 || socialLinks.every(link => !link.url || link.url.trim() === '')">
                                     <div class="col-span-full text-center py-8">
                                         <i class="fas fa-share-alt text-4xl text-gray-400 mb-4"></i>
                                         <p class="text-gray-500 dark-mode:text-gray-400">No social links added yet</p>
@@ -1693,6 +1691,7 @@
                     <div class="flex flex-wrap gap-4">
                         <template x-for="link in socialLinks" :key="link.platform">
                             <a :href="link.url" target="_blank" 
+                               x-show="link.url && link.url.trim() !== ''"
                                class="w-10 h-10 rounded-full glass flex items-center justify-center hover:scale-110 transition-all duration-300 hover:bg-primary-500/20">
                                 <i :class="link.icon" class="text-lg"></i>
                             </a>
@@ -4034,9 +4033,12 @@
                     }
                 },
 
+                // FIXED: PUBLISH TO PUBLIC METHOD
                 publishToPublic() {
+                    console.log('🚀 Starting publish process...');
+                    
                     if (!this.userId) {
-                        this.showToastMessage('Silakan login terlebih dahulu untuk publish', 'warning');
+                        this.showToastMessage('Please login first to publish', 'warning');
                         setTimeout(() => {
                             this.loginWithGoogle();
                         }, 500);
@@ -4044,23 +4046,23 @@
                     }
                     
                     if (!this.firestore) {
-                        this.showToastMessage('Firebase Firestore tidak tersedia', 'error');
+                        this.showToastMessage('Firebase Firestore not available', 'error');
                         return;
                     }
                     
                     if (!this.isOnline) {
-                        this.showToastMessage('Anda offline. Tidak bisa publish ke cloud.', 'warning');
+                        this.showToastMessage('You are offline. Cannot publish to cloud.', 'warning');
                         return;
                     }
                     
-                    if (!confirm('Publish perubahan Anda untuk membuatnya terlihat publik?')) {
+                    if (!confirm('Publish your changes to make them visible to the public?')) {
                         return;
                     }
                     
                     this.isSyncing = true;
-                    this.showToastMessage('Mempublish portfolio Anda...', 'info');
+                    this.showToastMessage('Publishing your portfolio...', 'info');
                     
-                    // FIXED: Ensure social links are properly formatted
+                    // FIXED: Ensure all data is properly formatted
                     const formattedSocialLinks = this.socialLinks
                         .filter(link => link.url && link.url.trim() !== '')
                         .map(link => ({
@@ -4069,7 +4071,7 @@
                             icon: link.icon
                         }));
                     
-                    const data = {
+                    const publishData = {
                         skills: this.skills,
                         projects: this.projects,
                         profile: this.profile,
@@ -4078,42 +4080,54 @@
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
                         updatedBy: this.userEmail,
                         version: '2.0',
-                        published: true
+                        published: true,
+                        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
                     };
                     
-                    console.log('Mempublish data ke koleksi publik...', data);
+                    console.log('📤 Publishing data to public collection...', publishData);
                     
-                    this.firestore.collection('publicPortfolios').doc('main')
-                        .set(data, { merge: true })
+                    // FIXED: Use proper Firebase update with error handling
+                    const batch = this.firestore.batch();
+                    const publicDocRef = this.firestore.collection('publicPortfolios').doc('main');
+                    const userDocRef = this.firestore.collection('portfolios').doc(this.userId);
+                    
+                    // Update public portfolio
+                    batch.set(publicDocRef, publishData, { merge: true });
+                    
+                    // Also save to user's private collection
+                    const userData = {
+                        ...publishData,
+                        userId: this.userId
+                    };
+                    batch.set(userDocRef, userData, { merge: true });
+                    
+                    batch.commit()
                         .then(() => {
-                            console.log('✅ Terpublish ke koleksi publik');
-                            
-                            // Juga simpan ke koleksi pribadi pengguna
-                            return this.firestore.collection('portfolios').doc(this.userId)
-                                .set({ ...data, userId: this.userId }, { merge: true });
-                        })
-                        .then(() => {
-                            console.log('✅ Disimpan ke koleksi pengguna');
+                            console.log('✅ Successfully published to public collection');
                             
                             this.lastSyncTime = new Date().toLocaleTimeString();
                             this.dataStatus = 'synced';
                             this.isSyncing = false;
                             
-                            this.showToastMessage('✅ Portfolio berhasil dipublish!', 'success');
-                            this.addToSyncHistory('Data dipublish', 'success');
+                            this.showToastMessage('✅ Portfolio successfully published!', 'success');
+                            this.addToSyncHistory('Data published', 'success');
                             
                         })
                         .catch((error) => {
-                            console.error('❌ Error publish:', error);
+                            console.error('❌ Publish error:', error);
                             this.isSyncing = false;
                             
-                            let errorMessage = 'Publish gagal';
+                            let errorMessage = 'Publish failed';
                             if (error.code === 'permission-denied') {
-                                errorMessage = 'Izin ditolak. Anda mungkin tidak punya akses tulis.';
+                                errorMessage = 'Permission denied. You may not have write access.';
+                            } else if (error.code === 'not-found') {
+                                errorMessage = 'Firebase collection not found. Please check configuration.';
+                            } else if (error.code === 'unavailable') {
+                                errorMessage = 'Firebase service unavailable. Please try again later.';
                             }
                             
                             this.showToastMessage(`❌ ${errorMessage}`, 'error');
-                            this.addToSyncHistory('Publish gagal', 'error');
+                            this.addToSyncHistory('Publish failed', 'error');
                         });
                 },
 
