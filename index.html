@@ -2054,11 +2054,11 @@
                                         </div>
                                         <h4 class="font-bold text-sm" x-text="link.platform"></h4>
                                         <p class="text-gray-600 dark-mode:text-gray-400 text-xs mt-1" 
-                                           x-text="getSocialUsername(link.url)"></p>
+                                           x-text="getSocialUsername(link.url, link.platform)"></p>
                                     </a>
                                 </template>
                                 
-                                <template x-if="socialLinks.length === 0 || socialLinks.every(link => !link.url || link.url.trim() === '')">
+                                <template x-if="socialLinks.filter(link => link.url && link.url.trim() !== '').length === 0">
                                     <div class="col-span-full text-center py-8">
                                         <i class="fas fa-share-alt text-4xl text-gray-400 mb-4"></i>
                                         <p class="text-gray-500 dark-mode:text-gray-400">No social links added yet</p>
@@ -3157,7 +3157,7 @@
                                         <i class="fas fa-share-alt text-pink-600 dark-mode:text-pink-400"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold" x-text="socialLinks.filter(l => l.url).length"></p>
+                                        <p class="font-semibold" x-text="socialLinks.filter(l => l.url && l.url.trim() !== '').length"></p>
                                         <p class="text-sm text-gray-500 dark-mode:text-gray-400">Social Links</p>
                                     </div>
                                 </div>
@@ -3808,19 +3808,14 @@
                     icon: 'fab fa-github'
                 },
                 {
-                    platform: 'LinkedIn',
-                    url: 'https://linkedin.com/in/username',
-                    icon: 'fab fa-linkedin-in'
+                    platform: 'WhatsApp',
+                    url: 'https://wa.me/phone-numb',
+                    icon: 'fab fa-whatsapp'
                 },
                 {
-                    platform: 'Twitter',
-                    url: 'https://twitter.com/username',
-                    icon: 'fab fa-twitter'
-                },
-                {
-                    platform: 'Email',
-                    url: 'mailto:muhammadzuyyina@gmail.com',
-                    icon: 'fas fa-envelope'
+                    platform: 'Instagram',
+                    url: 'https://instagram.com/username',
+                    icon: 'fab fa-instagram'
                 }
             ],
             technologySpectrum: [
@@ -5946,36 +5941,45 @@
                     return emailRegex.test(email);
                 },
 
-                getSocialUsername(url) {
-                    if (!url) return 'Not set';
+                getSocialUsername(url, platform = '') {
+                    if (!url || url.trim() === '') return 'Not set';
+                    
                     try {
+                        // Handle special cases
                         if (url.startsWith('mailto:')) {
                             return url.replace('mailto:', '');
                         }
                         
-                        const urlObj = new URL(url);
+                        if (url.startsWith('https://wa.me/')) {
+                            const phoneNumber = url.replace('https://wa.me/', '');
+                            return phoneNumber ? `+${phoneNumber}` : 'WhatsApp';
+                        }
+                        
+                        if (url.includes('instagram.com')) {
+                            const match = url.match(/instagram\.com\/([^\/\?]+)/);
+                            return match ? match[1] : 'Instagram';
+                        }
+                        
                         if (url.includes('github.com')) {
-                            const path = urlObj.pathname.split('/').filter(p => p);
-                            return path[0] || 'username';
+                            const match = url.match(/github\.com\/([^\/\?]+)/);
+                            return match ? match[1] : 'GitHub';
                         }
-                        if (url.includes('linkedin.com/in/')) {
-                            return urlObj.pathname.split('/in/')[1] || 'username';
+                        
+                        // Default: try to extract username from URL
+                        const urlObj = new URL(url);
+                        const pathParts = urlObj.pathname.split('/').filter(p => p);
+                        
+                        if (pathParts.length > 0) {
+                            return pathParts[0];
                         }
-                        if (url.includes('twitter.com/')) {
-                            return urlObj.pathname.split('/')[1] || 'username';
-                        }
-                        if (url.includes('instagram.com/')) {
-                            return urlObj.pathname.split('/')[1] || 'username';
-                        }
-                        if (url.includes('youtube.com/c/')) {
-                            return urlObj.pathname.split('/c/')[1] || 'username';
-                        }
-                        if (url.includes('facebook.com/')) {
-                            return urlObj.pathname.split('/')[1] || 'username';
-                        }
-                        return urlObj.hostname.replace('www.', '');
+                        
+                        return platform || 'Social Link';
                     } catch (_) {
-                        return url;
+                        // If URL parsing fails, return a simplified version
+                        if (url.includes('wa.me')) return 'WhatsApp';
+                        if (url.includes('instagram.com')) return 'Instagram';
+                        if (url.includes('github.com')) return 'GitHub';
+                        return 'Social Link';
                     }
                 },
 
