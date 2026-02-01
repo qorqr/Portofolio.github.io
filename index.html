@@ -2630,17 +2630,56 @@
                         </div>
                     </div>
                     
-                    <!-- Image URL -->
+                    <!-- Image Upload Section -->
                     <div>
                         <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
-                            Project Image URL
+                            Project Image
                         </label>
-                        <input type="url" x-model="newProject.image" 
-                               class="form-input"
-                               placeholder="https://example.com/project-image.jpg">
-                        <p class="text-sm text-gray-500 dark-mode:text-gray-400 mt-2">
-                            Leave empty for default image
-                        </p>
+                        
+                        <!-- Image Preview and Upload -->
+                        <div class="flex gap-4 items-start mb-4">
+                            <!-- Image Preview -->
+                            <div class="relative">
+                                <img :src="projectImagePreview" 
+                                     alt="Project Preview" 
+                                     class="image-upload-preview object-cover">
+                                <div x-show="uploadingProjectImage" class="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl">
+                                    <i class="fas fa-spinner fa-spin text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Upload Buttons -->
+                            <div class="flex-1 space-y-3">
+                                <label class="btn btn-outline cursor-pointer w-full">
+                                    <i class="fas fa-upload mr-2"></i>
+                                    Upload from Computer
+                                    <input type="file" accept="image/*" @change="uploadProjectImage" class="hidden">
+                                </label>
+                                
+                                <button @click="newProject.image = ''; projectImagePreview = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';" 
+                                        class="btn btn-outline w-full">
+                                    <i class="fas fa-image mr-2"></i>
+                                    Use Default Image
+                                </button>
+                                
+                                <button @click="newProject.image = ''; projectImagePreview = '';" 
+                                        class="btn btn-outline w-full" x-show="newProject.image">
+                                    <i class="fas fa-times mr-2"></i>
+                                    Remove Image
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- URL Input (alternative) -->
+                        <div>
+                            <label class="block text-gray-700 dark-mode:text-gray-300 mb-3 font-semibold">
+                                Or enter image URL:
+                            </label>
+                            <input type="url" x-model="newProject.image" 
+                                   @input="updateProjectImagePreview()"
+                                   class="form-input"
+                                   placeholder="https://example.com/project-image.jpg">
+                        </div>
                     </div>
                     
                     <!-- Links -->
@@ -3948,6 +3987,8 @@
                 editingProject: null,
                 uploadingImage: false,
                 uploadingProfileImage: false,
+                uploadingProjectImage: false,
+                projectImagePreview: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 isSubmitting: false,
                 isPublishing: false,
                 deleteItem: { type: '', id: null, name: '' },
@@ -4874,6 +4915,11 @@
                     this.modals[modalName] = true;
                     document.body.style.overflow = 'hidden';
                     
+                    // Initialize project image preview
+                    if (modalName === 'addProject') {
+                        this.updateProjectImagePreview();
+                    }
+                    
                     // Initialize charts if opening skills modal
                     if (modalName === 'addSkill' && this.chartView === 'chart') {
                         setTimeout(() => this.initSkillsChart(), 100);
@@ -5066,6 +5112,36 @@
 
                 removeTech(tech) {
                     this.newProject.technologies = this.newProject.technologies.filter(t => t !== tech);
+                },
+
+                // PROJECT IMAGE UPLOAD
+                uploadProjectImage(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        if (file.size > this.storageConfig.maxImageSize) {
+                            this.showToastMessage('Image size too large. Max 1MB.', 'error');
+                            return;
+                        }
+                        
+                        this.uploadingProjectImage = true;
+                        
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.newProject.image = e.target.result;
+                            this.projectImagePreview = e.target.result;
+                            this.uploadingProjectImage = false;
+                            this.showToastMessage('Project image uploaded successfully', 'success');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                },
+
+                updateProjectImagePreview() {
+                    if (this.newProject.image && this.newProject.image.trim() !== '') {
+                        this.projectImagePreview = this.newProject.image;
+                    } else {
+                        this.projectImagePreview = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                    }
                 },
 
                 addNewProject() {
@@ -6019,6 +6095,7 @@
                     };
                     this.techInput = '';
                     this.techSuggestions = [];
+                    this.projectImagePreview = 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
                     this.editingProject = null;
                 },
 
@@ -6047,6 +6124,7 @@
                     
                     this.editingProject = { ...project };
                     this.newProject = { ...project };
+                    this.projectImagePreview = project.image || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
                     this.openModal('addProject');
                 },
 
@@ -6100,5 +6178,3 @@
     </script>
 </body>
 </html>
-
-
